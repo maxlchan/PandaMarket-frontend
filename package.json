@@ -15,6 +15,9 @@
     "redux": "^4.0.5",
     "styled-components": "^5.2.1"
   },
+  "devDependencies": {
+    "redux-logger": "^3.0.6"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
