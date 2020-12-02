@@ -2,6 +2,7 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 
 const setUserInfo = createAction("setUserInfo");
 const initialState = {
+  isLoggedIn: false,
   _id: '',
   email: '',
   username: '',
