@@ -22,6 +22,11 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 
+a {
+  color: black;
+  text-decoration: none;
+}
+
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
