@@ -29,7 +29,7 @@ const StyledHeader = styled.header`
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 40%;
+    width: 30%;
     height: 100%;
   }
 `;

@@ -9,7 +9,7 @@ const HomeContainer = ({ isLoggedIn }) => {
 
 const mapStateToProps = (state) => {
   return {
-    isLoggedIn: state.user,
+    isLoggedIn: state.user.isLoggedIn,
   };
 };
 

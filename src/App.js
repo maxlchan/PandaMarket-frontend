@@ -7,6 +7,7 @@ import themes from './styles/themes';
 import HeaderContainer from './containers/HeaderContainer';
 import HomeContainer from './containers/HomeContainer';
 import LoginContainer from './containers/LoginContainer';
+import AuctionsContainer from './containers/AuctionsContainer'
 import { ROUTES, MESSAGE } from './constants/';
 import { useEffect } from 'react';
 import { loginUser } from './actions';
@@ -41,6 +42,7 @@ const App = ({ loginUser }) => {
         <Switch>
           <Route exact path={ROUTES.HOME} component={HomeContainer} />
           <Route path={ROUTES.LOGIN} component={LoginContainer} />
+          <Route path={ROUTES.AUCTIONS} component={AuctionsContainer} />
           <Route render={() => <Redirect to={ROUTES.HOME} />} />
         </Switch>
       </Main>
