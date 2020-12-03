@@ -1,6 +1,6 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
+import { createReducer } from '@reduxjs/toolkit';
+import { loginUser, logoutUser } from '../actions';
 
-const setUserInfo = createAction("setUserInfo");
 const initialState = {
   isLoggedIn: false,
   _id: '',
@@ -8,11 +8,14 @@ const initialState = {
   username: '',
   phonenumber: '',
   myAuction: [],
-  reservedAuction: []
-}
+  reservedAuction: [],
+};
 
 export const user = createReducer(initialState, {
-  [setUserInfo]: (state, action) => {
-    return action.payload;
+  [loginUser]: (state, action) => {
+    return { isLoggedIn: true, ...action.payload };
+  },
+  [logoutUser]: (state, action) => {
+    return initialState;
   },
 });
