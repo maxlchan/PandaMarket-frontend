@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { loginUser } from '../actions';
 import { ROUTES } from '../constants';
 
 const Wrapper = styled.div`
 
 `;
 
-const RegistrationContainer = ({ isLoggedIn, loginUser }) => {
+const RegistrationContainer = () => {
+  const { isLoggedIn } = useSelector((state) => state.user);
   const history = useHistory();
 
   useEffect(() => {
@@ -23,17 +23,4 @@ const RegistrationContainer = ({ isLoggedIn, loginUser }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  const { user } = state;
-  return {
-    isLoggedIn: user.isLoggedIn,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loginUser: (userInfo) => dispatch(loginUser(userInfo)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrationContainer);
+export default RegistrationContainer;

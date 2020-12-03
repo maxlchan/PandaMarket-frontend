@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { loginUser } from '../actions';
+import { loginUser } from '../redux/user/userReducer';
 import panda from '../assets/images/panda.png';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 import { loginWithGoogle } from '../utils/api';
@@ -39,7 +39,8 @@ const Wrapper = styled.div`
   }
 `;
 
-const LoginContainer = ({ loginUser }) => {
+const LoginContainer = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const handleResponse = async (authResponse) => {
@@ -48,7 +49,7 @@ const LoginContainer = ({ loginUser }) => {
       const { userInfo, token } = data;
 
       localStorage.setItem('token', token);
-      loginUser(userInfo);
+      dispatch(loginUser(userInfo));
 
       history.goBack();
     } catch (err) {
@@ -68,10 +69,4 @@ const LoginContainer = ({ loginUser }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loginUser: (userInfo) => dispatch(loginUser(userInfo)),
-  };
-};
-
-export default connect(null, mapDispatchToProps)(LoginContainer);
+export default LoginContainer;

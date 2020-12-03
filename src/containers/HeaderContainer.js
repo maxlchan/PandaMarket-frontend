@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NavItem from '../components/NavItem';
 import { ROUTES } from '../constants';
 import logo from '../assets/images/logoHorizontal.png';
@@ -36,7 +36,9 @@ const StyledHeader = styled.header`
   }
 `;
 
-const HeaderContainer = ({ isLoggedIn }) => {
+const HeaderContainer = () => {
+  const { isLoggedIn } = useSelector((state) => state.user);
+
   return (
     <StyledHeader>
       <Link className='header__logo' to={ROUTES.HOME}>
@@ -54,11 +56,4 @@ const HeaderContainer = ({ isLoggedIn }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  const { user } = state;
-  return {
-    isLoggedIn: user.isLoggedIn,
-  };
-};
-
-export default connect(mapStateToProps, null)(HeaderContainer);
+export default HeaderContainer;

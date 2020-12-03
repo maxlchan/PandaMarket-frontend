@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 import Carousel from '../components/Carousel';
 import { useHistory } from 'react-router-dom';
 import Button from '../components/Button';
@@ -13,7 +12,8 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
-const HomeContainer = ({ isLoggedIn }) => {
+
+const HomeContainer = () => {
   const history = useHistory();
 
   const handleButtonClick = () => {
@@ -28,17 +28,5 @@ const HomeContainer = ({ isLoggedIn }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  const { user } = state;
-  return {
-    isLoggedIn: user.isLoggedIn,
-  };
-};
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-
-//   }
-// }
-
-export default connect(mapStateToProps, null)(HomeContainer);
+export default HomeContainer;
