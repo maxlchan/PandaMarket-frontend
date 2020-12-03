@@ -11,7 +11,8 @@ const StyledHeader = styled.header`
   align-items: center;
   width: 100%;
   height: 60px;
-  background-color: ${({ theme }) => theme.colors.light_white};
+  box-shadow: ${({ theme }) => theme.boxShadows.default};
+  margin-bottom: 1.5px;
 
   .header__logo {
     position: absolute;

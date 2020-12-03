@@ -1,21 +1,16 @@
+import { useEffect } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import styled, { ThemeProvider } from 'styled-components';
-import GlobalStyle from './styles/GlobalStyle';
-import themes from './styles/themes';
-
+import { ThemeProvider } from 'styled-components';
 import HeaderContainer from './containers/HeaderContainer';
 import HomeContainer from './containers/HomeContainer';
 import LoginContainer from './containers/LoginContainer';
 import AuctionsContainer from './containers/AuctionsContainer'
+import GlobalStyle from './styles/GlobalStyle';
+import themes from './styles/themes';
 import { ROUTES, MESSAGE } from './constants/';
-import { useEffect } from 'react';
 import { loginUser } from './actions';
 import { loginWithToken } from './utils/api';
-
-const Main = styled.section`
-  padding: 0 2%;
-`;
 
 const App = ({ loginUser }) => {
   useEffect(() => {
@@ -38,14 +33,14 @@ const App = ({ loginUser }) => {
     <ThemeProvider theme={themes}>
       <GlobalStyle />
       <HeaderContainer />
-      <Main>
+      <section>
         <Switch>
           <Route exact path={ROUTES.HOME} component={HomeContainer} />
           <Route path={ROUTES.LOGIN} component={LoginContainer} />
           <Route path={ROUTES.AUCTIONS} component={AuctionsContainer} />
           <Route render={() => <Redirect to={ROUTES.HOME} />} />
         </Switch>
-      </Main>
+      </section>
     </ThemeProvider>
   );
 };
