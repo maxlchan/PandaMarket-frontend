@@ -4,6 +4,7 @@ const ROUTES = {
   USERS_DETAIL: '/:userId',
   LOGIN: '/login',
   TOKEN: '/token',
+  REGISTRATION: '/registration',
   AUCTIONS: '/auctions',
   AUCTION_DETAIL: '/:auctionId',
   MY_INFO: '/my-info',

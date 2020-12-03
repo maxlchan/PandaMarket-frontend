@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
   display: flex;
@@ -7,12 +6,15 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 70vh;
+  background-image: url(${({ backgroundImg }) => backgroundImg});
+  background-position: center;
+  background-size: cover;
   background-color: ${({ color }) => color};
 `;
 
-const Card = ({ color, children }) => {
+const Card = ({ color, backgroundImg, children }) => {
   return (
-    <Wrapper color={color}>
+    <Wrapper color={color} backgroundImg={backgroundImg}>
       {children}
     </Wrapper>
   );

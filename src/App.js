@@ -6,6 +6,7 @@ import HeaderContainer from './containers/HeaderContainer';
 import HomeContainer from './containers/HomeContainer';
 import LoginContainer from './containers/LoginContainer';
 import AuctionsContainer from './containers/AuctionsContainer'
+import RegistrationContainer from './containers/RegistrationContainer';
 import GlobalStyle from './styles/GlobalStyle';
 import themes from './styles/themes';
 import { ROUTES, MESSAGE } from './constants/';
@@ -38,6 +39,7 @@ const App = ({ loginUser }) => {
           <Route exact path={ROUTES.HOME} component={HomeContainer} />
           <Route path={ROUTES.LOGIN} component={LoginContainer} />
           <Route path={ROUTES.AUCTIONS} component={AuctionsContainer} />
+          <Route path={ROUTES.REGISTRATION} component={RegistrationContainer} />
           <Route render={() => <Redirect to={ROUTES.HOME} />} />
         </Switch>
       </section>

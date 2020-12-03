@@ -27,12 +27,13 @@ const Wrapper = styled.div`
   }
 
   .text__login {
-    font-size: ${({ theme }) => theme.fontSizes.titleSize};
+    font-size: ${({ theme }) => theme.fontSizes.xxxl};
+    font-weight: ${({ theme }) => theme.fontWeights.medium};
     color: ${({ theme }) => theme.colors.bamboo};
   }
 
   .text__welcome {
-    font-size: ${({ theme }) => theme.fontSizes.xxl};
+    font-size: ${({ theme }) => theme.fontSizes.base};
     margin-bottom: 50px;
   }
 `;

@@ -29,7 +29,7 @@ const Carousel = () => {
   return (
     <SliderWrapper>
       <Slider {...settings}>
-        <Card color={colors.light_white}>
+        <Card color={colors.light_white} backgroundImg={bamboo} >
           <WelcomeContent />
         </Card>
         <Card color={colors.pastel_blue}/>

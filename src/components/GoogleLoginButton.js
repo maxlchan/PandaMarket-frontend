@@ -18,7 +18,7 @@ const StyledButton = styled.div`
   }
 
   .login__btn__text {
-    font-size: ${({ theme }) => theme.fontSizes.base};
+    font-size: ${({ theme }) => theme.fontSizes.small};
   }
 `;
 

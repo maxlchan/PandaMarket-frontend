@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
+  width: 100%;
 
   .text__welcome__wrap {
     display: flex;
@@ -20,24 +20,36 @@ const Wrapper = styled.div`
       font-size: ${({ theme }) => theme.fontSizes.base};
       margin-top: 10px;
       margin-bottom: 10px;
+      font-weight: 500;
     }
 
     h1 {
-      color: ${({ theme }) => theme.colors.bamboo};
-      font-size: ${({ theme }) => theme.fontSizes.titleSize};
       margin-top: 10px;
       margin-bottom: 10px;
-      font-weight: 800;
+      color: ${({ theme }) => theme.colors.bamboo};
+      font-size: ${({ theme }) => theme.fontSizes.titleSize};
+      font-weight: ${({ theme }) => theme.fontWeights.strong};
     }
 
     h3 {
       font-size: ${({ theme }) => theme.fontSizes.small};
+      font-weight: ${({ theme }) => theme.fontWeights.strong};
     }
   }
 
-  .img__welcome {
-    width: 30%;
-    min-width: 300px;
+  .img__welcome__wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+
+    img {
+      width: 100%;
+      max-width: 400px;
+      min-width: 200px;
+    }
   }
 `;
 
@@ -50,7 +62,9 @@ const WelcomeContent = () => {
         <h3>당신의 중고물품을</h3>
         <h3>실시간 라이브 방송을 통해 경매해봐요!</h3>
       </div>
-      <img className='img__welcome' src={panda} alt={'panda'} />
+      <div className='img__welcome__wrap'>
+        <img src={panda} alt={'panda'} />
+      </div>
     </Wrapper>
   );
 };
