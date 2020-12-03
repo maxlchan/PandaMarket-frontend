@@ -1,9 +1,9 @@
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { loginUser } from '../actions';
-import { MESSAGE, ROUTES } from '../constants';
-import { useEffect } from 'react';
+import { ROUTES } from '../constants';
 
 const Wrapper = styled.div`
 

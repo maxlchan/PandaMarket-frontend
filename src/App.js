@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
@@ -21,7 +21,7 @@ const App = ({ loginUser }) => {
 
       try {
         const { data } = await loginWithToken(token);
-        const userInfo = data;
+        const { userInfo } = data;
 
         loginUser(userInfo);
       } catch {

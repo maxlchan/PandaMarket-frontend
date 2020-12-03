@@ -1,10 +1,13 @@
-import { createStore, applyMiddleware } from "redux";
-import { createLogger } from "redux-logger";
-import reducers from "../reducers/index";
+import { createStore, applyMiddleware } from 'redux';
+import { createLogger } from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
 
-const middleware = [];
+import reducers from '../reducers';
 
-if (process.env.NODE_ENV !== "production") {
+const sagaMiddleware = createSagaMiddleware();
+const middleware = [sagaMiddleware];
+
+if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger());
 }
 

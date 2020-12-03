@@ -1,7 +1,8 @@
+import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Carousel from '../components/Carousel';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '../components/Button';
 import { ROUTES } from '../constants';
 

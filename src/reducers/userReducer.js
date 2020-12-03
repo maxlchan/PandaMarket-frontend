@@ -11,7 +11,7 @@ const initialState = {
   reservedAuction: [],
 };
 
-export const user = createReducer(initialState, {
+const userReducer = createReducer(initialState, {
   [loginUser]: (state, action) => {
     return { isLoggedIn: true, ...action.payload };
   },
@@ -19,3 +19,5 @@ export const user = createReducer(initialState, {
     return initialState;
   },
 });
+
+export default userReducer;
