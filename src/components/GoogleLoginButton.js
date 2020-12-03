@@ -7,7 +7,7 @@ const StyledButton = styled.div`
   justify-content: center;
   align-items: center;
   width: 80%;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: ${({ theme }) => theme.boxShadows.default};
   background-color: white;
   padding: 10px;
   cursor: pointer;
@@ -15,6 +15,10 @@ const StyledButton = styled.div`
   .login__btn__logo {
     width: 5%;
     margin-right: 10px;
+  }
+
+  .login__btn__text {
+    font-size: ${({ theme }) => theme.fontSizes.base};
   }
 `;
 

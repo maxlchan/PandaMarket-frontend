@@ -11,7 +11,7 @@ const StyledHeader = styled.header`
   align-items: center;
   width: 100%;
   height: 60px;
-  background-color: ${(props) => props.theme.LIGHT_WHITE};
+  background-color: ${({ theme }) => theme.colors.light_white};
 
   .header__logo {
     position: absolute;
