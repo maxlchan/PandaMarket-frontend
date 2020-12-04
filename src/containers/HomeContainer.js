@@ -17,8 +17,8 @@ const HomeContainer = () => {
   const history = useHistory();
 
   const handleButtonClick = () => {
-    history.push(ROUTES.REGISTRATION);
-  }
+    history.push(ROUTES.REGISTERATION);
+  };
 
   return (
     <Wrapper>
