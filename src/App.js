@@ -10,26 +10,16 @@ import RegistrationContainer from './containers/RegistrationContainer';
 import GlobalStyle from './styles/GlobalStyle';
 import themes from './styles/themes';
 import { ROUTES, MESSAGE } from './constants/';
-import { loginUser } from './redux/user/userReducer';
-import { loginWithToken } from './utils/api';
+import { fetchUser } from './redux/user/userReducer';
 
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      const token = localStorage.getItem('token');
-      if (!token) return;
+    const token = localStorage.getItem('token');
+    if (!token) return;
 
-      try {
-        const { data } = await loginWithToken(token);
-        const { userInfo } = data;
-
-        dispatch(loginUser(userInfo));
-      } catch {
-        alert(MESSAGE.UNKNOWN_ERROR);
-      }
-    })();
+    dispatch(fetchUser({ type: 'token', payload: token }));
   }, []);
 
   return (

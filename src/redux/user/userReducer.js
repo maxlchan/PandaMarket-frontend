@@ -1,25 +1,68 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { createAction } from '@reduxjs/toolkit';
+import {
+  createAction,
+  createReducer,
+  createAsyncThunk,
+} from '@reduxjs/toolkit';
+import { fetchUserByGoogleAuth, fetchUserByToken } from '../../utils/api';
 
-export const LOGIN_USER = 'LOGIN_USER';
-export const LOGOUT_USER = 'LOGOUT_USER';
-
-export const loginUser = createAction('LOGIN_USER');
 export const logoutUser = createAction('LOGOUT_USER');
 
+export const fetchUser = createAsyncThunk(
+  'users/fetch',
+  async ({ type, payload }, thunkAPI) => {
+    if (type === 'googleAuth') {
+      const { data } = await fetchUserByGoogleAuth(payload);
+      const { userInfo, token } = data;
+
+      localStorage.setItem('token', token);
+
+      return userInfo;
+    }
+
+    if (type === 'token') {
+      const { data } = await fetchUserByToken(payload);
+      const { userInfo } = data;
+
+      return userInfo;
+    }
+  }
+);
+
 const initialState = {
+  info: {
+    _id: '',
+    email: '',
+    username: '',
+    phonenumber: '',
+    myAuction: [],
+    reservedAuction: [],
+  },
   isLoggedIn: false,
-  _id: '',
-  email: '',
-  username: '',
-  phonenumber: '',
-  myAuction: [],
-  reservedAuction: [],
+  isLoading: false,
+  error: null,
 };
 
 const userReducer = createReducer(initialState, {
-  [loginUser]: (state, action) => {
-    return { isLoggedIn: true, ...action.payload };
+  [fetchUser.pending]: (state, action) => {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  },
+  [fetchUser.fulfilled]: (state, action) => {
+    return {
+      ...state,
+      info: action.payload,
+      isLoading: false,
+      isLoggedIn: true,
+    };
+  },
+  [fetchUser.rejected]: (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.payload.message,
+    };
   },
   [logoutUser]: (state, action) => {
     return initialState;

@@ -1,12 +1,10 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { loginUser } from '../redux/user/userReducer';
+import { fetchUser } from '../redux/user/userReducer';
 import panda from '../assets/images/panda.png';
 import GoogleLoginButton from '../components/GoogleLoginButton';
-import { loginWithGoogle } from '../utils/api';
-import { MESSAGE } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,22 +38,17 @@ const Wrapper = styled.div`
 `;
 
 const LoginContainer = () => {
+  const { isLoggedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleResponse = async (authResponse) => {
-    try {
-      const { data } = await loginWithGoogle(authResponse);
-      const { userInfo, token } = data;
-
-      localStorage.setItem('token', token);
-      dispatch(loginUser(userInfo));
-
-      history.goBack();
-    } catch (err) {
-      alert(MESSAGE.UNKNOWN_ERROR);
-    }
+  const handleResponse = async (auth) => {
+    dispatch(fetchUser({ type: 'googleAuth', payload: auth }));
   };
+
+  useEffect(() => {
+    isLoggedIn && history.goBack();
+  }, [isLoggedIn]);
 
   return (
     <Wrapper>

@@ -7,10 +7,10 @@ const StyledText = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.small};
 `;
 
-const NavItem = ({ to, name }) => {
+const NavItem = ({ to, name, onClick }) => {
   return (
     <Link to={to}>
-      <StyledText>{name}</StyledText>
+      <StyledText onClick={onClick}>{name}</StyledText>
     </Link>
   );
 };
