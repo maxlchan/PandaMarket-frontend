@@ -3,15 +3,17 @@ import {
   createReducer,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
-import { fetchUserByGoogleAuth, fetchUserByToken } from '../../utils/api';
+import { getUserByGoogleAuth, getUserByToken } from '../../utils/api';
+import { MESSAGE } from '../../constants';
 
-export const logoutUser = createAction('LOGOUT_USER');
+export const logoutUser = createAction('users/logout');
+export const addMyAuction = createAction('users/addMyAuction');
 
 export const fetchUser = createAsyncThunk(
   'users/fetch',
   async ({ type, payload }, thunkAPI) => {
     if (type === 'googleAuth') {
-      const { data } = await fetchUserByGoogleAuth(payload);
+      const { data } = await getUserByGoogleAuth(payload);
       const { userInfo, token } = data;
 
       localStorage.setItem('token', token);
@@ -20,7 +22,7 @@ export const fetchUser = createAsyncThunk(
     }
 
     if (type === 'token') {
-      const { data } = await fetchUserByToken(payload);
+      const { data } = await getUserByToken(payload);
       const { userInfo } = data;
 
       return userInfo;
@@ -34,8 +36,8 @@ const initialState = {
     email: '',
     username: '',
     phonenumber: '',
-    myAuction: [],
-    reservedAuction: [],
+    myAuctions: [],
+    reservedAuctions: [],
   },
   isLoggedIn: false,
   isLoading: false,
@@ -47,21 +49,32 @@ const userReducer = createReducer(initialState, {
     return {
       ...state,
       isLoading: true,
+      error: null,
     };
   },
   [fetchUser.fulfilled]: (state, action) => {
     return {
       ...state,
-      info: action.payload,
+      info: { ...state.info, ...action.payload },
       isLoading: false,
       isLoggedIn: true,
+      error: null,
     };
   },
   [fetchUser.rejected]: (state, action) => {
     return {
       ...state,
       isLoading: false,
-      error: action.payload.message,
+      error: MESSAGE.UNKNOWN_ERROR,
+    };
+  },
+  [addMyAuction]: (state, action) => {
+    return {
+      ...state,
+      info: {
+        ...state.info,
+        myAuctions: [...state.info.myAuction, action.payload],
+      },
     };
   },
   [logoutUser]: (state, action) => {

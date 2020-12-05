@@ -5,7 +5,7 @@ import NavItem from '../components/NavItem';
 import { ROUTES } from '../constants';
 import logo from '../assets/images/logoHorizontal.png';
 import { Link } from 'react-router-dom';
-import { logoutUser } from '../redux/user/userReducer';
+import { logoutUser } from '../redux/user/user.reducer';
 
 const StyledHeader = styled.header`
   display: flex;

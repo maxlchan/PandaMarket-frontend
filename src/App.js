@@ -10,7 +10,7 @@ import RegisterationContainer from './containers/RegisterationContainer';
 import GlobalStyle from './styles/GlobalStyle';
 import themes from './styles/themes';
 import { ROUTES, MESSAGE } from './constants/';
-import { fetchUser } from './redux/user/userReducer';
+import { fetchUser } from './redux/user/user.reducer';
 
 const App = () => {
   const dispatch = useDispatch();

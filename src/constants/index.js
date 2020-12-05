@@ -7,6 +7,7 @@ const ROUTES = {
   REGISTERATION: '/registeration',
   AUCTIONS: '/auctions',
   AUCTION_DETAIL: '/:auctionId',
+  UPLOAD: '/upload',
   MY_INFO: '/my-info',
 };
 
