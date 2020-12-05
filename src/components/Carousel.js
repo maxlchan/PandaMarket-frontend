@@ -7,36 +7,107 @@ import Card from './Card';
 import themes from '../styles/themes';
 import bamboo from '../assets/images/bamboo.jpg';
 import WelcomeContent from './WelcomeContent';
+import Button from './Button';
 
-const { colors } = themes;
+const { colors, pastelColors } = themes;
+const cardColors = Object.values(pastelColors);
+
 const SliderWrapper = styled.div`
   width: 100%;
   height: 75vh;
 `;
 
-const Carousel = () => {
-  const settings = {
-    pauseOnHover: true,
-    dots: true,
-    infinite: true,
-    lazyLoad: true,
-    autoplay: true,
-    autoplaySpeed: 6000,
-    speed: 1500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
+const sliderSettings = {
+  pauseOnHover: true,
+  dots: true,
+  infinite: true,
+  lazyLoad: true,
+  autoplay: true,
+  autoplaySpeed: 5000,
+  speed: 1000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
 
+const ContentWrapper = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 80%;
+  height: 80%;
+
+  .carousel__intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 50%;
+    height: 80%;
+    color: white;
+
+    .carousel__intro__title {
+      font-size: ${({ theme }) => theme.fontSizes.titleSize};
+      font-weight: ${({ theme }) => theme.fontWeights.strong};
+    }
+
+    .carousel__intro__desrciption {
+      font-size: ${({ theme }) => theme.fontSizes.xxl};
+      font-weight: ${({ theme }) => theme.fontWeights.medium};
+    }
+
+    h3 {
+      font-size: ${({ theme }) => theme.fontSizes.lg};
+    }
+  }
+
+  .carousel__image {
+    width: 50%;
+    height: 80%;
+
+    img {
+      height: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: ${({ theme }) => theme.boxShadows.default};
+    }
+  }
+`;
+
+const Carousel = ({ contents, onClick }) => {
   return (
     <SliderWrapper>
-      <Slider {...settings}>
-        <Card color={colors.light_white} backgroundImg={bamboo} >
+      <Slider {...sliderSettings}>
+        <Card backgroundImg={bamboo}>
           <WelcomeContent />
         </Card>
-        <Card color={colors.pastel_blue}/>
-        <Card color={colors.pastel_lavender}/>
-        <Card color={colors.pastel_pink}/>
-        <Card color={colors.pastel_red}/>
+        {contents.map((content, index) => {
+          const { _id, picturesUrl, title, initalPrice } = content;
+          const colorIndex = index % cardColors.length;
+
+          return (
+            <Card key={_id} color={cardColors[colorIndex]}>
+              <ContentWrapper>
+                <div className='carousel__intro'>
+                  <h1 className='carousel__intro__title'>{title}</h1>
+                  <h2 className='carousel__intro__desrciption'>
+                    경매 시작가 {initalPrice}원
+                  </h2>
+                  <h3>
+                    경매중
+                  </h3>
+                  <Button
+                    color={colors.indigo}
+                    text={'바로 참여하기'}
+                    onClick={onClick}
+                  />
+                </div>
+                <div className='carousel__image'>
+                  <img src={picturesUrl[0]} />
+                </div>
+              </ContentWrapper>
+            </Card>
+          );
+        })}
       </Slider>
     </SliderWrapper>
   );

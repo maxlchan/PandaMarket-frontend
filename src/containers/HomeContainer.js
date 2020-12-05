@@ -4,6 +4,7 @@ import Carousel from '../components/Carousel';
 import { useHistory } from 'react-router-dom';
 import Button from '../components/Button';
 import { ROUTES } from '../constants';
+import { useSelector } from 'react-redux';
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,8 +13,8 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
-
 const HomeContainer = () => {
+  const auctions = useSelector((state) => state.auctions.data);
   const history = useHistory();
 
   const handleButtonClick = () => {
@@ -22,11 +23,10 @@ const HomeContainer = () => {
 
   return (
     <Wrapper>
-      <Carousel />
-      <Button onClick={handleButtonClick} text={'내 중고 상품 등록'}/>
+      <Carousel contents={auctions} />
+      <Button onClick={handleButtonClick} text={'내 중고 상품 등록'} />
     </Wrapper>
   );
 };
-
 
 export default HomeContainer;

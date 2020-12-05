@@ -34,7 +34,7 @@ footer, header, hgroup, menu, nav, section {
 
 body {
 	line-height: 1;
-	background-color: whitesmoke
+	background-color: whitesmoke;
 }
 
 ol, ul {

@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 80%;
 
   .text__welcome__wrap {
     display: flex;

@@ -4,7 +4,8 @@ import ReduxThunk from 'redux-thunk';
 import rootReducer from './root-reducer';
 import { createBrowserHistory } from 'history';
 
-const customHistory = createBrowserHistory();
+export const customHistory = createBrowserHistory();
+
 const middleware = [ReduxThunk.withExtraArgument({ history: customHistory })];
 
 if (process.env.NODE_ENV !== 'production') {

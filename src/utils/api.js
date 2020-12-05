@@ -24,7 +24,7 @@ export const postAuction = async (payload, userId) => {
     category,
     pictures,
     description,
-    initPrice,
+    initalPrice,
     startedDateTime,
   } = payload;
 
@@ -40,7 +40,7 @@ export const postAuction = async (payload, userId) => {
   formData.append('itemName', itemName);
   formData.append('category', category);
   formData.append('description', description);
-  formData.append('initPrice', initPrice);
+  formData.append('initalPrice', initalPrice);
   formData.append('startedDateTime', startedDateTime);
 
   return axios.post(`${ROUTES.AUCTIONS}`, formData, config);

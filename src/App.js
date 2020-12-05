@@ -1,19 +1,23 @@
 import React, { useEffect } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import HeaderContainer from './containers/HeaderContainer';
 import HomeContainer from './containers/HomeContainer';
 import LoginContainer from './containers/LoginContainer';
 import AuctionsContainer from './containers/AuctionsContainer';
+import BroadcastContainer from './containers/BroadcastContainer';
 import RegisterationContainer from './containers/RegisterationContainer';
+import Loading from './components/Loading';
 import GlobalStyle from './styles/GlobalStyle';
 import themes from './styles/themes';
-import { ROUTES, MESSAGE } from './constants/';
+import { ROUTES } from './constants/';
 import { fetchUser } from './redux/user/user.reducer';
+import { fetchAuctions } from './redux/auction/auction.reducer';
 
 const App = () => {
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.user.isLoading);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -22,17 +26,38 @@ const App = () => {
     dispatch(fetchUser({ type: 'token', payload: token }));
   }, []);
 
+  useEffect(() => {
+    dispatch(fetchAuctions());
+  }, []);
+
   return (
     <ThemeProvider theme={themes}>
       <GlobalStyle />
-      <HeaderContainer />
-      <Switch>
-        <Route exact path={ROUTES.HOME} component={HomeContainer} />
-        <Route path={ROUTES.LOGIN} component={LoginContainer} />
-        <Route path={ROUTES.AUCTIONS} component={AuctionsContainer} />
-        <Route path={ROUTES.REGISTERATION} component={RegisterationContainer} />
-        <Route render={() => <Redirect to={ROUTES.HOME} />} />
-      </Switch>
+      {isLoading ? (
+        <Loading type='spokes' color='white' />
+      ) : (
+        <>
+          <HeaderContainer />
+          <Switch>
+            <Route exact path={ROUTES.HOME}>
+              <HomeContainer />
+            </Route>
+            <Route exact path={ROUTES.AUCTIONS}>
+              <AuctionsContainer />
+            </Route>
+            <Route path={ROUTES.LOGIN}>
+              <LoginContainer />
+            </Route>
+            <Route path={ROUTES.REGISTERATION}>
+              <RegisterationContainer />
+            </Route>
+            <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.BROADCAST}`}>
+              <BroadcastContainer />
+            </Route>
+            <Route render={() => <Redirect to={ROUTES.HOME} />} />
+          </Switch>
+        </>
+      )}
     </ThemeProvider>
   );
 };

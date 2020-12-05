@@ -5,6 +5,7 @@ const ROUTES = {
   LOGIN: '/login',
   TOKEN: '/token',
   REGISTERATION: '/registeration',
+  BROADCAST: '/broadcast',
   AUCTIONS: '/auctions',
   AUCTION_DETAIL: '/:auctionId',
   UPLOAD: '/upload',

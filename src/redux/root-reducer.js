@@ -4,5 +4,5 @@ import auctionReducer from './auction/auction.reducer';
 
 export default combineReducers({
   user: userReducer,
-  auction: auctionReducer,
+  auctions: auctionReducer,
 });

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { fetchUser } from '../redux/user/user.reducer';
 import panda from '../assets/images/panda.png';
 import GoogleLoginButton from '../components/GoogleLoginButton';
+import { useHistory } from 'react-router-dom';
+import { ROUTES } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,8 +48,8 @@ const LoginContainer = () => {
   };
 
   useEffect(() => {
-    isLoggedIn && history.goBack();
-  }, [isLoggedIn]);
+    isLoggedIn && history.push(ROUTES.HOME);
+  }, []);
 
   return (
     <Wrapper>

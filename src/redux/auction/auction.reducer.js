@@ -1,98 +1,88 @@
 import { createReducer, createAsyncThunk } from '@reduxjs/toolkit';
 import { getAuctions, postAuction } from '../../utils/api';
 import { addMyAuction } from '../user/user.reducer';
-import { MESSAGE } from '../../constants';
+import { ROUTES } from '../../constants';
 
 export const fetchAuctions = createAsyncThunk(
   'auctions/fetch',
-  async (payload, thunkAPI) => {
-    const { data } = await getAuctions();
-    // const { userInfo, token } = data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await getAuctions();
+      const { auctionsInfo } = data;
 
-    // return userInfo;
+      return auctionsInfo ? auctionsInfo : [];
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
   }
 );
 
 export const createAuction = createAsyncThunk(
   'auctions/create',
-  async (payload, { dispatch, getState }) => {
-    const { user } = getState();
-    const userId = user.info._id;
+  async (payload, { dispatch, getState, extra, rejectWithValue }) => {
+    const { history } = extra;
 
-    const { data } = await postAuction(payload, userId);
-    const { auctionInfo } = data;
+    try {
+      const { user } = getState();
+      const userId = user.info._id;
 
-    dispatch(addMyAuction(auctionInfo));
+      const { data } = await postAuction(payload, userId);
+      const { auctionInfo } = data;
+      const auctionId = auctionInfo._id;
 
-    return auctionInfo;
+      dispatch(addMyAuction(auctionInfo));
+
+      alert('등록 성공!');
+      history.push(
+        `${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`
+      );
+
+      return auctionInfo;
+    } catch (err) {
+      console.log(err);
+      return rejectWithValue(err.response.data);
+    }
   }
 );
 
 const initialState = {
-  data: [
-    {
-      title: '',
-      itemName: '',
-      category: '',
-      picturesUrl: [],
-      description: '',
-      initPrice: 0,
-      finalPrice: 0,
-      startedDateTime: null,
-      isStarted: false,
-      isFinished: false,
-      host: '',
-      reservedUser: [],
-    },
-  ],
+  data: [],
   isLoading: false,
   error: null,
 };
 
 const auctionReducer = createReducer(initialState, {
-  [fetchAuctions.pending]: (state, action) => {
-    return {
-      ...state,
-      isLoading: true,
-      error: null,
-    };
-  },
-  [fetchAuctions.fulfilled]: (state, action) => {
-    return {
-      ...state,
-      data: action.payload,
-      isLoading: false,
-      error: null,
-    };
-  },
-  [fetchAuctions.rejected]: (state, action) => {
-    return {
-      ...state,
-      isLoading: false,
-      error: action.payload.message,
-    };
-  },
-  [createAuction.pending]: (state, action) => {
-    return {
-      ...state,
-      isLoading: true,
-      error: null,
-    };
-  },
-  [createAuction.fulfilled]: (state, action) => {
-    return {
-      data: [...state.data, action.payload],
-      isLoading: false,
-      error: null,
-    };
-  },
-  [createAuction.rejected]: (state, action) => {
-    return {
-      ...state,
-      isLoading: false,
-      error: MESSAGE.UNKNOWN_ERROR,
-    };
-  },
+  [fetchAuctions.pending]: (state, action) => ({
+    ...state,
+    isLoading: true,
+    error: null,
+  }),
+  [fetchAuctions.fulfilled]: (state, action) => ({
+    ...state,
+    data: action.payload,
+    isLoading: false,
+    error: null,
+  }),
+  [fetchAuctions.rejected]: (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.payload.result,
+  }),
+  [createAuction.pending]: (state, action) => ({
+    ...state,
+    isLoading: true,
+    error: null,
+  }),
+  [createAuction.fulfilled]: (state, action) => ({
+    data: [...state.data, action.payload],
+    isLoading: false,
+    error: null,
+  }),
+  [createAuction.rejected]: (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.payload.result,
+  }),
 });
 
 export default auctionReducer;

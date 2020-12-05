@@ -4,15 +4,13 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import store from './redux/store';
 import App from './App';
-import { createBrowserHistory } from 'history';
-
-const customHistory = createBrowserHistory();
+import { customHistory } from './redux/store';
 
 ReactDOM.render(
-  <Router history={customHistory}>
-    <Provider store={store}>
+  <Provider store={store}>
+    <Router history={customHistory}>
       <App />
-    </Provider>
-  </Router>,
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );

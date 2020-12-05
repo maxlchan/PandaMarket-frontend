@@ -4,28 +4,34 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import { getUserByGoogleAuth, getUserByToken } from '../../utils/api';
-import { MESSAGE } from '../../constants';
 
 export const logoutUser = createAction('users/logout');
 export const addMyAuction = createAction('users/addMyAuction');
 
 export const fetchUser = createAsyncThunk(
   'users/fetch',
-  async ({ type, payload }, thunkAPI) => {
-    if (type === 'googleAuth') {
-      const { data } = await getUserByGoogleAuth(payload);
-      const { userInfo, token } = data;
+  async ({ type, payload }, { extra, rejectWithValue }) => {
+    const { history } = extra;
 
-      localStorage.setItem('token', token);
+    try {
+      if (type === 'googleAuth') {
+        const { data } = await getUserByGoogleAuth(payload);
+        const { userInfo, token } = data;
 
-      return userInfo;
-    }
+        localStorage.setItem('token', token);
+        history.goBack();
 
-    if (type === 'token') {
-      const { data } = await getUserByToken(payload);
-      const { userInfo } = data;
+        return userInfo;
+      }
 
-      return userInfo;
+      if (type === 'token') {
+        const { data } = await getUserByToken(payload);
+        const { userInfo } = data;
+
+        return userInfo;
+      }
+    } catch (err) {
+      return rejectWithValue(err.response.data);
     }
   }
 );
@@ -45,41 +51,27 @@ const initialState = {
 };
 
 const userReducer = createReducer(initialState, {
-  [fetchUser.pending]: (state, action) => {
-    return {
-      ...state,
-      isLoading: true,
-      error: null,
-    };
-  },
-  [fetchUser.fulfilled]: (state, action) => {
-    return {
-      ...state,
-      info: { ...state.info, ...action.payload },
-      isLoading: false,
-      isLoggedIn: true,
-      error: null,
-    };
-  },
-  [fetchUser.rejected]: (state, action) => {
-    return {
-      ...state,
-      isLoading: false,
-      error: MESSAGE.UNKNOWN_ERROR,
-    };
-  },
+  [fetchUser.pending]: (state, action) => ({
+    ...state,
+    isLoading: true,
+    error: null,
+  }),
+  [fetchUser.fulfilled]: (state, action) => ({
+    ...state,
+    info: { ...state.info, ...action.payload },
+    isLoading: false,
+    isLoggedIn: true,
+    error: null,
+  }),
+  [fetchUser.rejected]: (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.payload.result,
+  }),
   [addMyAuction]: (state, action) => {
-    return {
-      ...state,
-      info: {
-        ...state.info,
-        myAuctions: [...state.info.myAuction, action.payload],
-      },
-    };
+    state.info.myAuctions.push(action.payload);
   },
-  [logoutUser]: (state, action) => {
-    return initialState;
-  },
+  [logoutUser]: (state, action) => initialState,
 });
 
 export default userReducer;
