@@ -23,7 +23,7 @@ const sliderSettings = {
   infinite: true,
   lazyLoad: true,
   autoplay: true,
-  autoplaySpeed: 5000,
+  autoplaySpeed: 4000,
   speed: 1000,
   slidesToShow: 1,
   slidesToScroll: 1,
@@ -34,7 +34,7 @@ const ContentWrapper = styled.div`
   justify-content: space-evenly;
   align-items: center;
   width: 80%;
-  height: 80%;
+  height: 50%;
 
   .carousel__intro {
     display: flex;
@@ -66,7 +66,7 @@ const ContentWrapper = styled.div`
 
     img {
       height: 100%;
-      max-width: 600px;
+      max-width: 500px;
       margin: 0 auto;
       box-shadow: ${({ theme }) => theme.boxShadows.default};
     }

@@ -12,8 +12,9 @@ const LoadingWrapper = styled.div`
   background-color: white;
 
   img {
-    width: 80%;
-    height: 100%;
+    width: 60%;
+    min-width: 800px;
+    height: 75%;
   }
 
   .loader {
