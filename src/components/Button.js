@@ -5,12 +5,13 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: ${({ width }) => width};
   padding: 15px 30px;
   color: white;
-  background-color: ${( props ) => {
+  background-color: ${(props) => {
     return props.color || props.theme.colors.bamboo;
   }};
-  box-shadow: ${({theme}) => theme.boxShadows.default};
+  box-shadow: ${({ theme }) => theme.boxShadows.default};
   font-size: ${({ theme }) => theme.fontSizes.small};
   cursor: pointer;
   transition: all 0.2s ease-in-out;
@@ -18,11 +19,14 @@ const Wrapper = styled.div`
   &:hover {
     transform: scale(1.05);
   }
+  h1 {
+    min-width: 25px;
+  }
 `;
 
-const Button = ({ onClick, color, text }) => {
+const Button = ({ onClick, color, text, width }) => {
   return (
-    <Wrapper onClick={onClick} color={color}>
+    <Wrapper onClick={onClick} color={color} width={width}>
       <h1>{text}</h1>
     </Wrapper>
   );
