@@ -1,8 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import io from 'socket.io-client';
 import HeaderContainer from './containers/HeaderContainer';
 import HomeContainer from './containers/HomeContainer';
 import LoginContainer from './containers/LoginContainer';
@@ -14,23 +13,16 @@ import GlobalStyle from './styles/GlobalStyle';
 import themes from './styles/themes';
 import { ROUTES } from './constants/';
 import { fetchUser } from './redux/user/user.reducer';
-import { fetchAuctions } from './redux/auction/auction.reducer';
 
 const App = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
-  const socketRef = useRef();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
     dispatch(fetchUser({ type: 'token', payload: token }));
-  }, []);
-
-  useEffect(() => {
-    dispatch(fetchAuctions());
-    socketRef.current = io.connect(process.env.REACT_APP_SERVER_URL);
   }, []);
 
   return (
@@ -55,7 +47,7 @@ const App = () => {
               <RegisterationContainer />
             </Route>
             <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.BROADCAST}`}>
-              <BroadcastContainer socketRef={socketRef} />
+              <BroadcastContainer />
             </Route>
             <Route render={() => <Redirect to={ROUTES.HOME} />} />
           </Switch>

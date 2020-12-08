@@ -66,7 +66,7 @@ const userReducer = createReducer(initialState, {
   [fetchUser.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.payload,
   }),
   [addMyAuction]: (state, action) => {
     state.info.myAuctions.push(action.payload);

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Carousel from '../components/Carousel';
 import { useHistory } from 'react-router-dom';
 import Button from '../components/Button';
 import { ROUTES } from '../constants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAuctions } from '../redux/auction/auction.reducer';
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,7 +16,12 @@ const Wrapper = styled.div`
 
 const HomeContainer = () => {
   const auctions = useSelector((state) => state.auctions.data);
+  const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    dispatch(fetchAuctions());
+  }, []);
 
   const handleButtonClick = () => {
     history.push(ROUTES.REGISTERATION);

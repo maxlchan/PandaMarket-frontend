@@ -8,12 +8,13 @@ const StyldInput = styled.input`
   font-size: ${({ theme }) => theme.fontSizes.small};
 `;
 
-const ChatInput = ({ onChange, text }) => {
+const ChatInput = ({ onChange, onKeyPress, value }) => {
   return (
     <StyldInput
       placeholder={'메시지 입력하기'}
+      onKeyPress={onKeyPress}
       onChange={onChange}
-      value={text}
+      value={value}
     />
   );
 };

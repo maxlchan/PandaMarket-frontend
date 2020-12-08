@@ -66,7 +66,7 @@ const auctionReducer = createReducer(initialState, {
   [fetchAuctions.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.payload,
   }),
   [createAuction.pending]: (state, action) => ({
     ...state,
@@ -81,7 +81,7 @@ const auctionReducer = createReducer(initialState, {
   [createAuction.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.payload,
   }),
 });
 
