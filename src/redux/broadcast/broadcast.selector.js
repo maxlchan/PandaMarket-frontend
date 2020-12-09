@@ -8,8 +8,10 @@ export const broadcastSelectorForAuction = createSelector(
     highestBidPrice: broadcast.highestBidPriceList.slice(-1)[0],
     currentWinner: broadcast.winnerList.slice(-1)[0],
     memberNumber: broadcast.members.length,
+    privateMessages: broadcast.privateMessages,
     messages: broadcast.messages,
     isCountdownStart: broadcast.isCountdownStart,
+    isEnd: broadcast.isEnd,
     timeCount: broadcast.timeCount,
   })
 );

@@ -2,25 +2,22 @@ import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import ChatUnit from '../components/ChatUnit';
-import ChatInput from '../components/ChatInput';
 import Button from '../components/Button';
-import UserIcon from '../components/UserIcon';
-import themes from '../styles/themes';
 import { CONFIG, MESSAGE, ROUTES } from '../constants';
 import { socket } from '../utils/socket';
 import {
   resetBroadcast,
   setBroadcast,
   startCountdown,
+  setBroadcastEnd,
 } from '../redux/broadcast/broadcast.reducer';
 import {
   userRequiredInRoomSelector,
   userInfoSelector,
 } from '../redux/user/user.selector';
 import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
-
-const COLORS = themes.colors;
+import ChatBox from '../components/ChatBox';
+import { stopBothVideoAndAudio } from '../utils';
 
 const Wrapper = styled.div`
   display: flex;
@@ -71,33 +68,6 @@ const BroadcastBox = styled.div`
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     overflow: hidden;
 
-    .box__right__allchat {
-      width: 100%;
-      height: 70%;
-      background-color: ${({ theme }) => theme.colors.light_white};
-      box-shadow: ${({ theme }) => theme.boxShadows.default};
-      overflow: auto;
-    }
-
-    .box__right__mychat {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: flex-end;
-      position: relative;
-      width: 100%;
-      height: 10%;
-
-      .box__right__usericon {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 30px;
-        position: absolute;
-        left: 15px;
-        top: 15px;
-      }
-    }
-
     .box__right__bid {
       display: flex;
       flex-direction: column;
@@ -121,7 +91,7 @@ const PriceBiddingInput = styled.input`
 
 const BroadcastContainer = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
-  const { myAuctions, _id } = useSelector(userInfoSelector);
+  const { myAuctions, _id: userId } = useSelector(userInfoSelector);
   const userRequiredInRoom = useSelector(userRequiredInRoomSelector);
   const {
     memberNumber,
@@ -136,7 +106,7 @@ const BroadcastContainer = () => {
 
   const hostVideo = useRef();
   const peer = useRef({});
-  const messagesEndRef = useRef();
+  let stream;
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -174,28 +144,32 @@ const BroadcastContainer = () => {
   };
 
   const handleTimeout = () => {
-    const isWinner = currentWinner?._id === _id;
+    const isWinner = currentWinner?._id === userId;
+
+    dispatch(setBroadcastEnd());
 
     if (isHost) {
-      alert('경매가 완료되었습니다. 낙찰자와의 대화창으로 이동합니다');
+      socket.emit('broadcast end');
+      alert(MESSAGE.BROADCAST_END_HOST);
+      history.replace(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.PRIVATE_CHAT}`);
       return;
     }
 
     if (isWinner) {
-      alert(
-        '경매가 완료되었습니다. 1등으로 낙찰 되셨네요. 판매자와의 대화창으로 이동합니다'
-      );
+      alert(MESSAGE.BROADCAST_END_WINNER);
+      history.replace(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.PRIVATE_CHAT}`);
       return;
     }
 
-    alert('경매가 완료되었습니다. 아쉽지만 다음 기회를 노리세요!');
-    history.push(ROUTES.HOME);
+    dispatch(resetBroadcast());
     socket.emit('leave room');
+    alert(MESSAGE.BROADCAST_END_MEMBER);
+    history.replace(ROUTES.HOME);
   };
 
   const subscribeAsHost = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
       });
@@ -348,7 +322,7 @@ const BroadcastContainer = () => {
     });
 
     socket.on('room broked by host', () => {
-      alert('방장님이 나가셨습니다.');
+      alert(MESSAGE.HOST_OUT);
 
       socket.emit('leave room');
       dispatch(resetBroadcast());
@@ -364,21 +338,16 @@ const BroadcastContainer = () => {
       subscribeAsMember();
     }
 
-    return () => socket.removeAllListeners();
+    return () => {
+      socket.removeAllListeners();
+      stopBothVideoAndAudio(stream);
+    };
   }, []);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(scrollToBottom, [messages]);
 
   useEffect(() => {
     const isTimeout = timeCount === 0;
     isTimeout && handleTimeout();
   }, [timeCount]);
-
-  console.log(!!bidPrice);
 
   return (
     <Wrapper>
@@ -394,41 +363,21 @@ const BroadcastContainer = () => {
           <Button text={'제품 상세보기'} />
         </div>
         <div className='box__right'>
-          <div className='box__right__allchat'>
-            {messages.map(({ imageUrl, name, message, isHost }, index) => (
-              <ChatUnit
-                key={index}
-                imageUrl={imageUrl}
-                name={name}
-                text={message}
-                isHost={isHost}
-              />
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-          <div className='box__right__mychat'>
-            <ChatInput
-              onKeyPress={handleKeyPress}
-              onChange={(e) => setMessage(e.target.value)}
-              value={message}
-              disabled={!message}
-            />
-            <Button
-              color={COLORS.indigo}
-              text='전송'
-              onClick={handleChatButtonClick}
-            />
-            <UserIcon
-              className='box__right__usericon'
-              userNumber={memberNumber}
-            />
-          </div>
+          <ChatBox
+            messages={messages}
+            message={message}
+            onKeyPress={handleKeyPress}
+            onChange={(e) => setMessage(e.target.value)}
+            onClick={handleChatButtonClick}
+            memberNumber={memberNumber}
+            userId={userId}
+          />
           <div className='box__right__bid'>
             {isHost ? (
               <Button
                 disabled={isCountdownStart}
                 onClick={handleCountDownClick}
-                width='80%'
+                width='90%'
                 text={'카운트 다운 Start'}
               />
             ) : (
@@ -444,7 +393,7 @@ const BroadcastContainer = () => {
                   <span>KRW</span>
                 </div>
                 <Button
-                  width='80%'
+                  width='90%'
                   text='배팅하기'
                   onClick={handleBidButtonClick}
                   disabled={!bidPrice}

@@ -5,9 +5,18 @@ import {
 } from '@reduxjs/toolkit';
 
 export const setBroadcast = createAction('broadcast/set');
-export const startCountdown = createAction('broadcast/startCoutndown');
 export const resetBroadcast = createAction('broadcast/reset');
+export const startCountdown = createAction('broadcast/startCountdown');
+export const setBroadcastEnd = createAction('broadcast/setEnd');
 
+// export const setBroadcastEnd = createAsyncThunk(
+//   'broadcast/setEnd',
+//   async(payload, {rejectWithValue}) => {
+//     try {
+      
+//     } catch
+//   }
+// );
 export const getMedia = createAsyncThunk(
   'broadcast/getMedia',
   async (payload, { rejectWithValue }) => {
@@ -28,10 +37,12 @@ const initialState = {
   host: '',
   members: [],
   messages: [],
+  privateMessages: [],
   winnerList: [],
   highestBidPriceList: [],
   isCountdownStart: false,
   timeCount: null,
+  isEnd: false,
   isLoading: false,
   error: null,
 };
@@ -59,6 +70,10 @@ const broadcastReducer = createReducer(initialState, {
   [startCountdown]: (state, action) => ({
     ...state,
     isCountdownStart: true,
+  }),
+  [setBroadcastEnd]: (state, action) => ({
+    ...state,
+    isEnd: true,
   }),
   [resetBroadcast]: (state, action) => initialState,
 });

@@ -13,6 +13,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import themes from './styles/themes';
 import { ROUTES } from './constants/';
 import { fetchUser } from './redux/user/user.reducer';
+import PrivateChatContainer from './containers/PrivateChatContainer';
 
 const App = () => {
   const isLoading = useSelector((state) => state.user.isLoading);
@@ -46,8 +47,11 @@ const App = () => {
             <Route path={ROUTES.REGISTERATION}>
               <RegisterationContainer />
             </Route>
-            <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.BROADCAST}`}>
+            <Route exact path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.BROADCAST}`}>
               <BroadcastContainer />
+            </Route>
+            <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.PRIVATE_CHAT}`}>
+              <PrivateChatContainer />
             </Route>
             <Route render={() => <Redirect to={ROUTES.HOME} />} />
           </Switch>

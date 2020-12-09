@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
+const ChatUnitWrapper = styled.div`
   display: flex;
+  flex-direction: ${({ isChatMine }) => isChatMine && 'row-reverse'};
   justify-content: flex-start;
   align-items: center;
   width: 95%;
@@ -21,17 +22,18 @@ const Wrapper = styled.div`
     width: 3%;
     min-width: 50px;
     max-width: 70px;
-    color: ${({ isHost }) => isHost ? 'goldenrod' : 'black'};
+    color: ${({ isHost }) => (isHost ? 'goldenrod' : 'black')};
     font-weight: ${({ theme }) => theme.fontWeights.strong};
     text-align: center;
   }
 
   .chatunit__text {
+    text-align: ${({ isChatMine }) => isChatMine && 'right'};
     width: 90%;
     min-width: 100px;
   }
 
-  .chatunit__hostMark{
+  .chatunit__hostMark {
     padding: 5px;
     background-color: green;
     border-radius: 50px;
@@ -41,14 +43,18 @@ const Wrapper = styled.div`
   }
 `;
 
-const ChatUnit = ({ imageUrl, name, text, isHost }) => {
+const ChatUnit = ({ imageUrl, name, text, isHost, ownerId, userId }) => {
+  const isChatMine = ownerId == userId;
+  console.log(imageUrl);
   return (
-    <Wrapper isHost={isHost}>
+    <ChatUnitWrapper isChatMine={isChatMine} isHost={isHost}>
       <img className='chatunit__image' src={imageUrl} />
       <span className='chatunit__name'>{name}</span>
-      {isHost && <span className='chatunit__hostMark'>판매자</span>}
+      {isHost && !isChatMine && (
+        <span className='chatunit__hostMark'>판매자</span>
+      )}
       <span className='chatunit__text'>{text}</span>
-    </Wrapper>
+    </ChatUnitWrapper>
   );
 };
 

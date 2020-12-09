@@ -39,7 +39,6 @@ export const createAuction = createAsyncThunk(
 
       return auctionInfo;
     } catch (err) {
-      console.log(err);
       return rejectWithValue(err.response.data);
     }
   }
@@ -66,7 +65,7 @@ const auctionReducer = createReducer(initialState, {
   [fetchAuctions.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload,
+    error: action.payload.result,
   }),
   [createAuction.pending]: (state, action) => ({
     ...state,
@@ -81,7 +80,7 @@ const auctionReducer = createReducer(initialState, {
   [createAuction.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload,
+    error: action.payload.result,
   }),
 });
 

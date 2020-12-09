@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 20px 0;
+  height: 90vh;
 
   .box__register {
     display: flex;
