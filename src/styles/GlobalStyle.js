@@ -51,6 +51,11 @@ input,textarea, select {
 	outline: none;
 }
 
+button {
+	border: none;
+  outline:none;
+}
+
 blockquote, q {
 	quotes: none;
 }

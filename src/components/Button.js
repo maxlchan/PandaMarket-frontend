@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
+const Wrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,20 +14,26 @@ const Wrapper = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   font-size: ${({ theme }) => theme.fontSizes.small};
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.05s ease-in-out;
 
-  &:hover {
-    transform: scale(1.05);
+  &:active {
+    transform: scale(0.95);
   }
+
+  &:disabled {
+    opacity: 50%;
+  }
+
   h1 {
     min-width: 25px;
   }
 `;
 
-const Button = ({ className, onClick, color, text, width }) => {
+const Button = ({ disabled, className, onClick, color, text, width }) => {
   return (
     <Wrapper
       className={className}
+      disabled={disabled}
       onClick={onClick}
       color={color}
       width={width}

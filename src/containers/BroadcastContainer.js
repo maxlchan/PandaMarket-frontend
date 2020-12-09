@@ -7,11 +7,12 @@ import ChatInput from '../components/ChatInput';
 import Button from '../components/Button';
 import UserIcon from '../components/UserIcon';
 import themes from '../styles/themes';
-import { SETTING, MESSAGE, ROUTES } from '../constants';
+import { CONFIG, MESSAGE, ROUTES } from '../constants';
 import { socket } from '../utils/socket';
 import {
   resetBroadcast,
   setBroadcast,
+  startCountdown,
 } from '../redux/broadcast/broadcast.reducer';
 import {
   userRequiredInRoomSelector,
@@ -120,7 +121,7 @@ const PriceBiddingInput = styled.input`
 
 const BroadcastContainer = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
-  const { myAuctions } = useSelector(userInfoSelector);
+  const { myAuctions, _id } = useSelector(userInfoSelector);
   const userRequiredInRoom = useSelector(userRequiredInRoomSelector);
   const {
     memberNumber,
@@ -132,15 +133,14 @@ const BroadcastContainer = () => {
   } = useSelector(broadcastSelectorForAuction);
   const [bidPrice, setBidPrice] = useState('');
   const [message, setMessage] = useState('');
-  console.log(isCountdownStart);
-  console.log(timeCount);
+
   const hostVideo = useRef();
   const peer = useRef({});
   const messagesEndRef = useRef();
 
-  const { auctionId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
+  const { auctionId } = useParams();
 
   const isHost = myAuctions.includes(auctionId);
 
@@ -149,22 +149,15 @@ const BroadcastContainer = () => {
       return alert(MESSAGE.INVAILD_BIDDING);
     }
 
-    if (!bidPrice) {
-      return alert(MESSAGE.INVAILD_BIDDING);
-    }
-
     socket.emit('update highest bid price', bidPrice);
   };
 
   const handleChatButtonClick = () => {
-    if (!message) return;
-
     socket.emit('send message', message);
     setMessage('');
   };
 
   const handleKeyPress = ({ key }) => {
-    if (!message) return;
     if (key === 'Enter') {
       socket.emit('send message', message);
       setMessage('');
@@ -176,8 +169,28 @@ const BroadcastContainer = () => {
   };
 
   const handleCountDownClick = () => {
-    if (isCountdownStart) return;
-    socket.emit('countdown', SETTING.LIMITED_SECONDS);
+    dispatch(startCountdown());
+    socket.emit('countdown', CONFIG.LIMITED_SECONDS);
+  };
+
+  const handleTimeout = () => {
+    const isWinner = currentWinner?._id === _id;
+
+    if (isHost) {
+      alert('경매가 완료되었습니다. 낙찰자와의 대화창으로 이동합니다');
+      return;
+    }
+
+    if (isWinner) {
+      alert(
+        '경매가 완료되었습니다. 1등으로 낙찰 되셨네요. 판매자와의 대화창으로 이동합니다'
+      );
+      return;
+    }
+
+    alert('경매가 완료되었습니다. 아쉽지만 다음 기회를 노리세요!');
+    history.push(ROUTES.HOME);
+    socket.emit('leave room');
   };
 
   const subscribeAsHost = async () => {
@@ -209,9 +222,7 @@ const BroadcastContainer = () => {
       socket.on('member join room', (memberSocketId, member, payload) => {
         dispatch(setBroadcast(payload));
 
-        peer.current[memberSocketId] = new RTCPeerConnection(
-          SETTING.ICE_SERVER
-        );
+        peer.current[memberSocketId] = new RTCPeerConnection(CONFIG.ICE_SERVER);
 
         const stream = hostVideo.current.srcObject;
 
@@ -300,7 +311,7 @@ const BroadcastContainer = () => {
     });
 
     socket.on('offer', (hostSocketId, sdp) => {
-      peer.current[hostSocketId] = new RTCPeerConnection(SETTING.ICE_SERVER);
+      peer.current[hostSocketId] = new RTCPeerConnection(CONFIG.ICE_SERVER);
       peer.current[hostSocketId].setRemoteDescription(sdp);
       peer.current[hostSocketId].createAnswer().then((sessionDescription) => {
         peer.current[hostSocketId].setLocalDescription(sessionDescription);
@@ -362,6 +373,13 @@ const BroadcastContainer = () => {
 
   useEffect(scrollToBottom, [messages]);
 
+  useEffect(() => {
+    const isTimeout = timeCount === 0;
+    isTimeout && handleTimeout();
+  }, [timeCount]);
+
+  console.log(!!bidPrice);
+
   return (
     <Wrapper>
       <BroadcastBox>
@@ -372,6 +390,7 @@ const BroadcastContainer = () => {
             {highestBidPrice && <h2>현재 경매가 - {highestBidPrice}원</h2>}
             {currentWinner?.name && <h3>현재 1등 {currentWinner.name}님</h3>}
           </div>
+          {isCountdownStart && <span>{timeCount}</span>}
           <Button text={'제품 상세보기'} />
         </div>
         <div className='box__right'>
@@ -392,6 +411,7 @@ const BroadcastContainer = () => {
               onKeyPress={handleKeyPress}
               onChange={(e) => setMessage(e.target.value)}
               value={message}
+              disabled={!message}
             />
             <Button
               color={COLORS.indigo}
@@ -406,6 +426,7 @@ const BroadcastContainer = () => {
           <div className='box__right__bid'>
             {isHost ? (
               <Button
+                disabled={isCountdownStart}
                 onClick={handleCountDownClick}
                 width='80%'
                 text={'카운트 다운 Start'}
@@ -426,6 +447,7 @@ const BroadcastContainer = () => {
                   width='80%'
                   text='배팅하기'
                   onClick={handleBidButtonClick}
+                  disabled={!bidPrice}
                 />
               </>
             )}

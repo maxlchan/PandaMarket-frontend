@@ -32,7 +32,7 @@ const ITEM_CATEGORY = [
   '도서 기타',
 ];
 
-const SETTING = {
+const CONFIG = {
   LIMITED_SECONDS: 5,
   ICE_SERVER: {
     iceServers: [
@@ -46,4 +46,4 @@ const SETTING = {
   },
 };
 
-export { ROUTES, MESSAGE, ITEM_CATEGORY, SETTING };
+export { ROUTES, MESSAGE, ITEM_CATEGORY, CONFIG };

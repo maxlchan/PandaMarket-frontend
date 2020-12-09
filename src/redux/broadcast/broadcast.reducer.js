@@ -5,6 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 
 export const setBroadcast = createAction('broadcast/set');
+export const startCountdown = createAction('broadcast/startCoutndown');
 export const resetBroadcast = createAction('broadcast/reset');
 
 export const getMedia = createAsyncThunk(
@@ -54,6 +55,10 @@ const broadcastReducer = createReducer(initialState, {
   [setBroadcast]: (state, action) => ({
     ...state,
     ...action.payload,
+  }),
+  [startCountdown]: (state, action) => ({
+    ...state,
+    isCountdownStart: true,
   }),
   [resetBroadcast]: (state, action) => initialState,
 });
