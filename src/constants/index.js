@@ -32,4 +32,18 @@ const ITEM_CATEGORY = [
   '도서 기타',
 ];
 
-export { ROUTES, MESSAGE, ITEM_CATEGORY };
+const SETTING = {
+  LIMITED_SECONDS: 5,
+  ICE_SERVER: {
+    iceServers: [
+      { urls: 'stun:stun.stunprotocol.org' },
+      {
+        urls: 'turn:numb.viagenie.ca',
+        credential: 'muazkh',
+        username: 'webrtc@live.com',
+      },
+    ],
+  },
+};
+
+export { ROUTES, MESSAGE, ITEM_CATEGORY, SETTING };

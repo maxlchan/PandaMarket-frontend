@@ -45,7 +45,6 @@ const HeaderContainer = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     dispatch(logoutUser());
-    window.location.reload();
   };
 
   return (

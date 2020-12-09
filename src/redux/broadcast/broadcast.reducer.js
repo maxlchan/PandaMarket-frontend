@@ -1,7 +1,11 @@
 import {
+  createAction,
   createReducer,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
+
+export const setBroadcast = createAction('broadcast/set');
+export const resetBroadcast = createAction('broadcast/reset');
 
 export const getMedia = createAsyncThunk(
   'broadcast/getMedia',
@@ -22,9 +26,11 @@ export const getMedia = createAsyncThunk(
 const initialState = {
   host: '',
   members: [],
-  chatList: [],
-  currentWinner: '',
-  currentHighesstPrice: '',
+  messages: [],
+  winnerList: [],
+  highestBidPriceList: [],
+  isCountdownStart: false,
+  timeCount: null,
   isLoading: false,
   error: null,
 };
@@ -45,6 +51,11 @@ const broadcastReducer = createReducer(initialState, {
     isLoading: false,
     error: action.payload.result,
   }),
+  [setBroadcast]: (state, action) => ({
+    ...state,
+    ...action.payload,
+  }),
+  [resetBroadcast]: (state, action) => initialState,
 });
 
 export default broadcastReducer;

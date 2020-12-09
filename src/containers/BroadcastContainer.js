@@ -1,14 +1,24 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ChatUnit from '../components/ChatUnit';
 import ChatInput from '../components/ChatInput';
 import Button from '../components/Button';
 import UserIcon from '../components/UserIcon';
 import themes from '../styles/themes';
-import { MESSAGE, ROUTES } from '../constants';
+import { SETTING, MESSAGE, ROUTES } from '../constants';
 import { socket } from '../utils/socket';
+import {
+  resetBroadcast,
+  setBroadcast,
+} from '../redux/broadcast/broadcast.reducer';
+import {
+  userRequiredInRoomSelector,
+  userInfoSelector,
+} from '../redux/user/user.selector';
+import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
+
 const COLORS = themes.colors;
 
 const Wrapper = styled.div`
@@ -109,34 +119,38 @@ const PriceBiddingInput = styled.input`
 `;
 
 const BroadcastContainer = () => {
+  const { isLoggedIn } = useSelector((state) => state.user);
+  const { myAuctions } = useSelector(userInfoSelector);
+  const userRequiredInRoom = useSelector(userRequiredInRoomSelector);
+  const {
+    memberNumber,
+    highestBidPrice,
+    currentWinner,
+    messages,
+    isCountdownStart,
+    timeCount,
+  } = useSelector(broadcastSelectorForAuction);
+  const [bidPrice, setBidPrice] = useState('');
+  const [message, setMessage] = useState('');
+  console.log(isCountdownStart);
+  console.log(timeCount);
   const hostVideo = useRef();
-  const peerConnections = useRef();
+  const peer = useRef({});
   const messagesEndRef = useRef();
 
   const { auctionId } = useParams();
-  const { isLoggedIn, info: userInfo } = useSelector((state) => state.user);
-  const [hightestBidPrice, setHighestBidPrice] = useState(0);
-  const [memberNumber, setMemberNumber] = useState(0);
-  const [currentWinner, setCurrentWinner] = useState('');
-  const [bidPrice, setBidPrice] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
   const history = useHistory();
 
-  const { _id, email, name, imageUrl, myAuctions } = userInfo;
   const isHost = myAuctions.includes(auctionId);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(scrollToBottom, [messages]);
-
   const handleBidButtonClick = () => {
-    if (bidPrice <= hightestBidPrice) {
-      alert(MESSAGE.INVAILD_BIDDING);
+    if (Number(bidPrice) <= Number(highestBidPrice)) {
+      return alert(MESSAGE.INVAILD_BIDDING);
+    }
 
-      return;
+    if (!bidPrice) {
+      return alert(MESSAGE.INVAILD_BIDDING);
     }
 
     socket.emit('update highest bid price', bidPrice);
@@ -144,14 +158,15 @@ const BroadcastContainer = () => {
 
   const handleChatButtonClick = () => {
     if (!message) return;
-    socket.emit('send message', message, auctionId);
+
+    socket.emit('send message', message);
     setMessage('');
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = ({ key }) => {
     if (!message) return;
-    if (e.key === 'Enter') {
-      socket.emit('send message', message, auctionId);
+    if (key === 'Enter') {
+      socket.emit('send message', message);
       setMessage('');
     }
   };
@@ -160,50 +175,53 @@ const BroadcastContainer = () => {
     setBidPrice(e.target.value);
   };
 
-  const getMedia = async (constraints) => {
+  const handleCountDownClick = () => {
+    if (isCountdownStart) return;
+    socket.emit('countdown', SETTING.LIMITED_SECONDS);
+  };
+
+  const subscribeAsHost = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      const userData = { _id, email, name, imageUrl };
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
 
       hostVideo.current.srcObject = stream;
 
       socket.emit('create room', {
         roomId: auctionId,
-        user: userData,
+        user: userRequiredInRoom,
       });
 
-      socket.on('send message', (messages) => {
-        setMessages(messages);
+      socket.on('send message', (payload) => {
+        dispatch(setBroadcast(payload));
       });
 
-      socket.on('update highest bid price', (price, name) => {
-        setHighestBidPrice(price);
-        setCurrentWinner(name);
+      socket.on('update highest bid price', (payload) => {
+        dispatch(setBroadcast(payload));
       });
 
-      socket.on('member join room', (memberSocketId, member) => {
-        if (!peerConnections.current) peerConnections.current = {};
+      socket.on('countdown', (payload) => {
+        dispatch(setBroadcast(payload));
+      });
 
-        peerConnections.current[memberSocketId] = new RTCPeerConnection({
-          iceServers: [
-            { urls: 'stun:stun.stunprotocol.org' },
-            {
-              urls: 'turn:numb.viagenie.ca',
-              credential: 'muazkh',
-              username: 'webrtc@live.com',
-            },
-          ],
-        });
+      socket.on('member join room', (memberSocketId, member, payload) => {
+        dispatch(setBroadcast(payload));
+
+        peer.current[memberSocketId] = new RTCPeerConnection(
+          SETTING.ICE_SERVER
+        );
 
         const stream = hostVideo.current.srcObject;
 
         stream
           .getTracks()
           .forEach((track) =>
-            peerConnections.current[memberSocketId].addTrack(track, stream)
+            peer.current[memberSocketId].addTrack(track, stream)
           );
 
-        peerConnections.current[memberSocketId].onicecandidate = (event) => {
+        peer.current[memberSocketId].onicecandidate = (event) => {
           if (event.candidate) {
             socket.emit('candidate', memberSocketId, {
               type: 'candidate',
@@ -214,10 +232,10 @@ const BroadcastContainer = () => {
           }
         };
 
-        peerConnections.current[memberSocketId]
+        peer.current[memberSocketId]
           .createOffer()
           .then((sessionDescription) => {
-            peerConnections.current[memberSocketId].setLocalDescription(
+            peer.current[memberSocketId].setLocalDescription(
               sessionDescription
             );
 
@@ -234,7 +252,7 @@ const BroadcastContainer = () => {
       });
 
       socket.on('answer', (memberSocketId, event) => {
-        peerConnections.current[memberSocketId].setRemoteDescription(
+        peer.current[memberSocketId].setRemoteDescription(
           new RTCSessionDescription(event)
         );
       });
@@ -245,11 +263,12 @@ const BroadcastContainer = () => {
           candidate: event.candidate,
         });
 
-        peerConnections.current[memberSocketId].addIceCandidate(candidate);
+        peer.current[memberSocketId].addIceCandidate(candidate);
       });
 
-      socket.on('member leave room', (memberSocketId, name) => {
-        delete peerConnections?.current[memberSocketId];
+      socket.on('leave room', (memberSocketId, name, payload) => {
+        delete peer.current[memberSocketId];
+        dispatch(setBroadcast(payload));
         console.log(`${name}이 나가셨습니다.`);
       });
     } catch (err) {
@@ -257,77 +276,47 @@ const BroadcastContainer = () => {
     }
   };
 
-  useEffect(() => {
-    isHost && getMedia({ audio: true, video: true });
+  const subscribeAsMember = () => {
+    socket.emit('join room', { roomId: auctionId, user: userRequiredInRoom });
 
-    return () => socket.removeAllListeners();
-  }, []);
-
-  useEffect(() => {
-    if (!isLoggedIn) return;
-    if (isHost) return;
-
-    const userData = { _id, email, name, imageUrl };
-    console.log(12313);
-    socket.emit(
-      'join room',
-      { roomId: auctionId, user: userData },
-      (
-        currentMessages,
-        currentHighestPrice,
-        currentWinner,
-        currnetMemberNumber
-      ) => {
-        setMessages(currentMessages);
-        setHighestBidPrice(currentHighestPrice);
-        setCurrentWinner(currentWinner);
-        setMemberNumber(currnetMemberNumber);
-      }
-    );
-
-    socket.on('send message', (messages) => {
-      setMessages(messages);
+    socket.on('member join room', (_, __, payload) => {
+      dispatch(setBroadcast(payload));
     });
 
-    socket.on('update highest bid price', (price, name) => {
-      setHighestBidPrice(price);
-      setCurrentWinner(name);
+    socket.on('send message', (payload) => {
+      dispatch(setBroadcast(payload));
+    });
+
+    socket.on('countdown', (payload) => {
+      dispatch(setBroadcast(payload));
+    });
+
+    socket.on('leave room', (_, __, payload) => {
+      dispatch(setBroadcast(payload));
+    });
+
+    socket.on('update highest bid price', (payload) => {
+      dispatch(setBroadcast(payload));
     });
 
     socket.on('offer', (hostSocketId, sdp) => {
-      peerConnections.current = {};
-      peerConnections.current[hostSocketId] = new RTCPeerConnection({
-        iceServers: [
-          { urls: 'stun:stun.stunprotocol.org' },
-          {
-            urls: 'turn:numb.viagenie.ca',
-            credential: 'muazkh',
-            username: 'webrtc@live.com',
-          },
-        ],
+      peer.current[hostSocketId] = new RTCPeerConnection(SETTING.ICE_SERVER);
+      peer.current[hostSocketId].setRemoteDescription(sdp);
+      peer.current[hostSocketId].createAnswer().then((sessionDescription) => {
+        peer.current[hostSocketId].setLocalDescription(sessionDescription);
+
+        socket.emit('answer', {
+          type: 'answer',
+          sdp: sessionDescription,
+          roomId: auctionId,
+        });
       });
 
-      peerConnections.current[hostSocketId].setRemoteDescription(sdp);
-
-      peerConnections.current[hostSocketId]
-        .createAnswer()
-        .then((sessionDescription) => {
-          peerConnections.current[hostSocketId].setLocalDescription(
-            sessionDescription
-          );
-
-          socket.emit('answer', {
-            type: 'answer',
-            sdp: sessionDescription,
-            roomId: auctionId,
-          });
-        });
-
-      peerConnections.current[hostSocketId].ontrack = (event) => {
+      peer.current[hostSocketId].ontrack = (event) => {
         hostVideo.current.srcObject = event.streams[0];
       };
 
-      peerConnections.current[hostSocketId].onicecandidate = (event) => {
+      peer.current[hostSocketId].onicecandidate = (event) => {
         if (event.candidate) {
           socket.emit('candidate', hostSocketId, {
             type: 'candidate',
@@ -344,18 +333,34 @@ const BroadcastContainer = () => {
         sdpMLineIndex: event.label,
         candidate: event.candidate,
       });
-      peerConnections.current[hostSocketId].addIceCandidate(candidate);
+      peer.current[hostSocketId].addIceCandidate(candidate);
     });
 
     socket.on('room broked by host', () => {
       alert('방장님이 나가셨습니다.');
 
-      socket.emit('leave room', auctionId);
+      socket.emit('leave room');
+      dispatch(resetBroadcast());
       history.push(ROUTES.HOME);
     });
+  };
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    if (isHost) {
+      subscribeAsHost();
+    } else {
+      subscribeAsMember();
+    }
 
     return () => socket.removeAllListeners();
   }, []);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(scrollToBottom, [messages]);
 
   return (
     <Wrapper>
@@ -363,10 +368,11 @@ const BroadcastContainer = () => {
         <div className='box__left'>
           <video autoPlay ref={hostVideo} />
           <div className='box__left__status'>
-            <h2>시작가 {3000}</h2>
-            <h2>현재 경매가 {hightestBidPrice}</h2>
-            <h3>현재 1등 {currentWinner}님</h3>
+            <h2>시작가 - {3000}원</h2>
+            {highestBidPrice && <h2>현재 경매가 - {highestBidPrice}원</h2>}
+            {currentWinner?.name && <h3>현재 1등 {currentWinner.name}님</h3>}
           </div>
+          <Button text={'제품 상세보기'} />
         </div>
         <div className='box__right'>
           <div className='box__right__allchat'>
@@ -398,21 +404,31 @@ const BroadcastContainer = () => {
             />
           </div>
           <div className='box__right__bid'>
-            <div className='box__right__bid__price'>
-              <span>₩</span>
-              <PriceBiddingInput
-                type='number'
-                value={bidPrice}
-                onChange={handleBidInputChange}
-                placeholder={0}
+            {isHost ? (
+              <Button
+                onClick={handleCountDownClick}
+                width='80%'
+                text={'카운트 다운 Start'}
               />
-              <span>KRW</span>
-            </div>
-            <Button
-              width='80%'
-              text='배팅하기'
-              onClick={handleBidButtonClick}
-            />
+            ) : (
+              <>
+                <div className='box__right__bid__price'>
+                  <span>₩</span>
+                  <PriceBiddingInput
+                    type='number'
+                    value={bidPrice}
+                    onChange={handleBidInputChange}
+                    placeholder={0}
+                  />
+                  <span>KRW</span>
+                </div>
+                <Button
+                  width='80%'
+                  text='배팅하기'
+                  onClick={handleBidButtonClick}
+                />
+              </>
+            )}
           </div>
         </div>
       </BroadcastBox>

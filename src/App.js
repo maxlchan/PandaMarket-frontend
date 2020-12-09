@@ -15,8 +15,8 @@ import { ROUTES } from './constants/';
 import { fetchUser } from './redux/user/user.reducer';
 
 const App = () => {
-  const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.user.isLoading);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const token = localStorage.getItem('token');

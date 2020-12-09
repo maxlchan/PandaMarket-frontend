@@ -24,9 +24,14 @@ const Wrapper = styled.div`
   }
 `;
 
-const Button = ({ onClick, color, text, width }) => {
+const Button = ({ className, onClick, color, text, width }) => {
   return (
-    <Wrapper onClick={onClick} color={color} width={width}>
+    <Wrapper
+      className={className}
+      onClick={onClick}
+      color={color}
+      width={width}
+    >
       <h1>{text}</h1>
     </Wrapper>
   );
