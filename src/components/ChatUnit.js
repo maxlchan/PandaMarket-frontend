@@ -45,7 +45,7 @@ const ChatUnitWrapper = styled.div`
 
 const ChatUnit = ({ imageUrl, name, text, isHost, ownerId, userId }) => {
   const isChatMine = ownerId == userId;
-  console.log(imageUrl);
+
   return (
     <ChatUnitWrapper isChatMine={isChatMine} isHost={isHost}>
       <img className='chatunit__image' src={imageUrl} />

@@ -93,6 +93,8 @@ const BroadcastContainer = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
   const { myAuctions, _id: userId } = useSelector(userInfoSelector);
   const userRequiredInRoom = useSelector(userRequiredInRoomSelector);
+  const [bidPrice, setBidPrice] = useState('');
+  const [message, setMessage] = useState('');
   const {
     memberNumber,
     highestBidPrice,
@@ -101,8 +103,6 @@ const BroadcastContainer = () => {
     isCountdownStart,
     timeCount,
   } = useSelector(broadcastSelectorForAuction);
-  const [bidPrice, setBidPrice] = useState('');
-  const [message, setMessage] = useState('');
 
   const hostVideo = useRef();
   const peer = useRef({});
@@ -146,28 +146,26 @@ const BroadcastContainer = () => {
   const handleTimeout = () => {
     const isWinner = currentWinner?._id === userId;
 
-    dispatch(setBroadcastEnd());
-
     if (isHost) {
-      socket.emit('broadcast end');
       alert(MESSAGE.BROADCAST_END_HOST);
-      history.replace(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.PRIVATE_CHAT}`);
-      return;
-    }
-
-    if (isWinner) {
+    } else if (isWinner) {
       alert(MESSAGE.BROADCAST_END_WINNER);
-      history.replace(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.PRIVATE_CHAT}`);
+    } else {
+      dispatch(resetBroadcast());
+      socket.emit('leave room');
+
+      alert(MESSAGE.BROADCAST_END_MEMBER);
+      history.replace(ROUTES.HOME);
+
       return;
     }
 
-    dispatch(resetBroadcast());
-    socket.emit('leave room');
-    alert(MESSAGE.BROADCAST_END_MEMBER);
-    history.replace(ROUTES.HOME);
+    socket.emit('broadcast end');
+    dispatch(setBroadcastEnd(auctionId));
+    history.replace(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.PRIVATE_CHAT}`);
   };
 
-  const subscribeAsHost = async () => {
+  const getUserMedia = async () => {
     try {
       stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -175,90 +173,90 @@ const BroadcastContainer = () => {
       });
 
       hostVideo.current.srcObject = stream;
-
-      socket.emit('create room', {
-        roomId: auctionId,
-        user: userRequiredInRoom,
-      });
-
-      socket.on('send message', (payload) => {
-        dispatch(setBroadcast(payload));
-      });
-
-      socket.on('update highest bid price', (payload) => {
-        dispatch(setBroadcast(payload));
-      });
-
-      socket.on('countdown', (payload) => {
-        dispatch(setBroadcast(payload));
-      });
-
-      socket.on('member join room', (memberSocketId, member, payload) => {
-        dispatch(setBroadcast(payload));
-
-        peer.current[memberSocketId] = new RTCPeerConnection(CONFIG.ICE_SERVER);
-
-        const stream = hostVideo.current.srcObject;
-
-        stream
-          .getTracks()
-          .forEach((track) =>
-            peer.current[memberSocketId].addTrack(track, stream)
-          );
-
-        peer.current[memberSocketId].onicecandidate = (event) => {
-          if (event.candidate) {
-            socket.emit('candidate', memberSocketId, {
-              type: 'candidate',
-              label: event.candidate.sdpMLineIndex,
-              id: event.candidate.sdpMid,
-              candidate: event.candidate.candidate,
-            });
-          }
-        };
-
-        peer.current[memberSocketId]
-          .createOffer()
-          .then((sessionDescription) => {
-            peer.current[memberSocketId].setLocalDescription(
-              sessionDescription
-            );
-
-            socket.emit('offer', memberSocketId, {
-              type: 'offer',
-              sdp: sessionDescription,
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-
-        console.log(`${member.name}님이 들어오셨습니다.`);
-      });
-
-      socket.on('answer', (memberSocketId, event) => {
-        peer.current[memberSocketId].setRemoteDescription(
-          new RTCSessionDescription(event)
-        );
-      });
-
-      socket.on('candidate', (memberSocketId, event) => {
-        const candidate = new RTCIceCandidate({
-          sdpMLineIndex: event.label,
-          candidate: event.candidate,
-        });
-
-        peer.current[memberSocketId].addIceCandidate(candidate);
-      });
-
-      socket.on('leave room', (memberSocketId, name, payload) => {
-        delete peer.current[memberSocketId];
-        dispatch(setBroadcast(payload));
-        console.log(`${name}이 나가셨습니다.`);
-      });
     } catch (err) {
       console.log(err.name + ': ' + err.message);
     }
+  };
+
+  const subscribeAsHost = async () => {
+    socket.emit('create room', {
+      roomId: auctionId,
+      user: userRequiredInRoom,
+    });
+
+    socket.on('send message', (payload) => {
+      dispatch(setBroadcast(payload));
+    });
+
+    socket.on('update highest bid price', (payload) => {
+      dispatch(setBroadcast(payload));
+    });
+
+    socket.on('countdown', (payload) => {
+      dispatch(setBroadcast(payload));
+    });
+
+    socket.on('member join room', (memberSocketId, member, payload) => {
+      dispatch(setBroadcast(payload));
+
+      peer.current[memberSocketId] = new RTCPeerConnection(CONFIG.ICE_SERVER);
+
+      const stream = hostVideo.current.srcObject;
+
+      stream
+        .getTracks()
+        .forEach((track) =>
+          peer.current[memberSocketId].addTrack(track, stream)
+        );
+
+      peer.current[memberSocketId].onicecandidate = (event) => {
+        if (event.candidate) {
+          socket.emit('candidate', memberSocketId, {
+            type: 'candidate',
+            label: event.candidate.sdpMLineIndex,
+            id: event.candidate.sdpMid,
+            candidate: event.candidate.candidate,
+          });
+        }
+      };
+
+      peer.current[memberSocketId]
+        .createOffer()
+        .then((sessionDescription) => {
+          peer.current[memberSocketId].setLocalDescription(sessionDescription);
+
+          socket.emit('offer', memberSocketId, {
+            type: 'offer',
+            sdp: sessionDescription,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      console.log(`${member.name}님이 들어오셨습니다.`);
+    });
+
+    socket.on('answer', (memberSocketId, event) => {
+      peer.current[memberSocketId].setRemoteDescription(
+        new RTCSessionDescription(event)
+      );
+    });
+
+    socket.on('candidate', (memberSocketId, event) => {
+      const candidate = new RTCIceCandidate({
+        sdpMLineIndex: event.label,
+        candidate: event.candidate,
+      });
+
+      peer.current[memberSocketId].addIceCandidate(candidate);
+    });
+
+    socket.on('leave room', (memberSocketId, name, payload) => {
+      delete peer.current[memberSocketId];
+      dispatch(setBroadcast(payload));
+      console.log(`${name}이 나가셨습니다.`);
+    });
   };
 
   const subscribeAsMember = () => {
@@ -333,7 +331,10 @@ const BroadcastContainer = () => {
   useEffect(() => {
     if (!isLoggedIn) return;
     if (isHost) {
-      subscribeAsHost();
+      (async () => {
+        await getUserMedia();
+        subscribeAsHost();
+      })();
     } else {
       subscribeAsMember();
     }

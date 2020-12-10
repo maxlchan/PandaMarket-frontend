@@ -45,3 +45,8 @@ export const postAuction = async (payload, userId) => {
 
   return axios.post(`${ROUTES.AUCTIONS}`, formData, config);
 };
+
+export const finishAuction = async (payload, auctionId) => {
+  console.log(payload);
+  return axios.put(`${ROUTES.AUCTIONS}/${auctionId}`, payload);
+};

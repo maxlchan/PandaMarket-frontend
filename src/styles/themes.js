@@ -12,7 +12,7 @@ const fontSizes = {
 
 const fontWeights = {
   weak: 300,
-  medium: 500,
+  medium: 600,
   strong: 800,
 };
 

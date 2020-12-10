@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import ChatBox from '../components/ChatBox';
-import { setBroadcast } from '../redux/broadcast/broadcast.reducer';
-import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
+import Loading from '../components/Loading';
+import { ROUTES } from '../constants';
 import {
-  userInfoSelector,
-} from '../redux/user/user.selector';
+  resetBroadcast,
+  setBroadcast,
+} from '../redux/broadcast/broadcast.reducer';
+import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
+import { userInfoSelector } from '../redux/user/user.selector';
 import { socket } from '../utils/socket';
 
 const Wrapper = styled.div`
@@ -16,7 +20,9 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 93vh;
-  background-color: white;
+  background-image: url('https://acegif.com/wp-content/gif/confetti-18.gif');
+  background-position: center;
+  background-size: cover;
 
   .privatechat__wrapper {
     display: flex;
@@ -25,21 +31,22 @@ const Wrapper = styled.div`
     align-items: center;
     width: 40%;
     height: 100%;
-  }
 
-  .privatechat__backImg {
-    width: 20%;
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
+    .privatechat__title {
+      font-size: ${({ theme }) => theme.fontSizes.xl};
+      color: ${({ theme }) => theme.colors.ligth_black};
+      font-weight: ${({ theme }) => theme.fontWeights.strong};
+    }
   }
 `;
 
 const PrivateChatContainer = () => {
+  const { isLoading } = useSelector((state) => state.broadcast);
   const { privateMessages, isEnd } = useSelector(broadcastSelectorForAuction);
   const { _id: userId } = useSelector(userInfoSelector);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     socket.on('send private message', (payload) => {
@@ -61,11 +68,20 @@ const PrivateChatContainer = () => {
     setMessage('');
   };
 
-  const handleEndButtonClick = () => {};
+  const handleEndButtonClick = () => {
+    socket.emit('leave room');
+    dispatch(resetBroadcast());
+    history.replace(ROUTES.HOME);
+  };
 
-  return (
+  return isLoading ? (
+    <Loading type='spokes' color='white' />
+  ) : (
     <Wrapper>
       <div className='privatechat__wrapper'>
+        <div className='privatechat__title'>
+          <h1>CONGRATULATIONS!</h1>
+        </div>
         <ChatBox
           messages={privateMessages}
           message={message}
@@ -77,13 +93,6 @@ const PrivateChatContainer = () => {
         />
         <Button onClick={handleEndButtonClick} text={'대화 종료하기'} />
       </div>
-      <img
-
-        className='privatechat__backImg'
-        src={
-          'https://64.media.tumblr.com/8527f7f854ea74655ed418139b3522c9/tumblr_ow9oc3MJdd1vbdodoo1_500.gif'
-        }
-      />
     </Wrapper>
   );
 };

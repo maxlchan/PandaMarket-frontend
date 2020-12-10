@@ -17,11 +17,13 @@ const ChatBoxWrapper = styled.div`
   position: relative;
   box-shadow: ${({ isPrivate, theme }) =>
     isPrivate && theme.boxShadows.default};
+  border-radius: ${({ isPrivate }) => isPrivate && '30px'};
 
   .box__allchat {
     width: 100%;
     height: 85%;
-    background-color: ${({ theme }) => theme.colors.light_white};
+    background-color: ${({ isPrivate, theme }) =>
+      isPrivate ? 'rgba(200,200,200, 0.9)' : theme.colors.light_white};
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     overflow-y: overlay;
   }
@@ -62,6 +64,7 @@ const ChatBoxHeader = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadows.default};
 
   h1 {
+    font-weight: ${({ theme }) => theme.fontWeights.medium};
     margin-left: 30px;
   }
 `;
@@ -86,7 +89,7 @@ const ChatBox = ({
   return (
     <ChatBoxWrapper isPrivate={isPrivate}>
       <ChatBoxHeader>
-        <h1>{isPrivate ? '대화방' : '주요 채팅'}</h1>
+        <h1>{isPrivate ? '대화창' : '주요 채팅'}</h1>
       </ChatBoxHeader>
       <div className='box__allchat'>
         <div className='box__layer' />
