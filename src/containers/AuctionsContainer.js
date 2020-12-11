@@ -13,6 +13,8 @@ import {
 } from '../redux/auction/auction.reducer';
 import { auctionsOnWaitingSelector } from '../redux/auction/auctios.selector';
 import { ITEM_CATEGORY } from '../constants';
+import Search from '../components/Search';
+import { checkIsKeywordIn } from '../utils';
 
 const itemCategories = [...ITEM_CATEGORY, '전체'];
 
@@ -24,6 +26,7 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
+  padding-top: 40px;
 `;
 
 const AuctionsGrid = styled.div`
@@ -36,7 +39,7 @@ const AuctionsGrid = styled.div`
   padding: 10px 0;
 `;
 
-const AuctionsHeader = styled.header`
+const AuctionCategoryBox = styled.div`
   display: flex;
   width: 1000px;
   margin: 20px 0;
@@ -48,12 +51,25 @@ const AuctionsContainer = () => {
   const [clickedAuction, setClickedAuction] = useState({});
   const [isModalClicked, setIsModalClicked] = useState(false);
   const [isFilterOn, setIsFilterOn] = useState(false);
+  const [isSearchOn, setIsSearchOn] = useState(false);
   const [filteredCategory, setFilteredCategory] = useState('');
+  const [searchKeyWord, setSearchKeyWord] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAuctions());
   }, []);
+
+  const handleAuctionSearch = (keyword) => {
+    if (!keyword) {
+      setIsSearchOn(false);
+
+      return;
+    }
+
+    setSearchKeyWord(keyword);
+    setIsSearchOn(true);
+  };
 
   const handleAuctionsDetailClick = (clickedAuctionId) => {
     const clickedAuction = auctions.find(
@@ -90,7 +106,8 @@ const AuctionsContainer = () => {
           />
         </Modal>
       )}
-      <AuctionsHeader>
+      <Search onSearch={handleAuctionSearch} />
+      <AuctionCategoryBox>
         {itemCategories.map((category, index) => (
           <AuctionCategory
             key={category}
@@ -100,18 +117,34 @@ const AuctionsContainer = () => {
             onClick={handleCategoryClick}
           />
         ))}
-      </AuctionsHeader>
+      </AuctionCategoryBox>
       <AuctionsGrid>
         {auctions.map(
-          ({ picturesUrl, isStarted, initialPrice, title, _id, category }) => {
+          ({
+            title,
+            _id,
+            picturesUrl,
+            initialPrice,
+            category,
+            itemName,
+            description,
+          }) => {
             if (isFilterOn && category !== filteredCategory) return;
+            if (isSearchOn) {
+              const isValidated = checkIsKeywordIn(searchKeyWord, {
+                title,
+                itemName,
+                description,
+              });
+
+              if (!isValidated) return;
+            }
 
             return (
               <AuctionItem
                 title={title}
                 key={_id}
                 imageUrl={picturesUrl}
-                isStarted={isStarted}
                 initialPrice={initialPrice}
                 onClick={() => handleAuctionsDetailClick(_id)}
               />

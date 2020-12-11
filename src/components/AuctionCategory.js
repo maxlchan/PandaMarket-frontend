@@ -14,7 +14,7 @@ const StyldBox = styled.div`
   word-break: break-all;
   text-align: center;
   border-bottom: 2px solid transparent;
-  z-index: 10;
+  z-index: 1;
   cursor: pointer;
 
   &:hover {

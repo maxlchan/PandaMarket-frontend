@@ -35,7 +35,6 @@ const ItemWrapper = styled.div`
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    /* border-bottom: 1px dotted gray; */
   }
 
   .item__bottom {
@@ -62,14 +61,14 @@ const ItemWrapper = styled.div`
   }
 `;
 
-const AuctionItem = ({ imageUrl, title, initialPrice, isStarted, onClick }) => {
+const AuctionItem = ({ imageUrl, title, initialPrice, onClick }) => {
   return (
     <ItemWrapper imageUrl={imageUrl}>
       <div className='item__top'></div>
       <div className='item__bottom'>
         <h1 className='item__bottom__title'>{title}</h1>
         <h2 className='item__bottom__price'>시작가격 - {initialPrice}원</h2>
-        <span>{isStarted ? '경매 진행중' : '경매 예약중'}</span>
+        <span>{'경매 예약중'}</span>
         <Button onClick={onClick} text={'상세보기'} />
       </div>
     </ItemWrapper>

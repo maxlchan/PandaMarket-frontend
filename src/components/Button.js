@@ -9,7 +9,7 @@ const Wrapper = styled.button`
   padding: 3% 5%;
   color: white;
   background-color: ${(props) => {
-    return props.color || props.theme.colors.bamboo;
+    return props.color || props.theme.colors.green;
   }};
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   font-size: ${({ theme }) => theme.fontSizes.small};

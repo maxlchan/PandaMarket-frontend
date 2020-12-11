@@ -15,5 +15,17 @@ export const generateDateToText = (dateString) => {
   const date = dateObj.getDate();
   const hour = dateObj.getHours();
 
-  return `${year}년 ${month}월 ${date}일 ${hour}시`
-}
+  return `${year}년 ${month}월 ${date}일 ${hour}시`;
+};
+
+export const checkIsKeywordIn = (keyword, target) => {
+  const targetsForCheck = Object.values(target);
+
+  for (let i = 0; i < targetsForCheck.length; i++) {
+    const target = targetsForCheck[i];
+
+    if (target.includes(keyword)) return true;
+  }
+
+  return false;
+};

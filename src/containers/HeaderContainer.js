@@ -11,11 +11,13 @@ const StyledHeader = styled.header`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  position: fixed;
   width: 100%;
   height: 60px;
   background-color: white;
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   margin-bottom: 1.5px;
+  z-index: 10;
 
   .header__logo {
     position: absolute;
@@ -38,6 +40,10 @@ const StyledHeader = styled.header`
   }
 `;
 
+const HeaderForSpace = styled.div`
+  height: 60px;
+`;
+
 const HeaderContainer = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -48,20 +54,28 @@ const HeaderContainer = () => {
   };
 
   return (
-    <StyledHeader>
-      <Link className='header__logo' to={ROUTES.HOME}>
-        <img src={logo} alt='logo' />
-      </Link>
-      <nav className='header__nav'>
-        <NavItem to={ROUTES.HOME} name={'홈'} />
-        <NavItem to={ROUTES.AUCTIONS} name={'경매상품'} />
-        {isLoggedIn && <NavItem to={ROUTES.MY_INFO} name={'내정보'} />}
-        {isLoggedIn
-          ? <NavItem to={ROUTES.HOME} name={'로그아웃'} onClick={handleLogout} />
-          : <NavItem to={ROUTES.LOGIN} name={'로그인'} />
-        }
-      </nav>
-    </StyledHeader>
+    <>
+      <StyledHeader>
+        <Link className='header__logo' to={ROUTES.HOME}>
+          <img src={logo} alt='logo' />
+        </Link>
+        <nav className='header__nav'>
+          <NavItem to={ROUTES.HOME} name={'홈'} />
+          <NavItem to={ROUTES.AUCTIONS} name={'경매상품'} />
+          {isLoggedIn && <NavItem to={ROUTES.MY_INFO} name={'내정보'} />}
+          {isLoggedIn ? (
+            <NavItem
+              to={ROUTES.HOME}
+              name={'로그아웃'}
+              onClick={handleLogout}
+            />
+          ) : (
+            <NavItem to={ROUTES.LOGIN} name={'로그인'} />
+          )}
+        </nav>
+      </StyledHeader>
+      <HeaderForSpace />
+    </>
   );
 };
 
