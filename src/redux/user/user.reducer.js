@@ -11,7 +11,7 @@ export const addReservedAuction = createAction('users/addReservedAuction');
 
 export const fetchUser = createAsyncThunk(
   'users/fetch',
-  async ({ type, payload }, { extra, rejectWithValue }) => {
+  async ({ type, payload }, { extra }) => {
     const { history } = extra;
 
     try {
@@ -32,7 +32,7 @@ export const fetchUser = createAsyncThunk(
         return userInfo;
       }
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      return err;
     }
   }
 );
@@ -67,7 +67,7 @@ const userReducer = createReducer(initialState, {
   [fetchUser.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.error.message,
   }),
   [addMyAuction]: (state, action) => {
     state.info.myAuctions.push(action.payload);

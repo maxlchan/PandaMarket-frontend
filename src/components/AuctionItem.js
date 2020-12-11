@@ -7,7 +7,7 @@ const ItemWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 92%;
+  width: 100%;
   height: 100%;
   min-width: 200px;
   min-height: 250px;
@@ -35,7 +35,7 @@ const ItemWrapper = styled.div`
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    border-bottom: 1px dotted black;
+    /* border-bottom: 1px dotted gray; */
   }
 
   .item__bottom {

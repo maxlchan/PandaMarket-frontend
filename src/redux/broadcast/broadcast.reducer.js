@@ -11,7 +11,7 @@ export const startCountdown = createAction('broadcast/startCountdown');
 
 export const setBroadcastEnd = createAsyncThunk(
   'broadcast/setEnd',
-  async (auctionId, { getState, rejectWithValue }) => {
+  async (auctionId, { getState }) => {
     try {
       const { broadcast } = getState();
       const winner = broadcast.winnerList.slice(-1)[0];
@@ -22,14 +22,14 @@ export const setBroadcastEnd = createAsyncThunk(
 
       return;
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      return err;
     }
   }
 );
 
 export const getMedia = createAsyncThunk(
   'broadcast/getMedia',
-  async (payload, { rejectWithValue }) => {
+  async (payload, thunkAPI) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -38,7 +38,7 @@ export const getMedia = createAsyncThunk(
 
       payload.scrObject = stream;
     } catch (err) {
-      return rejectWithValue(err);
+      return err;
     }
   }
 );
@@ -71,7 +71,7 @@ const broadcastReducer = createReducer(initialState, {
   [getMedia.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.error.message
   }),
   [setBroadcast]: (state, action) => ({
     ...state,
@@ -95,7 +95,7 @@ const broadcastReducer = createReducer(initialState, {
   [setBroadcastEnd.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.error.message,
   }),
   [resetBroadcast]: (state, action) => initialState,
 });

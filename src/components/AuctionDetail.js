@@ -1,29 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import { generateDateToText } from '../utils';
 import Button from './Button';
-import Card from './Card';
 import AuctionDetailContent from '../components/AuctionDetailContent';
 
 const sliderSettings = {
   dots: true,
-  speed: 1000,
+  speed: 500,
   slidesToShow: 1,
   slidesToScroll: 1,
 };
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
   height: 100%;
 
   .detail__left {
-    width: 45%;
-    height: 80%;
-    background-color: yellow;
+    width: 40%;
+
+    .slick-track {
+      display: flex;
+      align-items: center;
+    }
+
+    img {
+      width: 100%;
+      background-color: white;
+    }
   }
 
   .detail__right {
@@ -31,7 +38,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    width: 50%;
+    width: 45%;
     height: 80%;
 
     .detail__right__header {
@@ -59,27 +66,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const DetailContent = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin: 3% 0;
-
-  .detail__content__title {
-    width: 30%;
-    padding-left: 30px;
-  }
-
-  .detail__content__payload {
-    width: 80%;
-  }
-
-  .detail__content__description {
-    max-height: 200px;
-    word-break: break-all;
-  }
-`;
-
 const AuctionDetail = ({ auction, onClick }) => {
   const {
     description,
@@ -95,14 +81,15 @@ const AuctionDetail = ({ auction, onClick }) => {
   return (
     <Wrapper>
       <div className='detail__left'>
-        asdasddfdsfsdas
-        {/* <Slider {...sliderSettings}>
-          {picturesUrl.map((pictureUrl) => (
-            <div className='detail__img' key={pictureUrl}>
-              <img src={pictureUrl} />
-            </div>
-          ))}
-        </Slider> */}
+        <div className='slider__wrap'>
+          <Slider {...sliderSettings}>
+            {picturesUrl.map((pictureUrl) => (
+              <div className='detail__left__img' key={pictureUrl}>
+                <img src={pictureUrl} />
+              </div>
+            ))}
+          </Slider>
+        </div>
       </div>
       <div className='detail__right'>
         <div className='detail__right__header'>

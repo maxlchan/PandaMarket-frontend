@@ -23,7 +23,7 @@ const ChatBoxWrapper = styled.div`
     width: 100%;
     height: 85%;
     background-color: ${({ isPrivate, theme }) =>
-      isPrivate ? 'rgba(200,200,200, 0.9)' : theme.colors.light_white};
+      isPrivate ? 'rgba(220,220,220, 0.9)' : theme.colors.light_white};
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     overflow-y: overlay;
   }

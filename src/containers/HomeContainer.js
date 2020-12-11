@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import { ROUTES } from '../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAuctions } from '../redux/auction/auction.reducer';
+import { auctionsOnAirSelector } from '../redux/auction/auctios.selector';
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,7 +16,7 @@ const Wrapper = styled.div`
 `;
 
 const HomeContainer = () => {
-  const auctions = useSelector((state) => state.auctions.data);
+  const auctionsOnAir = useSelector(auctionsOnAirSelector);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -29,7 +30,7 @@ const HomeContainer = () => {
 
   return (
     <Wrapper>
-      <Carousel contents={auctions} />
+      <Carousel contents={auctionsOnAir} />
       <Button onClick={handleButtonClick} text={'내 중고 상품 등록'} />
     </Wrapper>
   );

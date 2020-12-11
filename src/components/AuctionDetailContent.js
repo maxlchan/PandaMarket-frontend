@@ -12,10 +12,10 @@ const DetailContent = styled.div`
     padding-left: 30px;
   }
 
-  .detail__content__content {
+  .detail__content__payload {
     width: 80%;
+    vertical-align: middle;
     max-height: 150px;
-    overflow: hidden;
     word-break: break-all;
   }
 `;
@@ -26,7 +26,7 @@ const AuctionDetailContent = ({ item, content }) => {
       <div className='detail__content__title'>
         <span>· {item}</span>
       </div>
-      <div className='detail__content__content'>
+      <div className='detail__content__payload'>
         <span>{content}</span>
       </div>
     </DetailContent>

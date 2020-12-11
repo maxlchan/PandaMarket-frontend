@@ -5,21 +5,21 @@ import { ROUTES } from '../../constants';
 
 export const fetchAuctions = createAsyncThunk(
   'auctions/fetch',
-  async (_, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
       const { data } = await api.getAuctions();
       const { auctionsInfo } = data;
 
       return auctionsInfo ? auctionsInfo : [];
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      return err;
     }
   }
 );
 
 export const createAuction = createAsyncThunk(
   'auctions/create',
-  async (payload, { dispatch, getState, extra, rejectWithValue }) => {
+  async (payload, { dispatch, getState, extra }) => {
     const { history } = extra;
 
     try {
@@ -37,27 +37,34 @@ export const createAuction = createAsyncThunk(
 
       return auctionInfo;
     } catch (err) {
-      console.log(err);
-      return rejectWithValue(err.response.data);
+      return err;
     }
   }
 );
 
 export const reserveAuction = createAsyncThunk(
   'auctions/reserve',
-  async (auctionId, { dispatch, rejectWithValue }) => {
+  async (auctionId, { getState, dispatch }) => {
+    const { user, auctions } = getState();
+    const userReservedAuctionIds = user.info.reservedAuctions;
+    const isAlreadyReserved = userReservedAuctionIds.includes(auctionId);
+
+    if (isAlreadyReserved) {
+      alert('이미 예약하신 경매입니다.');
+
+      return auctions.data;
+    }
+
     try {
       const { data } = await api.reserveAuction(auctionId);
-      const { auctionsInfo } = data;
+      const { updatedAuctionsInfo } = data;
 
       dispatch(addReservedAuction(auctionId));
-
       alert('예약 완료!');
 
-      return auctionsInfo;
+      return updatedAuctionsInfo;
     } catch (err) {
-      console.log(err);
-      return rejectWithValue(err.response.data);
+      return err;
     }
   }
 );
@@ -83,7 +90,7 @@ const auctionReducer = createReducer(initialState, {
   [fetchAuctions.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.error.message,
   }),
   [createAuction.pending]: (state, action) => ({
     ...state,
@@ -98,7 +105,7 @@ const auctionReducer = createReducer(initialState, {
   [createAuction.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.error.message,
   }),
   [reserveAuction.pending]: (state, action) => ({
     ...state,
@@ -113,7 +120,7 @@ const auctionReducer = createReducer(initialState, {
   [reserveAuction.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.payload.result,
+    error: action.error.message,
   }),
 });
 

@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 93vh;
-  background-image: url('https://acegif.com/wp-content/gif/confetti-18.gif');
+  background-image: url('https://acegif.com/wp-content/gif/confetti-29.gif');
   background-position: center;
   background-size: cover;
 

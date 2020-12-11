@@ -12,13 +12,7 @@ import Button from './Button';
 const { colors, pastelColors } = themes;
 const cardColors = Object.values(pastelColors);
 
-const SliderWrapper = styled.div`
-  width: 100%;
-  height: 75vh;
-`;
-
 const sliderSettings = {
-  pauseOnHover: true,
   dots: true,
   infinite: true,
   lazyLoad: true,
@@ -28,6 +22,11 @@ const sliderSettings = {
   slidesToShow: 1,
   slidesToScroll: 1,
 };
+
+const SliderWrapper = styled.div`
+  width: 100%;
+  height: 75vh;
+`;
 
 const ContentWrapper = styled.div`
   display: flex;
