@@ -8,6 +8,8 @@ const ROUTES = {
   BROADCAST: '/broadcast',
   AUCTIONS: '/auctions',
   AUCTION_DETAIL: '/:auctionId',
+  FINISH: '/finish',
+  RESERVE: '/reserve',
   UPLOAD: '/upload',
   MY_INFO: '/my-info',
   PRIVATE_CHAT: '/private-chat'

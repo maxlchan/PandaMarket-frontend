@@ -24,7 +24,7 @@ export const postAuction = async (payload, userId) => {
     category,
     pictures,
     description,
-    initalPrice,
+    initialPrice,
     startedDateTime,
   } = payload;
 
@@ -40,13 +40,16 @@ export const postAuction = async (payload, userId) => {
   formData.append('itemName', itemName);
   formData.append('category', category);
   formData.append('description', description);
-  formData.append('initalPrice', initalPrice);
+  formData.append('initialPrice', initialPrice);
   formData.append('startedDateTime', startedDateTime);
 
   return axios.post(`${ROUTES.AUCTIONS}`, formData, config);
 };
 
 export const finishAuction = async (payload, auctionId) => {
-  console.log(payload);
-  return axios.put(`${ROUTES.AUCTIONS}/${auctionId}`, payload);
+  return axios.put(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.FINISH}`, payload);
+};
+
+export const reserveAuction = async (auctionId) => {
+  return axios.put(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.RESERVE}`);
 };

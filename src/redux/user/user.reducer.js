@@ -7,6 +7,7 @@ import { getUserByGoogleAuth, getUserByToken } from '../../utils/api';
 
 export const logoutUser = createAction('users/logout');
 export const addMyAuction = createAction('users/addMyAuction');
+export const addReservedAuction = createAction('users/addReservedAuction');
 
 export const fetchUser = createAsyncThunk(
   'users/fetch',
@@ -70,6 +71,9 @@ const userReducer = createReducer(initialState, {
   }),
   [addMyAuction]: (state, action) => {
     state.info.myAuctions.push(action.payload);
+  },
+  [addReservedAuction]: (state, action) => {
+    state.info.reservedAuctions.push(action.payload);
   },
   [logoutUser]: (state, action) => initialState,
 });

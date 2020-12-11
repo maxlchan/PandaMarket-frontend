@@ -2,6 +2,7 @@ const calcRem = (size) => `${size / 16}rem`;
 
 const fontSizes = {
   small: calcRem(16),
+  medium: calcRem(20),
   base: calcRem(25),
   lg: calcRem(30),
   xl: calcRem(40),
@@ -18,6 +19,7 @@ const fontWeights = {
 
 const boxShadows = {
   default: '0px 2px 2px rgba(0, 0, 0, 0.25)',
+  deep: '0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)',
 };
 
 const colors = {

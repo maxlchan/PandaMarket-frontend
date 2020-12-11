@@ -67,6 +67,8 @@ const ContentWrapper = styled.div`
     img {
       height: 100%;
       max-width: 500px;
+      min-height: 300px;
+      max-height: 400px;
       margin: 0 auto;
       box-shadow: ${({ theme }) => theme.boxShadows.default};
     }
@@ -81,7 +83,7 @@ const Carousel = ({ contents, onClick }) => {
           <WelcomeContent />
         </Card>
         {contents.map((content, index) => {
-          const { _id, picturesUrl, title, initalPrice } = content;
+          const { _id, picturesUrl, title, initialPrice } = content;
           const colorIndex = index % cardColors.length;
 
           return (
@@ -90,11 +92,9 @@ const Carousel = ({ contents, onClick }) => {
                 <div className='carousel__intro'>
                   <h1 className='carousel__intro__title'>{title}</h1>
                   <h2 className='carousel__intro__desrciption'>
-                    경매 시작가 {initalPrice}원
+                    경매 시작가 {initialPrice}원
                   </h2>
-                  <h3>
-                    경매중
-                  </h3>
+                  <h3>경매중</h3>
                   <Button
                     color={colors.indigo}
                     text={'바로 참여하기'}

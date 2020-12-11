@@ -37,7 +37,7 @@ const GoogleLoginButton = ({ onResponse }) => {
         </StyledButton>
       )}
       onSuccess={onResponse}
-      onFailure={(result) => alert(result)}
+      onFailure={(result) => console.log(result)}
     />
   );
 };

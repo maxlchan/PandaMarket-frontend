@@ -14,7 +14,6 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 90vh;
 
   .box__register {
     display: flex;
@@ -26,6 +25,8 @@ const Wrapper = styled.div`
     max-width: 1000px;
     background-color: white;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
+    border-radius: 20px;
+    overflow: hidden;
 
     .title__register {
       display: flex;
@@ -87,9 +88,9 @@ const RegisterContent = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
-  width: 40%;
   max-width: 350px;
   min-width: 300px;
+  margin-bottom: 15px;
 `;
 
 const RegisterationContainer = () => {
@@ -98,7 +99,7 @@ const RegisterationContainer = () => {
   const [category, setCategory] = useState(ITEM_CATEGORY[0]);
   const [description, setDescription] = useState('');
   const [pictures, setPictures] = useState([]);
-  const [initalPrice, setInitalPrice] = useState('');
+  const [initialPrice, setInitialPrice] = useState('');
   const [startedDateTime, setStartedDateTime] = useState('');
   const { isLoggedIn } = useSelector((state) => state.user);
   const isLoading = useSelector((state) => state.auctions.isLoading);
@@ -116,7 +117,7 @@ const RegisterationContainer = () => {
       category,
       pictures,
       description,
-      initalPrice,
+      initialPrice,
       startedDateTime,
     };
 
@@ -213,8 +214,8 @@ const RegisterationContainer = () => {
                 <div className='contents__register__payload'>
                   <input
                     type='number'
-                    value={initalPrice}
-                    onChange={(e) => setInitalPrice(e.target.value)}
+                    value={initialPrice}
+                    onChange={(e) => setInitialPrice(e.target.value)}
                     placeholder={0}
                   />
                 </div>

@@ -6,7 +6,7 @@ const Wrapper = styled.button`
   justify-content: center;
   align-items: center;
   width: ${({ width }) => width};
-  padding: 15px 30px;
+  padding: 3% 5%;
   color: white;
   background-color: ${(props) => {
     return props.color || props.theme.colors.bamboo;
