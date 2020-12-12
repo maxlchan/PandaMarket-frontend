@@ -25,7 +25,7 @@ const sliderSettings = {
 
 const SliderWrapper = styled.div`
   width: 100%;
-  height: 75vh;
+  height: 80vh;
 `;
 
 const ContentWrapper = styled.div`
@@ -33,7 +33,6 @@ const ContentWrapper = styled.div`
   justify-content: space-evenly;
   align-items: center;
   width: 80%;
-  height: 50%;
 
   .carousel__intro {
     display: flex;
@@ -41,30 +40,38 @@ const ContentWrapper = styled.div`
     justify-content: space-around;
     align-items: center;
     width: 50%;
-    height: 80%;
     color: white;
+    white-space: nowrap;
+    text-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
 
     .carousel__intro__title {
       font-size: ${({ theme }) => theme.fontSizes.titleSize};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
+      margin-bottom: 30px;
     }
 
     .carousel__intro__desrciption {
       font-size: ${({ theme }) => theme.fontSizes.xxl};
       font-weight: ${({ theme }) => theme.fontWeights.medium};
+
+      span {
+        font-size: ${({ theme }) => theme.fontSizes.xxxl};
+        font-weight: ${({ theme }) => theme.fontWeights.strong};
+        color: ${({ theme }) => theme.colors.gray};
+        text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+      }
     }
 
-    h3 {
+    .carousel__intro__description__sub {
       font-size: ${({ theme }) => theme.fontSizes.lg};
+      margin-bottom: 50px;
     }
   }
 
-  .carousel__image {
+  .carousel__image__wrap {
     width: 50%;
-    height: 80%;
 
     img {
-      height: 100%;
       max-width: 500px;
       min-height: 300px;
       max-height: 400px;
@@ -91,16 +98,18 @@ const Carousel = ({ contents, onClick }) => {
                 <div className='carousel__intro'>
                   <h1 className='carousel__intro__title'>{title}</h1>
                   <h2 className='carousel__intro__desrciption'>
-                    경매 시작가 {initialPrice}원
+                    경매 시작가 <span>{initialPrice}</span>원
                   </h2>
-                  <h3>경매중</h3>
+                  <h3 className='carousel__intro__description__sub'>
+                    절찬리 경매중
+                  </h3>
                   <Button
                     color={colors.indigo}
                     text={'바로 참여하기'}
                     onClick={onClick}
                   />
                 </div>
-                <div className='carousel__image'>
+                <div className='carousel__image__wrap'>
                   <img src={picturesUrl[0]} />
                 </div>
               </ContentWrapper>

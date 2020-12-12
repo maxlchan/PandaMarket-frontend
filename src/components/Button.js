@@ -6,7 +6,7 @@ const Wrapper = styled.button`
   justify-content: center;
   align-items: center;
   width: ${({ width }) => width};
-  padding: 3% 5%;
+  padding: ${({ padding }) => padding || '3% 5%'};
   color: white;
   background-color: ${(props) => {
     return props.color || props.theme.colors.green;
@@ -29,7 +29,15 @@ const Wrapper = styled.button`
   }
 `;
 
-const Button = ({ disabled, className, onClick, color, text, width }) => {
+const Button = ({
+  disabled,
+  className,
+  onClick,
+  color,
+  text,
+  width,
+  padding,
+}) => {
   return (
     <Wrapper
       className={className}
@@ -37,6 +45,7 @@ const Button = ({ disabled, className, onClick, color, text, width }) => {
       onClick={onClick}
       color={color}
       width={width}
+      padding={padding}
     >
       <h1>{text}</h1>
     </Wrapper>

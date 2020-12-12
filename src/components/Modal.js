@@ -28,10 +28,10 @@ const ModalOverlay = styled.div`
 
 const ModalContents = styled.div`
   position: relative;
-  width: 60vw;
+  width: 50vw;
   min-width: 700px;
-  height: 80vh;
   z-index: 1000;
+  padding: 40px 0;
   background-color: #f2f1ef;
   box-shadow: ${({ theme }) => theme.boxShadows.deep};
   border-radius: 10px;

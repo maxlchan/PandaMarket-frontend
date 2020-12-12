@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Button from '../components/Button';
 import ChatInput from '../components/ChatInput';
 import ChatUnit from '../components/ChatUnit';
+import useScrollToBottom from '../hooks/useScrollToBottom';
 import themes from '../styles/themes';
 import UserIcon from './UserIcon';
 
@@ -79,12 +80,7 @@ const ChatBox = ({
   userId,
   isPrivate,
 }) => {
-  const messagesEndRef = useRef();
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(scrollToBottom, [messages]);
+  const messagesEndRef = useScrollToBottom(messages);
 
   return (
     <ChatBoxWrapper isPrivate={isPrivate}>

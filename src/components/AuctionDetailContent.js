@@ -5,17 +5,18 @@ const DetailContent = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 3% 0;
+  margin: 2% 0;
 
   .detail__content__title {
     width: 30%;
     padding-left: 30px;
+    font-weight: ${({ theme }) => theme.fontWeights.medium};
   }
 
   .detail__content__payload {
-    width: 80%;
-    vertical-align: middle;
+    width: 70%;
     max-height: 150px;
+    overflow: auto;
     word-break: break-all;
   }
 `;

@@ -20,11 +20,12 @@ const Wrapper = styled.div`
   height: 100%;
 
   .detail__left {
-    width: 40%;
+    width: 30%;
 
     .slick-track {
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
     img {
@@ -38,7 +39,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    width: 45%;
+    width: 50%;
     height: 80%;
 
     .detail__right__header {
@@ -104,10 +105,10 @@ const AuctionDetail = ({ auction, onClick }) => {
             item={'경매 일시'}
             content={generateDateToText(startedDateTime)}
           />
-          <AuctionDetailContent item={'시작 가격'} content={initialPrice} />
+          <AuctionDetailContent item={'시작 가격'} content={`${initialPrice}원`} />
           <AuctionDetailContent
             item={'현재 예약자'}
-            content={reservedUser.length}
+            content={`${reservedUser.length}명`}
           />
           <AuctionDetailContent item={'상품 정보'} content={description} />
         </div>
