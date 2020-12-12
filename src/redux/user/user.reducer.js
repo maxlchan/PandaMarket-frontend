@@ -3,6 +3,7 @@ import {
   createReducer,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
+import { TYPE } from '../../constants';
 import { getUserByGoogleAuth, getUserByToken } from '../../utils/api';
 
 export const logoutUser = createAction('users/logout');
@@ -15,7 +16,7 @@ export const fetchUser = createAsyncThunk(
     const { history } = extra;
 
     try {
-      if (type === 'googleAuth') {
+      if (type === TYPE.GOOGLEAUTH) {
         const { data } = await getUserByGoogleAuth(payload);
         const { userInfo, token } = data;
 
@@ -25,7 +26,7 @@ export const fetchUser = createAsyncThunk(
         return userInfo;
       }
 
-      if (type === 'token') {
+      if (type === TYPE.TOKEN) {
         const { data } = await getUserByToken(payload);
         const { userInfo } = data;
 

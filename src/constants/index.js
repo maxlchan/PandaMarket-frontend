@@ -1,7 +1,7 @@
 const ROUTES = {
   HOME: '/',
   USERS: '/users',
-  USERS_DETAIL: '/:userId',
+  USER_DETAIL: '/:userId',
   LOGIN: '/login',
   TOKEN: '/token',
   REGISTERATION: '/registeration',
@@ -11,7 +11,9 @@ const ROUTES = {
   FINISH: '/finish',
   RESERVE: '/reserve',
   UPLOAD: '/upload',
-  MY_INFO: '/my-info',
+  MY_PAGE: '/mypage',
+  MY_AUCTIONS: '/my-auctions',
+  RESERVED_AUCTIONS: '/reserved-auctions',
   PRIVATE_CHAT: '/private-chat'
 };
 
@@ -22,6 +24,14 @@ const MESSAGE = {
   BROADCAST_END_WINNER : '축하합니다. 1등이시군요! 판매자와의 대화창으로 이동합니다',
   BROADCAST_END_MEMBER: '경매가 종료되었습니다. 아쉽지만 다음 기회를 노리세요!',
   HOST_OUT: '판매자가 나감으로 경매가 종료되었습니다.'
+};
+
+const TYPE = {
+  GOOGLEAUTH: 'googleAuth',
+  TOKEN: 'token',
+  START: 'start',
+  REGISTER: 'register',
+  LOADING: 'spokes',
 };
 
 const ITEM_CATEGORY = [
@@ -53,4 +63,4 @@ const CONFIG = {
   },
 };
 
-export { ROUTES, MESSAGE, ITEM_CATEGORY, CONFIG };
+export { ROUTES, MESSAGE, ITEM_CATEGORY, CONFIG, TYPE };

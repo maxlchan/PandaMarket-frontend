@@ -28,10 +28,9 @@ const ModalOverlay = styled.div`
 
 const ModalContents = styled.div`
   position: relative;
-  width: 50vw;
-  min-width: 700px;
+  width: 60vw;
   z-index: 1000;
-  padding: 40px 0;
+  padding: 40px 20px;
   background-color: #f2f1ef;
   box-shadow: ${({ theme }) => theme.boxShadows.deep};
   border-radius: 10px;

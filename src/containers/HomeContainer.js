@@ -31,7 +31,7 @@ const HomeContainer = () => {
   return (
     <Wrapper>
       <Carousel contents={auctionsOnAir} />
-      <Button onClick={handleButtonClick} padding="1% 1.5%" text={'내 중고물품 경매하기'} />
+      <Button onClick={handleButtonClick} padding="15px 20px" text={'내 중고물품 경매하기'} />
     </Wrapper>
   );
 };

@@ -13,7 +13,7 @@ const StyledHeader = styled.header`
   align-items: center;
   position: fixed;
   width: 100%;
-  height: 60px;
+  height: 7vh;
   background-color: white;
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   margin-bottom: 1.5px;
@@ -40,8 +40,8 @@ const StyledHeader = styled.header`
   }
 `;
 
-const HeaderForSpace = styled.div`
-  height: 60px;
+const HeaderSpace = styled.div`
+  height: 7vh;
 `;
 
 const HeaderContainer = () => {
@@ -62,19 +62,18 @@ const HeaderContainer = () => {
         <nav className='header__nav'>
           <NavItem to={ROUTES.HOME} name={'홈'} />
           <NavItem to={ROUTES.AUCTIONS} name={'경매상품'} />
-          {isLoggedIn && <NavItem to={ROUTES.MY_INFO} name={'내정보'} />}
-          {isLoggedIn ? (
+          {isLoggedIn && (
             <NavItem
-              to={ROUTES.HOME}
-              name={'로그아웃'}
-              onClick={handleLogout}
+              to={`${ROUTES.MY_PAGE}${ROUTES.MY_AUCTIONS}`}
+              name={'내정보'}
             />
-          ) : (
-            <NavItem to={ROUTES.LOGIN} name={'로그인'} />
           )}
+          {isLoggedIn
+            ? <NavItem to={ROUTES.HOME} name={'로그아웃'} onClick={handleLogout} />
+            : <NavItem to={ROUTES.LOGIN} name={'로그인'} />}
         </nav>
       </StyledHeader>
-      <HeaderForSpace />
+      <HeaderSpace />
     </>
   );
 };

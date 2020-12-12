@@ -6,7 +6,7 @@ const Wrapper = styled.button`
   justify-content: center;
   align-items: center;
   width: ${({ width }) => width};
-  padding: ${({ padding }) => padding || '3% 5%'};
+  padding: ${({ padding }) => padding || '2% 6%'};
   color: white;
   background-color: ${(props) => {
     return props.color || props.theme.colors.green;
@@ -26,6 +26,7 @@ const Wrapper = styled.button`
 
   h1 {
     min-width: 25px;
+    pointer-events: none;
   }
 `;
 
@@ -37,9 +38,11 @@ const Button = ({
   text,
   width,
   padding,
+  id,
 }) => {
   return (
     <Wrapper
+      id={id}
       className={className}
       disabled={disabled}
       onClick={onClick}

@@ -1,7 +1,7 @@
 import { createReducer, createAsyncThunk } from '@reduxjs/toolkit';
 import * as api from '../../utils/api';
 import { addMyAuction, addReservedAuction } from '../user/user.reducer';
-import { ROUTES } from '../../constants';
+import { ROUTES, TYPE } from '../../constants';
 
 export const fetchAuctions = createAsyncThunk(
   'auctions/fetch',
@@ -19,8 +19,10 @@ export const fetchAuctions = createAsyncThunk(
 
 export const createAuction = createAsyncThunk(
   'auctions/create',
-  async (payload, { dispatch, getState, extra }) => {
+  async ({ type, payload }, { dispatch, getState, extra }) => {
     const { history } = extra;
+
+    if (type === TYPE.START) payload.isStarted = true;
 
     try {
       const { user } = getState();
@@ -33,7 +35,14 @@ export const createAuction = createAsyncThunk(
       dispatch(addMyAuction(auctionId));
 
       alert('등록 성공!');
-      history.push(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`);
+
+      if (type === TYPE.START) {
+        history.push(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`);
+      }
+
+      if (type === TYPE.REGISTER) {
+        history.push(`${ROUTES.HOME}`);
+      }
 
       return auctionInfo;
     } catch (err) {

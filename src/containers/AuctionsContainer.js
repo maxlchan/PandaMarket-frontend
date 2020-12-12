@@ -12,7 +12,7 @@ import {
   reserveAuction,
 } from '../redux/auction/auction.reducer';
 import { auctionsOnWaitingSelector } from '../redux/auction/auctios.selector';
-import { ITEM_CATEGORY } from '../constants';
+import { ITEM_CATEGORY, TYPE } from '../constants';
 import Search from '../components/Search';
 import { checkIsKeywordIn } from '../utils';
 
@@ -94,7 +94,7 @@ const AuctionsContainer = () => {
   const closeModal = () => setIsModalClicked(false);
 
   return isLoading ? (
-    <Loading type='spokes' color='white' />
+    <Loading type={TYPE.LOADING} color='white' />
   ) : (
     <Wrapper>
       {isModalClicked && (

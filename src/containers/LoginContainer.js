@@ -5,7 +5,7 @@ import { fetchUser } from '../redux/user/user.reducer';
 import panda from '../assets/images/panda.png';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 import { useHistory } from 'react-router-dom';
-import { ROUTES } from '../constants';
+import { ROUTES, TYPE } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.light_white};
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   }
-
+  
   .text__login {
     font-size: ${({ theme }) => theme.fontSizes.xxxl};
     font-weight: ${({ theme }) => theme.fontWeights.medium};
@@ -44,7 +44,7 @@ const LoginContainer = () => {
   const history = useHistory();
 
   const handleResponse = async (auth) => {
-    dispatch(fetchUser({ type: 'googleAuth', payload: auth }));
+    dispatch(fetchUser({ type: TYPE.GOOGLEAUTH, payload: auth }));
   };
 
   useEffect(() => {

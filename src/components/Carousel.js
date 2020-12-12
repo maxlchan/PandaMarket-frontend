@@ -57,7 +57,7 @@ const ContentWrapper = styled.div`
       span {
         font-size: ${({ theme }) => theme.fontSizes.xxxl};
         font-weight: ${({ theme }) => theme.fontWeights.strong};
-        color: ${({ theme }) => theme.colors.gray};
+        color: black;
         text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
       }
     }
@@ -89,14 +89,14 @@ const Carousel = ({ contents, onClick }) => {
           <WelcomeContent />
         </Card>
         {contents.map((content, index) => {
-          const { _id, picturesUrl, title, initialPrice } = content;
+          const { _id, picturesUrl, itemName, initialPrice } = content;
           const colorIndex = index % cardColors.length;
 
           return (
             <Card key={_id} color={cardColors[colorIndex]}>
               <ContentWrapper>
                 <div className='carousel__intro'>
-                  <h1 className='carousel__intro__title'>{title}</h1>
+                  <h1 className='carousel__intro__title'>{itemName}</h1>
                   <h2 className='carousel__intro__desrciption'>
                     경매 시작가 <span>{initialPrice}</span>원
                   </h2>

@@ -8,23 +8,23 @@ const Wrapper = styled.div`
   align-items: center;
   width: 80%;
 
-  .text__welcome__wrap {
+  .welcome__wrap {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 50%;
     height: 100%;
+    white-space: nowrap;
 
-    h2 {
+    .welcome__title__top {
       color: ${({ theme }) => theme.colors.bamboo};
       font-size: ${({ theme }) => theme.fontSizes.base};
       margin-top: 10px;
-      margin-bottom: 10px;
       font-weight: 500;
     }
 
-    h1 {
+    .welcome__title__medium {
       margin-top: 10px;
       margin-bottom: 10px;
       color: ${({ theme }) => theme.colors.bamboo};
@@ -32,13 +32,13 @@ const Wrapper = styled.div`
       font-weight: ${({ theme }) => theme.fontWeights.strong};
     }
 
-    h3 {
+    .welcome__title__bottom {
       font-size: ${({ theme }) => theme.fontSizes.small};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
     }
   }
 
-  .img__welcome__wrap {
+  .welcome__img__wrap {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -57,13 +57,17 @@ const Wrapper = styled.div`
 const WelcomeContent = () => {
   return (
     <Wrapper>
-      <div className='text__welcome__wrap'>
-        <h2>사람의 마음을 얻는 자, 중고를 판다</h2>
-        <h1>판다 마켓</h1>
-        <h3>당신의 중고물품을</h3>
-        <h3>실시간 라이브 방송을 통해 경매해봐요!</h3>
+      <div className='welcome__wrap'>
+        <h2 className='welcome__title__top'>
+          사람의 마음을 얻는 자, 중고를 판다
+        </h2>
+        <h1 className='welcome__title__medium'>판다 마켓</h1>
+        <h3 className='welcome__title__bottom'>당신의 중고물품을</h3>
+        <h3 className='welcome__title__bottom'>
+          실시간 라이브 방송을 통해 경매해봐요!
+        </h3>
       </div>
-      <div className='img__welcome__wrap'>
+      <div className='welcome__img__wrap'>
         <img src={panda} alt={'panda'} />
       </div>
     </Wrapper>

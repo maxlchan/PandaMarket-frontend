@@ -8,12 +8,14 @@ import LoginContainer from './containers/LoginContainer';
 import AuctionsContainer from './containers/AuctionsContainer';
 import BroadcastContainer from './containers/BroadcastContainer';
 import RegisterationContainer from './containers/RegisterationContainer';
+import PrivateChatContainer from './containers/PrivateChatContainer';
+import MypageContainer from './containers/MypageContainer';
 import Loading from './components/Loading';
 import GlobalStyle from './styles/GlobalStyle';
 import themes from './styles/themes';
-import { ROUTES } from './constants/';
 import { fetchUser } from './redux/user/user.reducer';
-import PrivateChatContainer from './containers/PrivateChatContainer';
+import { ROUTES, TYPE } from './constants/';
+
 
 const App = () => {
   const isLoading = useSelector((state) => state.user.isLoading);
@@ -23,14 +25,13 @@ const App = () => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    dispatch(fetchUser({ type: 'token', payload: token }));
+    dispatch(fetchUser({ type: TYPE.TOKEN, payload: token }));
   }, []);
-
   return (
     <ThemeProvider theme={themes}>
       <GlobalStyle />
       {isLoading ? (
-        <Loading type='spokes' color='white' />
+        <Loading type={TYPE.LOADING} color='white' />
       ) : (
         <>
           <HeaderContainer />
@@ -53,6 +54,12 @@ const App = () => {
             <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.PRIVATE_CHAT}`}>
               <PrivateChatContainer />
             </Route>
+            <Route path={`${ROUTES.MY_PAGE}${ROUTES.MY_AUCTIONS}`} >
+              <MypageContainer />
+            </Route>
+            <Route path={`${ROUTES.MY_PAGE}${ROUTES.RESERVED_AUCTIONS}`} >
+              <MypageContainer />
+            </Route>
             <Route render={() => <Redirect to={ROUTES.HOME} />} />
           </Switch>
         </>
@@ -60,5 +67,4 @@ const App = () => {
     </ThemeProvider>
   );
 };
-
 export default App;

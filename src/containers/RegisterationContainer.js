@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import ImageUploader from 'react-images-upload';
 import styled from 'styled-components';
 import Button from '../components/Button';
-import { ROUTES, ITEM_CATEGORY } from '../constants';
+import { ROUTES, ITEM_CATEGORY, TYPE } from '../constants';
 import { createAuction } from '../redux/auction/auction.reducer';
 import Loading from '../components/Loading';
 
@@ -87,10 +87,13 @@ const RegisterContent = styled.div`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-evenly;
-  max-width: 350px;
-  min-width: 300px;
+  justify-content: center;
   margin-bottom: 15px;
+  width: 50%;
+
+  .contents__button {
+    margin: 0 5px;
+  }
 `;
 
 const RegisterationContainer = () => {
@@ -110,8 +113,9 @@ const RegisterationContainer = () => {
     if (!isLoggedIn) history.push(ROUTES.LOGIN);
   }, [history, isLoggedIn]);
 
-  const handleRegister = () => {
-    const payload = {
+  const handleRegister = (e) => {
+    const registeredType = e.target.id;
+    const registeredData = {
       title,
       itemName,
       category,
@@ -121,7 +125,7 @@ const RegisterationContainer = () => {
       startedDateTime,
     };
 
-    dispatch(createAuction(payload));
+    dispatch(createAuction({ type: registeredType, payload: registeredData }));
   };
 
   const handleGoBack = () => {
@@ -131,7 +135,7 @@ const RegisterationContainer = () => {
   return (
     <Wrapper>
       {isLoading ? (
-        <Loading type='spokes' color='black' />
+        <Loading type={TYPE.LOADING} color='black' />
       ) : (
         <>
           <div className='box__register'>
@@ -235,9 +239,24 @@ const RegisterationContainer = () => {
               </RegisterContent>
             </div>
           </div>
-          <ButtonWrapper >
-            <Button onClick={handleRegister} text={'경매 등록하기'} />
-            <Button onClick={handleGoBack} text={'뒤로 돌아가기'} />
+          <ButtonWrapper>
+            <Button
+              className='contents__button'
+              onClick={handleRegister}
+              id={TYPE.START}
+              text={'경매 바로 시작'}
+            />
+            <Button
+              className='contents__button'
+              onClick={handleRegister}
+              id={TYPE.REGISTER}
+              text={'경매 등록하기'}
+            />
+            <Button
+              className='contents__button'
+              onClick={handleGoBack}
+              text={'뒤로 돌아가기'}
+            />
           </ButtonWrapper>
         </>
       )}

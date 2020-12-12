@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   height: 100%;
 
   .detail__left {
-    width: 30%;
+    width: 35%;
 
     .slick-track {
       display: flex;
@@ -41,10 +41,14 @@ const Wrapper = styled.div`
     align-items: center;
     width: 50%;
     height: 80%;
+    box-shadow: ${({ theme }) => theme.boxShadows.default};
+    background-color: white;
+    padding: 30px;
 
     .detail__right__header {
       width: 100%;
       text-align: center;
+      margin-bottom: 30px;
 
       .detail__title {
         font-size: ${({ theme }) => theme.fontSizes.base};
@@ -105,7 +109,10 @@ const AuctionDetail = ({ auction, onClick }) => {
             item={'경매 일시'}
             content={generateDateToText(startedDateTime)}
           />
-          <AuctionDetailContent item={'시작 가격'} content={`${initialPrice}원`} />
+          <AuctionDetailContent
+            item={'시작 가격'}
+            content={`${initialPrice}원`}
+          />
           <AuctionDetailContent
             item={'현재 예약자'}
             content={`${reservedUser.length}명`}

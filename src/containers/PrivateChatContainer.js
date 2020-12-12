@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Button from '../components/Button';
 import ChatBox from '../components/ChatBox';
 import Loading from '../components/Loading';
-import { ROUTES } from '../constants';
+import { ROUTES, TYPE } from '../constants';
 import {
   resetBroadcast,
   setBroadcast,
@@ -75,7 +75,7 @@ const PrivateChatContainer = () => {
   };
 
   return isLoading ? (
-    <Loading type='spokes' color='white' />
+    <Loading type={TYPE.LOADING} color='white' />
   ) : (
     <Wrapper>
       <div className='privatechat__wrapper'>
