@@ -5,6 +5,7 @@ const broadcastSelector = (state) => state.broadcast;
 export const broadcastSelectorForAuction = createSelector(
   broadcastSelector,
   (broadcast) => ({
+    initialPrice: broadcast.initialPrice,
     highestBidPrice: broadcast.highestBidPriceList.slice(-1)[0],
     currentWinner: broadcast.winnerList.slice(-1)[0],
     memberNumber: broadcast.members.length,

@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import ImageUploader from 'react-images-upload';
+import DateTimePicker from 'react-datetime-picker';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import { ROUTES, ITEM_CATEGORY, TYPE } from '../constants';
 import { createAuction } from '../redux/auction/auction.reducer';
 import Loading from '../components/Loading';
+import {
+  unitizedValue,
+  makeStringToNumber,
+  checkIsOverOneHour,
+} from '../utils';
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,7 +27,7 @@ const Wrapper = styled.div`
     justify-content: space-evenly;
     align-items: center;
     margin: 20px 0px;
-    width: 90%;
+    width: 60%;
     max-width: 1000px;
     background-color: white;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
@@ -58,28 +64,39 @@ const RegisterContent = styled.div`
     align-items: center;
     width: 20%;
   }
+
   .contents__register__payload {
     display: flex;
-    justify-content: center;
+    align-items: center;
     width: 70%;
+
+    .deleteImage {
+      width: 37px;
+      height: 30px;
+      padding-top: 5px;
+    }
 
     input,
     textarea,
     select {
-      border: 1.5px solid #3f4257;
-      border-radius: 3px;
+      border: 1px solid gray;
       width: 100%;
-      box-shadow: ${({ theme }) => theme.boxShadows.default};
-    }
-
-    input,
-    select {
+      padding-left: 10px;
       height: 30px;
-      text-align: center;
     }
 
-    textarea {
-      height: 100px;
+    .itemname,
+    .startedDateTime,
+    .initialprice {
+      width: 50%;
+    }
+
+    .category {
+      width: 30%;
+    }
+
+    .description {
+      height: 120px;
       resize: none;
     }
   }
@@ -113,7 +130,28 @@ const RegisterationContainer = () => {
     if (!isLoggedIn) history.push(ROUTES.LOGIN);
   }, [history, isLoggedIn]);
 
+  const validateData = () => {
+    const PICTURES_LENGTH = pictures.length;
+    const isLowerThanThousand = makeStringToNumber(initialPrice) < 1000;
+    const isOverThanOneHour = checkIsOverOneHour(startedDateTime);
+
+    if (PICTURES_LENGTH < 1) return alert('최소 1장의 사진을 등록해주세요');
+    if (PICTURES_LENGTH > 5) return alert('사진은 최대 5개만 등록됩니다');
+    if (!title) return alert('경매 제목을 입력해주세요');
+    if (!itemName) return alert('상품명을 입력해주세요');
+    if (!description) return alert('상품 설명을 입력해주세요');
+    if (!initialPrice) return alert('시작 가격을 입력해주세요');
+    if (!startedDateTime) return alert('경매 일시를 입력해주세요');
+    if (isLowerThanThousand) return alert('최소 1,000원 이상을 입력해주세요');
+    if (isOverThanOneHour) return alert('최소 1시간 후의 시간을 등록해주세요');
+
+    return true;
+  };
+
   const handleRegister = (e) => {
+    const isValid = validateData();
+    if (!isValid) return;
+
     const registeredType = e.target.id;
     const registeredData = {
       title,
@@ -125,11 +163,18 @@ const RegisterationContainer = () => {
       startedDateTime,
     };
 
-    dispatch(createAuction({ type: registeredType, payload: registeredData }));
+    // dispatch(createAuction({ type: registeredType, payload: registeredData }));
   };
 
-  const handleGoBack = () => {
-    history.goBack();
+  const handleGoBack = () => history.goBack();
+
+  const handleInitialPriceChange = (value) => {
+    if (value === '') return setInitialPrice(value);
+
+    const unitizedNumber = unitizedValue(value);
+
+    if (!unitizedNumber) return;
+    setInitialPrice(unitizedNumber);
   };
 
   return (
@@ -149,9 +194,8 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <ImageUploader
-                    label={'사진을 등록해주세요'}
+                    label={'최대 5개 사진을 등록해주세요'}
                     withPreview={true}
-                    withIcon={true}
                     onChange={(picture) => setPictures(picture)}
                     maxFileSize={5242880}
                   />
@@ -163,10 +207,11 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <input
+                    className='title'
                     type='text'
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder={'OO물건 경매합니다.형식으로 적어주세요'}
+                    placeholder={'경매 제목을 입력해주세요'}
                   />
                 </div>
               </RegisterContent>
@@ -176,6 +221,7 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <input
+                    className='itemname'
                     type='text'
                     value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
@@ -189,6 +235,7 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <select
+                    className='category'
                     onChange={(e) => setCategory(e.target.value)}
                     name='category'
                   >
@@ -206,6 +253,7 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <textarea
+                    className='description'
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
@@ -217,25 +265,26 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <input
-                    type='number'
+                    className='initialprice'
                     value={initialPrice}
-                    onChange={(e) => setInitialPrice(e.target.value)}
-                    placeholder={0}
+                    onChange={(e) => handleInitialPriceChange(e.target.value)}
+                    placeholder={'1,000원 이상으로 입력해주세요'}
+                    maxLength='10'
                   />
+                  원
                 </div>
-                원
               </RegisterContent>
               <RegisterContent>
                 <div className='contents__register__title'>
                   <h2>경매일시</h2>
                 </div>
-                <div className='contents__register__payload'>
-                  <input
-                    type='datetime-local'
-                    onChange={(e) => setStartedDateTime(e.target.value)}
-                    value={startedDateTime}
-                  />
-                </div>
+                <DateTimePicker
+                  minDate={new Date()}
+                  maxDetail='hour'
+                  disableClock={true}
+                  onChange={setStartedDateTime}
+                  value={startedDateTime}
+                />
               </RegisterContent>
             </div>
           </div>

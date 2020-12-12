@@ -29,3 +29,24 @@ export const checkIsKeywordIn = (keyword, target) => {
 
   return false;
 };
+
+export const makeStringToNumber = (value) => {
+  const removeComma = value.split(',').join('');
+  const makeStringToNumber = Number(removeComma);
+
+  return makeStringToNumber;
+};
+
+export const unitizedValue = (value) => {
+  const filterdNumber = makeStringToNumber(value);
+  if (!filterdNumber) return;
+
+  return new Intl.NumberFormat().format(filterdNumber);
+};
+
+export const checkIsOverOneHour = (target) => {
+  const currentHour = new Date().getTime();
+  const targetHour = target.getTime();
+  const oneHour = 3600000;
+  return targetHour - currentHour > oneHour;
+};

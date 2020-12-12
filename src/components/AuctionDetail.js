@@ -39,7 +39,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    width: 50%;
+    width: 45%;
     height: 80%;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     background-color: white;
@@ -124,7 +124,9 @@ const AuctionDetail = ({ auction, onClick }) => {
           />
           <AuctionDetailContent item={'상품 정보'} content={description} />
         </div>
-        <Button onClick={() => onClick(auctionId)} text={'경매 예약하기'} />
+        {onClick && (
+          <Button onClick={() => onClick(auctionId)} text={'경매 예약하기'} />
+        )}
       </div>
     </Wrapper>
   );

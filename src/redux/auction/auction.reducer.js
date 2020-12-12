@@ -34,13 +34,13 @@ export const createAuction = createAsyncThunk(
 
       dispatch(addMyAuction(auctionId));
 
-      alert('등록 성공!');
-
       if (type === TYPE.START) {
+        alert('등록 성공! 바로 경매방으로 입장입니다');
         history.push(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`);
       }
 
       if (type === TYPE.REGISTER) {
+        alert('등록 성공! 바로 경매방으로 입장입니다');
         history.push(`${ROUTES.HOME}`);
       }
 

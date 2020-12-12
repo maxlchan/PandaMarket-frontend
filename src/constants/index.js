@@ -33,6 +33,7 @@ const TYPE = {
   MODIFY: 'modify',
   DELETE: 'delete',
   JOIN: 'join',
+  DETAIL: 'detail',
   REGISTER: 'register',
   LOADING: 'spokes',
 };

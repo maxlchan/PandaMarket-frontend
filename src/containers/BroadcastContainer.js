@@ -97,6 +97,7 @@ const BroadcastContainer = () => {
   const [message, setMessage] = useState('');
   const {
     memberNumber,
+    initialPrice,
     highestBidPrice,
     currentWinner,
     messages,
@@ -356,9 +357,15 @@ const BroadcastContainer = () => {
         <div className='box__left'>
           <video autoPlay ref={hostVideo} />
           <div className='box__left__status'>
-            <h2>시작가 - {3000}원</h2>
-            {highestBidPrice && <h2>현재 경매가 - {highestBidPrice}원</h2>}
-            {currentWinner?.name && <h3>현재 1등 {currentWinner.name}님</h3>}
+            <h2 className='status__intialPrice'>시작가 - {3000}원</h2>
+            <h2 className='status__highestBidPrice'>
+              현재 경매가 - {highestBidPrice ? highestBidPrice : initialPrice}원
+            </h2>
+            {currentWinner?.name && (
+              <h3 className='status__currentWinner'>
+                현재 1등 {currentWinner.name}님
+              </h3>
+            )}
           </div>
           {isCountdownStart && <span>{timeCount}</span>}
           <Button text={'제품 상세보기'} />

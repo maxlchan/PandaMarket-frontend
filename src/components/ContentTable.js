@@ -12,7 +12,8 @@ const Wrapper = styled.div`
   .mypage__content__title {
     font-size: ${({ theme }) => theme.fontSizes.lg};
     font-weight: ${({ theme }) => theme.fontWeights.medium};
-    padding-bottom: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
     border-bottom: 3px solid gray;
   }
 
@@ -33,7 +34,7 @@ const Wrapper = styled.div`
     th {
       display: table-cell;
       vertical-align: middle;
-      border: 1px solid #ddd;
+      border: 1px dotted #ddd;
       padding: 8px;
     }
 
@@ -94,29 +95,25 @@ const ContentTable = ({
                     '경매대기'}
                 </td>
                 <td>
-                  {Array.isArray(children)
-                    ? children.map((button, index) => {
-                        let buttonType;
+                  {children.map((button, index) => {
+                    const { type } = button.props;
 
-                        if (index === 0) buttonType = TYPE.START;
-                        if (index === 1) buttonType = TYPE.MODIFY;
-                        if (index === 2) buttonType = TYPE.DELETE;
+                    let disabledCondition;
 
-                        const disabledCondition =
-                          buttonType === TYPE.START
-                            ? !isStartPossible
-                            : isStartPossible || isFinished;
+                    if (type === TYPE.START) {
+                      disabledCondition = !isStartPossible || isStarted;
+                    } else if (type === TYPE.MODIFY || type === TYPE.DELETE) {
+                      disabledCondition = isStartPossible || isFinished;
+                    } else if (type === TYPE.JOIN) {
+                      disabledCondition = isFinished || !isStarted;
+                    }
 
-                        return cloneElement(button, {
-                          key: index,
-                          disabled: disabledCondition,
-                          onClick: () => onClick(_id, buttonType),
-                        });
-                      })
-                    : cloneElement(children, {
-                        disabled: isFinished || !isStarted,
-                        onClick: () => onClick(_id, TYPE.JOIN),
-                      })}
+                    return cloneElement(button, {
+                      key: index,
+                      disabled: disabledCondition,
+                      onClick: () => onClick(_id, type),
+                    });
+                  })}
                 </td>
               </tr>
             </tbody>
