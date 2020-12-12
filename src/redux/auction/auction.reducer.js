@@ -55,12 +55,17 @@ export const reserveAuction = createAsyncThunk(
   'auctions/reserve',
   async (auctionId, { getState, dispatch }) => {
     const { user, auctions } = getState();
-    const userReservedAuctionIds = user.info.reservedAuctions;
-    const isAlreadyReserved = userReservedAuctionIds.includes(auctionId);
+    const { myAuctions, reservedAuctions } = user.info;
+    const isUsersAuction = myAuctions.includes(auctionId);
+    const isAlreadyReserved = reservedAuctions.includes(auctionId);
+
+    if (isUsersAuction) {
+      alert('자신이 만든 경매는 예약할 수 없습니다.');
+      return auctions.data;
+    }
 
     if (isAlreadyReserved) {
       alert('이미 예약하신 경매입니다.');
-
       return auctions.data;
     }
 

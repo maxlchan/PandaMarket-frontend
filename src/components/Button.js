@@ -7,14 +7,17 @@ const Wrapper = styled.button`
   align-items: center;
   width: ${({ width }) => width};
   padding: ${({ padding }) => padding || '2% 6%'};
+  box-shadow: ${({ theme }) => theme.boxShadows.default};
+  font-size: ${({ theme }) => theme.fontSizes.small};
+  transition: all 0.05s ease-in-out;
+  cursor: pointer;
   color: white;
   background-color: ${(props) => {
     return props.color || props.theme.colors.green;
   }};
-  box-shadow: ${({ theme }) => theme.boxShadows.default};
-  font-size: ${({ theme }) => theme.fontSizes.small};
-  cursor: pointer;
-  transition: all 0.05s ease-in-out;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
 
   &:active {
     transform: scale(0.95);

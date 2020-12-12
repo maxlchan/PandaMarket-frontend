@@ -30,6 +30,9 @@ const TYPE = {
   GOOGLEAUTH: 'googleAuth',
   TOKEN: 'token',
   START: 'start',
+  MODIFY: 'modify',
+  DELETE: 'delete',
+  JOIN: 'join',
   REGISTER: 'register',
   LOADING: 'spokes',
 };

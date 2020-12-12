@@ -80,6 +80,7 @@ const AuctionDetail = ({ auction, onClick }) => {
     reservedUser,
     title,
     itemName,
+    created_at,
     _id: auctionId,
   } = auction;
 
@@ -105,6 +106,10 @@ const AuctionDetail = ({ auction, onClick }) => {
         <div className='detail__right__main'>
           <AuctionDetailContent item={'경매 제목'} content={title} />
           <AuctionDetailContent item={'상품명'} content={itemName} />
+          <AuctionDetailContent
+            item={'등록 일시'}
+            content={generateDateToText(created_at)}
+          />
           <AuctionDetailContent
             item={'경매 일시'}
             content={generateDateToText(startedDateTime)}

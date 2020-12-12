@@ -15,6 +15,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import themes from './styles/themes';
 import { fetchUser } from './redux/user/user.reducer';
 import { ROUTES, TYPE } from './constants/';
+import { fetchAuctions } from './redux/auction/auction.reducer';
 
 
 const App = () => {
@@ -27,6 +28,11 @@ const App = () => {
 
     dispatch(fetchUser({ type: TYPE.TOKEN, payload: token }));
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchAuctions());
+  }, []);
+
   return (
     <ThemeProvider theme={themes}>
       <GlobalStyle />
