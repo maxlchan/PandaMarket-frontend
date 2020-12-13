@@ -34,15 +34,19 @@ export const checkIsKeywordIn = (keyword, target) => {
   return false;
 };
 
-export const makeStringToNumber = (value) => {
+export const convertUnitToNumber = (value) => {
   const removeComma = value.split(',').join('');
-  const makeStringToNumber = Number(removeComma);
+  const convertUnitToNumber = Number(removeComma);
 
-  return makeStringToNumber;
+  return convertUnitToNumber;
+};
+
+export const checkIsBigger = (source, target) => {
+  return convertUnitToNumber(source) > convertUnitToNumber(target);
 };
 
 export const unitizedValue = (value) => {
-  const filterdNumber = makeStringToNumber(value);
+  const filterdNumber = convertUnitToNumber(value);
   if (!filterdNumber) return;
 
   return new Intl.NumberFormat().format(filterdNumber);
@@ -51,7 +55,7 @@ export const unitizedValue = (value) => {
 export const checkIsOverOneHour = (target) => {
   const currentTime = new Date().getTime();
   const targetTime = target.getTime();
-  const oneHour = 3600000;
+  const oneHour = 60 * 60 * 1000;
 
   console.log(targetTime - currentTime > oneHour);
 

@@ -3,14 +3,26 @@ import {
   createReducer,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
-import { finishAuction } from '../../utils/api';
+import { finishAuction, startAuction } from '../../utils/api';
 
 export const setBroadcast = createAction('broadcast/set');
 export const resetBroadcast = createAction('broadcast/reset');
 export const startCountdown = createAction('broadcast/startCountdown');
 
-export const setBroadcastEnd = createAsyncThunk(
-  'broadcast/setEnd',
+export const startBroadcast = createAsyncThunk(
+  'broadcast/start',
+  async (auctionId, thunkAPI) => {
+    try {
+      await startAuction(auctionId);
+      return;
+    } catch (err) {
+      return err;
+    }
+  }
+);
+
+export const finishBroadcast = createAsyncThunk(
+  'broadcast/finish',
   async (auctionId, { getState }) => {
     try {
       const { broadcast } = getState();
@@ -19,7 +31,6 @@ export const setBroadcastEnd = createAsyncThunk(
       const payload = { winner: winner._id, finalPrice };
 
       await finishAuction(payload, auctionId);
-
       return;
     } catch (err) {
       return err;
@@ -52,7 +63,7 @@ const initialState = {
   highestBidPriceList: [],
   isCountdownStart: false,
   timeCount: null,
-  isEnd: false,
+  isFinished: false,
   isLoading: false,
   error: null,
 };
@@ -71,7 +82,7 @@ const broadcastReducer = createReducer(initialState, {
   [getMedia.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
-    error: action.error.message
+    error: action.error.message,
   }),
   [setBroadcast]: (state, action) => ({
     ...state,
@@ -81,18 +92,33 @@ const broadcastReducer = createReducer(initialState, {
     ...state,
     isCountdownStart: true,
   }),
-  [setBroadcastEnd.pending]: (state, action) => ({
+  [finishBroadcast.pending]: (state, action) => ({
     ...state,
     isLoading: true,
     error: null,
   }),
-  [setBroadcastEnd.fulfilled]: (state, action) => ({
+  [finishBroadcast.fulfilled]: (state, action) => ({
     ...state,
-    isEnd: true,
+    isFinished: true,
     isLoading: false,
     error: null,
   }),
-  [setBroadcastEnd.rejected]: (state, action) => ({
+  [finishBroadcast.rejected]: (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.error.message,
+  }),
+  [startBroadcast.pending]: (state, action) => ({
+    ...state,
+    isLoading: true,
+    error: null,
+  }),
+  [startBroadcast.fulfilled]: (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: null,
+  }),
+  [startBroadcast.rejected]: (state, action) => ({
     ...state,
     isLoading: false,
     error: action.error.message,

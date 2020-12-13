@@ -16,10 +16,13 @@ const Wrapper = styled.div`
 const HomeContainer = () => {
   const auctionsOnAir = useSelector(auctionsOnAirSelector);
   const history = useHistory();
+  const handleJoinButtonClick = (auctionId) => {
+    history.push(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`);
+  };
 
   return (
     <Wrapper>
-      <Carousel contents={auctionsOnAir} />
+      <Carousel contents={auctionsOnAir} onClick={handleJoinButtonClick} />
       <Button
         onClick={() => history.push(ROUTES.REGISTERATION)}
         padding='15px 20px'

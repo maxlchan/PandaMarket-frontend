@@ -31,6 +31,7 @@ const ChatBoxWrapper = styled.div`
     }};
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     overflow-y: overlay;
+    z-index: 10;
   }
 
   .box__layer {

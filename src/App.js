@@ -51,13 +51,10 @@ const App = () => {
             <Route path={ROUTES.LOGIN}>
               <LoginContainer />
             </Route>
-            <Route exact path={ROUTES.REGISTERATION}>
+            <Route path={ROUTES.REGISTERATION}>
               <RegisterationContainer />
             </Route>
-            <Route path={`${ROUTES.REGISTERATION}${ROUTES.AUCTION_DETAIL}`}>
-              <RegisterationContainer />
-            </Route>
-            <Route exact path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.BROADCAST}`}>
+            <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.BROADCAST}`}>
               <BroadcastContainer />
             </Route>
             <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.PRIVATE_CHAT}`}>

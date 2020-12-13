@@ -8,6 +8,7 @@ import WelcomeContent from './WelcomeContent';
 import Button from './Button';
 import themes from '../styles/themes';
 import bamboo from '../assets/images/bamboo.jpg';
+import Bullet from './Bullet';
 
 const { colors, pastelColors } = themes;
 const cardColors = Object.values(pastelColors);
@@ -46,6 +47,7 @@ const ContentWrapper = styled.div`
     color: white;
 
     .carousel__intro__title {
+      position: relative;
       margin-bottom: 30px;
       font-size: ${({ theme }) => theme.fontSizes.titleSize};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
@@ -87,7 +89,6 @@ const ContentWrapper = styled.div`
   }
 `;
 
-
 const Carousel = ({ contents, onClick }) => {
   return (
     <SliderWrapper>
@@ -103,6 +104,7 @@ const Carousel = ({ contents, onClick }) => {
             <Card key={_id} color={cardColors[colorIndex]}>
               <ContentWrapper>
                 <div className='carousel__intro'>
+                  <Bullet text={'HOT'} />
                   <h1 className='carousel__intro__title'>{itemName}</h1>
                   <h2 className='carousel__intro__desrciption'>
                     경매 시작가 <span>{initialPrice}</span>원
@@ -113,7 +115,7 @@ const Carousel = ({ contents, onClick }) => {
                   <Button
                     color={colors.indigo}
                     text={'바로 참여하기'}
-                    onClick={onClick}
+                    onClick={() => onClick(_id)}
                   />
                 </div>
                 <div className='carousel__image__wrap'>

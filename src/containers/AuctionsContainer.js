@@ -56,9 +56,9 @@ const AuctionsContainer = () => {
   const [searchKeyWord, setSearchKeyWord] = useState('');
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchAuctions());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchAuctions());
+  // }, []);
 
   const handleAuctionSearch = (keyword) => {
     if (!keyword) {

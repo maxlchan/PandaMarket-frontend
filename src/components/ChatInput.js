@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyldInput = styled.input`
-  width: 70%;
+  width: 65%;
   border: none;
   border-bottom: 2px solid gray;
   font-size: ${({ theme }) => theme.fontSizes.small};

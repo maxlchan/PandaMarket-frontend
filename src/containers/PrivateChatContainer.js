@@ -42,7 +42,7 @@ const Wrapper = styled.div`
 
 const PrivateChatContainer = () => {
   const { isLoading } = useSelector((state) => state.broadcast);
-  const { privateMessages, isEnd } = useSelector(broadcastSelectorForAuction);
+  const { privateMessages, isFinished } = useSelector(broadcastSelectorForAuction);
   const { _id: userId } = useSelector(userInfoSelector);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
@@ -88,7 +88,7 @@ const PrivateChatContainer = () => {
           onKeyPress={handleKeyPress}
           onChange={(e) => setMessage(e.target.value)}
           onClick={handleChatButtonClick}
-          isPrivate={isEnd}
+          isPrivate={isFinished}
           userId={userId}
         />
         <Button onClick={handleEndButtonClick} text={'대화 종료하기'} />

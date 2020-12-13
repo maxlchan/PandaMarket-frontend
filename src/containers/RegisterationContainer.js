@@ -9,7 +9,7 @@ import Loading from '../components/Loading';
 import { createAuction } from '../redux/auction/auction.reducer';
 import {
   unitizedValue,
-  makeStringToNumber,
+  convertUnitToNumber,
   checkIsOverOneHour,
 } from '../utils';
 import { ROUTES, ITEM_CATEGORY, TYPE } from '../constants';
@@ -132,7 +132,7 @@ const RegisterationContainer = () => {
 
   const validateRegisteredData = () => {
     const PICTURES_LENGTH = pictures.length;
-    const isLowerThanThousand = makeStringToNumber(initialPrice) < 1000;
+    const isLowerThanThousand = convertUnitToNumber(initialPrice) < 1000;
     const isLowerThanOneHour = !checkIsOverOneHour(startedDateTime);
 
     if (PICTURES_LENGTH < 1) return alert('최소 1장의 사진을 등록해주세요');

@@ -10,8 +10,7 @@ const Wrapper = styled.button`
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   font-size: ${({ theme }) => theme.fontSizes.small};
   margin-bottom: 5px;
-  margin-left: auto;
-  margin-right: auto;
+
   transition: all 0.05s ease-in-out;
   cursor: pointer;
   color: white;
