@@ -2,26 +2,27 @@ import React, { cloneElement } from 'react';
 import styled from 'styled-components';
 import { generateDateToText } from '../utils';
 import { TYPE } from '../constants';
+import NoDataText from './NoDataText';
 
 const Wrapper = styled.div`
   width: 100%;
-  background-color: white;
-  box-shadow: ${({ theme }) => theme.boxShadows.default};
   padding: 50px;
+  box-shadow: ${({ theme }) => theme.boxShadows.default};
+  background-color: white;
 
   .mypage__content__title {
-    font-size: ${({ theme }) => theme.fontSizes.lg};
-    font-weight: ${({ theme }) => theme.fontWeights.medium};
     padding-bottom: 10px;
     margin-bottom: 20px;
     border-bottom: 3px solid gray;
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+    font-weight: ${({ theme }) => theme.fontWeights.medium};
   }
 
   .mypage__contents {
     width: 100%;
     padding: 10px;
-    text-align: center;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
+    text-align: center;
 
     th {
       padding-top: 12px;
@@ -32,10 +33,10 @@ const Wrapper = styled.div`
 
     td,
     th {
+      padding: 8px;
       display: table-cell;
       vertical-align: middle;
       border: 1px dotted #ddd;
-      padding: 8px;
     }
 
     tr:nth-child(even) {
@@ -44,14 +45,10 @@ const Wrapper = styled.div`
   }
 `;
 
-const ContentTable = ({
-  auctionsInfo,
-  title,
-  onClick,
-  children,
-  isMyAuction,
-}) => {
-  return (
+const ContentTable = ({ auctionsInfo, title, onClick, children }) => {
+  const isAuctionsExisted = auctionsInfo.length;
+
+  return isAuctionsExisted ? (
     <Wrapper>
       <div className='mypage__content__title'>{title}</div>
       <table className='mypage__contents'>
@@ -67,7 +64,7 @@ const ContentTable = ({
             <th></th>
           </tr>
         </thead>
-        {auctionsInfo?.map(
+        {auctionsInfo.map(
           ({
             _id,
             itemName,
@@ -121,6 +118,8 @@ const ContentTable = ({
         )}
       </table>
     </Wrapper>
+  ) : (
+    <NoDataText />
   );
 };
 

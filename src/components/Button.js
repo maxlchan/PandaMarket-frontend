@@ -9,15 +9,15 @@ const Wrapper = styled.button`
   padding: ${({ padding }) => padding || '2% 6%'};
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   font-size: ${({ theme }) => theme.fontSizes.small};
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
   transition: all 0.05s ease-in-out;
   cursor: pointer;
   color: white;
   background-color: ${(props) => {
     return props.color || props.theme.colors.green;
   }};
-  margin-bottom: 5px;
-  margin-left: auto;
-  margin-right: auto;
 
   &:active {
     transform: scale(0.95);
@@ -27,21 +27,21 @@ const Wrapper = styled.button`
     opacity: 50%;
   }
 
-  h1 {
+  .button__title {
     min-width: 25px;
     pointer-events: none;
   }
 `;
 
 const Button = ({
-  disabled,
+  id,
   className,
+  disabled,
   onClick,
   color,
-  text,
   width,
   padding,
-  id,
+  text,
 }) => {
   return (
     <Wrapper
@@ -53,7 +53,7 @@ const Button = ({
       width={width}
       padding={padding}
     >
-      <h1>{text}</h1>
+      <h1 className='button__title'>{text}</h1>
     </Wrapper>
   );
 };

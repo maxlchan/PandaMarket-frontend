@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ROUTES } from '../constants';
-import NavItem from './NavItem';
 
 const Wrapper = styled.div`
   display: flex;
@@ -10,9 +8,9 @@ const Wrapper = styled.div`
   height: 100%;
   width: 15vw;
   position: fixed;
-  z-index: 1;
   top: 0;
   left: 0;
+  z-index: 1;
   background-color: ${({ theme }) => theme.colors.bamboo};
   overflow-x: hidden;
   padding-top: 30px;

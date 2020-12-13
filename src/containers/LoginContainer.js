@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import GoogleLoginButton from '../components/GoogleLoginButton';
 import { fetchUser } from '../redux/user/user.reducer';
 import panda from '../assets/images/panda.png';
-import GoogleLoginButton from '../components/GoogleLoginButton';
-import { useHistory } from 'react-router-dom';
 import { ROUTES, TYPE } from '../constants';
 
 const Wrapper = styled.div`

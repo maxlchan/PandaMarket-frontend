@@ -8,9 +8,9 @@ const StyledButton = styled.div`
   justify-content: center;
   align-items: center;
   width: 80%;
+  padding: 10px;
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   background-color: white;
-  padding: 10px;
   cursor: pointer;
 
   .login__btn__logo {

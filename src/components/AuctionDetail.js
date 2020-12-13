@@ -1,9 +1,9 @@
 import React from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
-import { generateDateToText } from '../utils';
+import AuctionDetailContent from './AuctionDetailContent';
 import Button from './Button';
-import AuctionDetailContent from '../components/AuctionDetailContent';
+import { generateDateToText } from '../utils';
 
 const sliderSettings = {
   dots: true,
@@ -41,9 +41,9 @@ const Wrapper = styled.div`
     align-items: center;
     width: 45%;
     height: 80%;
+    padding: 30px;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     background-color: white;
-    padding: 30px;
 
     .detail__right__header {
       width: 100%;
@@ -75,11 +75,11 @@ const AuctionDetail = ({ auction, onClick }) => {
   const {
     description,
     initialPrice,
-    startedDateTime,
     picturesUrl,
     reservedUser,
     title,
     itemName,
+    startedDateTime,
     created_at,
     _id: auctionId,
   } = auction;
@@ -102,7 +102,6 @@ const AuctionDetail = ({ auction, onClick }) => {
           <div className='detail__title'>{itemName}</div>
           <div className='detail__initialPrice'>시작가 {initialPrice}원</div>
         </div>
-
         <div className='detail__right__main'>
           <AuctionDetailContent item={'경매 제목'} content={title} />
           <AuctionDetailContent item={'상품명'} content={itemName} />

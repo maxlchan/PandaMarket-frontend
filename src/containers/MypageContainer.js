@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 import SideNavBar from '../components/SideNavBar';
 import NavItem from '../components/NavItem';
 import ContentTable from '../components/ContentTable';
@@ -17,19 +17,19 @@ import { ROUTES, TYPE } from '../constants';
 
 const MypageContentBox = styled.div`
   display: flex;
+  min-height: 85vh;
   padding: 30px 5% 15px 20%;
   padding-right: 5%;
-  min-height: 85vh;
 `;
 
 const MypageContainer = () => {
   const myAuctions = useSelector(myAuctionsSelector);
   const reservedAuctions = useSelector(reservedAuctionsSelector);
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const { pathname } = useLocation();
   const [isModalClicked, setIsModalClicked] = useState(false);
   const [clickedAuction, setClickedAuction] = useState({});
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
+  const history = useHistory();
 
   const handleButtonClick = (auctionId, type) => {
     if (type == TYPE.START) {

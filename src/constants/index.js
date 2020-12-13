@@ -49,12 +49,12 @@ const ITEM_CATEGORY = [
   '스포츠레저',
   '뷰티',
   '생활가전',
-  '자동차 공구',
   '도서 기타',
 ];
 
 const CONFIG = {
   LIMITED_SECONDS: 5,
+  DEBOUNCED_TIME: 500,
   ICE_SERVER: {
     iceServers: [
       { urls: 'stun:stun.stunprotocol.org' },
@@ -67,4 +67,9 @@ const CONFIG = {
   },
 };
 
-export { ROUTES, MESSAGE, ITEM_CATEGORY, CONFIG, TYPE };
+const URL = {
+  LOADING: 'https://acegif.com/wp-content/gif/panda-80.gif',
+  CONFETTI: 'https://acegif.com/wp-content/gif/confetti-29.gif'
+};
+
+export { ROUTES, MESSAGE, ITEM_CATEGORY, CONFIG, TYPE, URL };

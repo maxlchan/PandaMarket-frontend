@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import { CONFIG } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,16 +12,16 @@ const Wrapper = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.base};
   border-bottom: 2px solid black;
 
-  span {
+  .serach__image {
     position: absolute;
     left: 10px;
   }
 
-  input {
+  .serach__input {
     width: 100%;
     border: none;
-    background-color: transparent;
     font-size: ${({ theme }) => theme.fontSizes.base};
+    background-color: transparent;
     text-align: center;
   }
 `;
@@ -28,31 +29,30 @@ const Wrapper = styled.div`
 const Search = ({ onSearch }) => {
   const [keyword, setKeyword] = useState('');
 
-  const delayedCallOnSearch = useCallback(
-    debounce((onSearch, keyword) => {
-      onSearch(keyword);
-    }, 500),
+  const debouncedCallOnSearch = useCallback(
+    debounce((onSearch, keyword) => onSearch(keyword), CONFIG.DEBOUNCED_TIME),
     []
   );
 
-  const handleKeyPress = ({ key }) => {
+  const handleKeyPress = (e) => {
     if (!keyword) return;
-    if (key === 'Enter') onSearch(keyword);
+    if (e.key === 'Enter') onSearch(keyword);
 
-    delayedCallOnSearch.cancel();
+    debouncedCallOnSearch.cancel();
   };
 
   const handleChange = (e) => {
     const currentWord = e.target.value;
 
     setKeyword(currentWord);
-    delayedCallOnSearch(onSearch, currentWord);
+    debouncedCallOnSearch(onSearch, currentWord);
   };
 
   return (
     <Wrapper>
-      <span>🔍</span>
+      <span className='serach__image'>🔍</span>
       <input
+        className='serach__input'
         onChange={handleChange}
         onKeyPress={handleKeyPress}
         value={keyword}

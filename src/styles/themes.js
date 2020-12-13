@@ -27,10 +27,12 @@ const colors = {
   bamboo: '#88b234',
   green: '#53b332',
   hoverGreen: '#73b332',
-  gray: '#484950',
+  gray: '#f2f1ef',
+  transparent_gray: 'rgba(220,220,220, 0.9)',
   light_black: '#333040',
   light_white: '#f8f8f8',
   indigo: '#253857',
+  red: '#ea4065',
 };
 
 const pastelColors = {

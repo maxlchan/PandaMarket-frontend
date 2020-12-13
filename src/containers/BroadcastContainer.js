@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../components/Button';
-import { CONFIG, MESSAGE, ROUTES } from '../constants';
-import { socket } from '../utils/socket';
+import ChatBox from '../components/ChatBox';
 import {
   resetBroadcast,
   setBroadcast,
@@ -16,8 +15,9 @@ import {
   userInfoSelector,
 } from '../redux/user/user.selector';
 import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
-import ChatBox from '../components/ChatBox';
 import { stopBothVideoAndAudio } from '../utils';
+import { socket } from '../utils/socket';
+import { CONFIG, MESSAGE, ROUTES } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -330,7 +330,7 @@ const BroadcastContainer = () => {
   };
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn) return history.push(ROUTES.LOGIN);
     if (isHost) {
       (async () => {
         await getUserMedia();

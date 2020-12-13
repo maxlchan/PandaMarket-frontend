@@ -40,7 +40,7 @@ export const createAuction = createAsyncThunk(
       }
 
       if (type === TYPE.REGISTER) {
-        alert('등록 성공! 바로 경매방으로 입장입니다');
+        alert('등록 성공! 경매 시간을 반드시 준수해주세요!');
         history.push(`${ROUTES.HOME}`);
       }
 

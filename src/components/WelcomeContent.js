@@ -18,18 +18,18 @@ const Wrapper = styled.div`
     white-space: nowrap;
 
     .welcome__title__top {
-      color: ${({ theme }) => theme.colors.bamboo};
-      font-size: ${({ theme }) => theme.fontSizes.base};
       margin-top: 10px;
+      font-size: ${({ theme }) => theme.fontSizes.base};
       font-weight: 500;
+      color: ${({ theme }) => theme.colors.bamboo};
     }
 
     .welcome__title__medium {
       margin-top: 10px;
       margin-bottom: 10px;
-      color: ${({ theme }) => theme.colors.bamboo};
       font-size: ${({ theme }) => theme.fontSizes.titleSize};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
+      color: ${({ theme }) => theme.colors.bamboo};
     }
 
     .welcome__title__bottom {
@@ -46,7 +46,7 @@ const Wrapper = styled.div`
     width: 50%;
     height: 100%;
 
-    img {
+    .welcome__img {
       width: 100%;
       max-width: 400px;
       min-width: 200px;
@@ -68,7 +68,7 @@ const WelcomeContent = () => {
         </h3>
       </div>
       <div className='welcome__img__wrap'>
-        <img src={panda} alt={'panda'} />
+        <img className='welcome__img' src={panda} alt={'panda'} />
       </div>
     </Wrapper>
   );

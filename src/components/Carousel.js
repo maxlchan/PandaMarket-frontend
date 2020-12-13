@@ -4,10 +4,10 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import styled from 'styled-components';
 import Card from './Card';
-import themes from '../styles/themes';
-import bamboo from '../assets/images/bamboo.jpg';
 import WelcomeContent from './WelcomeContent';
 import Button from './Button';
+import themes from '../styles/themes';
+import bamboo from '../assets/images/bamboo.jpg';
 
 const { colors, pastelColors } = themes;
 const cardColors = Object.values(pastelColors);
@@ -24,8 +24,10 @@ const sliderSettings = {
 };
 
 const SliderWrapper = styled.div`
+  position: relative;
   width: 100%;
-  height: 80vh;
+  max-height: 1000px;
+  min-height: 80vh;
 `;
 
 const ContentWrapper = styled.div`
@@ -40,31 +42,34 @@ const ContentWrapper = styled.div`
     justify-content: space-around;
     align-items: center;
     width: 50%;
-    color: white;
-    white-space: nowrap;
     text-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
+    color: white;
 
     .carousel__intro__title {
+      margin-bottom: 30px;
       font-size: ${({ theme }) => theme.fontSizes.titleSize};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
-      margin-bottom: 30px;
+      text-align: center;
+      word-break: keep-all;
     }
 
     .carousel__intro__desrciption {
       font-size: ${({ theme }) => theme.fontSizes.xxl};
       font-weight: ${({ theme }) => theme.fontWeights.medium};
+      text-align: center;
+      word-break: keep-all;
 
       span {
         font-size: ${({ theme }) => theme.fontSizes.xxxl};
         font-weight: ${({ theme }) => theme.fontWeights.strong};
-        color: black;
         text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+        color: black;
       }
     }
 
     .carousel__intro__description__sub {
-      font-size: ${({ theme }) => theme.fontSizes.lg};
       margin-bottom: 50px;
+      font-size: ${({ theme }) => theme.fontSizes.lg};
     }
   }
 
@@ -76,10 +81,12 @@ const ContentWrapper = styled.div`
       min-height: 300px;
       max-height: 400px;
       margin: 0 auto;
-      box-shadow: ${({ theme }) => theme.boxShadows.default};
+      box-shadow: ${({ theme }) => theme.boxShadows.deep};
+      border-radius: 10px;
     }
   }
 `;
+
 
 const Carousel = ({ contents, onClick }) => {
   return (

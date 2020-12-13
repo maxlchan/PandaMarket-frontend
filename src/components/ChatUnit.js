@@ -7,9 +7,9 @@ const ChatUnitWrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 95%;
+  padding: 10px 0 10px 10px;
   word-wrap: break-word;
   word-break: keep-all;
-  padding: 10px 0 10px 10px;
 
   .chatunit__image {
     width: 3%;
@@ -28,18 +28,18 @@ const ChatUnitWrapper = styled.div`
   }
 
   .chatunit__text {
-    text-align: ${({ isChatMine }) => isChatMine && 'right'};
     width: 90%;
     min-width: 100px;
+    text-align: ${({ isChatMine }) => isChatMine && 'right'};
   }
 
   .chatunit__hostMark {
-    padding: 5px;
-    background-color: green;
-    border-radius: 50px;
-    color: white;
-    font-size: 10px;
     margin-right: 5px;
+    padding: 5px;
+    border-radius: 50px;
+    font-size: 10px;
+    background-color: green;
+    color: white;
   }
 `;
 

@@ -5,26 +5,30 @@ import ChatInput from '../components/ChatInput';
 import ChatUnit from '../components/ChatUnit';
 import useScrollToBottom from '../hooks/useScrollToBottom';
 import themes from '../styles/themes';
-import UserIcon from './UserIcon';
+import UserNumberIcon from './UserNumberIcon';
 
 const COLORS = themes.colors;
 
 const ChatBoxWrapper = styled.div`
   width: 100%;
   height: 80%;
-  min-height: 300px;
   max-height: 800px;
+  min-height: 300px;
   overflow: hidden;
   position: relative;
-  box-shadow: ${({ isPrivate, theme }) =>
-    isPrivate && theme.boxShadows.default};
   border-radius: ${({ isPrivate }) => isPrivate && '30px'};
+  box-shadow: ${({ isPrivate, theme }) => {
+    return isPrivate && theme.boxShadows.default;
+  }};
 
   .box__allchat {
     width: 100%;
     height: 85%;
-    background-color: ${({ isPrivate, theme }) =>
-      isPrivate ? 'rgba(220,220,220, 0.9)' : theme.colors.light_white};
+    background-color: ${({ isPrivate, theme }) => {
+      return isPrivate
+        ? theme.colors.transparent_gray
+        : theme.colors.light_white;
+    }};
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     overflow-y: overlay;
   }
@@ -46,8 +50,8 @@ const ChatBoxWrapper = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 30px;
       position: absolute;
+      width: 30px;
       left: 15px;
       top: 15px;
     }
@@ -58,13 +62,12 @@ const ChatBoxHeader = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  background-color: white;
   width: 100%;
   height: 5vh;
-  background-color: white;
   box-shadow: ${({ theme }) => theme.boxShadows.default};
+  background-color: white;
 
-  h1 {
+  .box__title {
     font-weight: ${({ theme }) => theme.fontWeights.medium};
     margin-left: 30px;
   }
@@ -85,7 +88,7 @@ const ChatBox = ({
   return (
     <ChatBoxWrapper isPrivate={isPrivate}>
       <ChatBoxHeader>
-        <h1>{isPrivate ? '대화창' : '주요 채팅'}</h1>
+        <h1 className='box__title'>{isPrivate ? '대화창' : '주요 채팅'}</h1>
       </ChatBoxHeader>
       <div className='box__allchat'>
         <div className='box__layer' />
@@ -113,7 +116,7 @@ const ChatBox = ({
         />
         <Button color={COLORS.indigo} text='전송' onClick={onClick} />
         {!isPrivate && (
-          <UserIcon className='box__usericon' userNumber={memberNumber} />
+          <UserNumberIcon className='box__usericon' userNumber={memberNumber} />
         )}
       </div>
     </ChatBoxWrapper>

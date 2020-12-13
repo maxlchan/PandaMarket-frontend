@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
-const UserIcon = ({ className, userNumber }) => {
+const UserNumberIcon = ({ className, userNumber }) => {
   return (
     <div className={className}>
       <FontAwesomeIcon icon={faUser} />
@@ -11,4 +11,4 @@ const UserIcon = ({ className, userNumber }) => {
   );
 };
 
-export default UserIcon;
+export default UserNumberIcon;

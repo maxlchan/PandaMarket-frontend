@@ -7,13 +7,13 @@ import AuctionItem from '../components/AuctionItem';
 import CloseButton from '../components/CloseButton';
 import Loading from '../components/Loading';
 import Modal from '../components/Modal';
+import Search from '../components/Search';
+import { auctionsOnWaitingSelector } from '../redux/auction/auctios.selector';
 import {
   fetchAuctions,
   reserveAuction,
 } from '../redux/auction/auction.reducer';
-import { auctionsOnWaitingSelector } from '../redux/auction/auctios.selector';
 import { ITEM_CATEGORY, TYPE } from '../constants';
-import Search from '../components/Search';
 import { checkIsKeywordIn } from '../utils';
 
 const itemCategories = [...ITEM_CATEGORY, '전체'];
@@ -25,8 +25,8 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  overflow: auto;
   padding-top: 40px;
+  overflow: auto;
 `;
 
 const AuctionsGrid = styled.div`
@@ -36,7 +36,7 @@ const AuctionsGrid = styled.div`
   grid-auto-rows: minmax(200px, auto);
   column-gap: 10px;
   row-gap: 20px;
-  padding: 10px 0;
+  padding: 20px 0 60px 0;
 `;
 
 const AuctionCategoryBox = styled.div`
@@ -48,11 +48,11 @@ const AuctionCategoryBox = styled.div`
 const AuctionsContainer = () => {
   const auctions = useSelector(auctionsOnWaitingSelector);
   const { isLoading } = useSelector((state) => state.auctions);
-  const [clickedAuction, setClickedAuction] = useState({});
   const [isModalClicked, setIsModalClicked] = useState(false);
-  const [isFilterOn, setIsFilterOn] = useState(false);
-  const [isSearchOn, setIsSearchOn] = useState(false);
+  const [clickedAuction, setClickedAuction] = useState({});
+  const [isCategoryFilterOn, setIsCategoryFilterOn] = useState(false);
   const [filteredCategory, setFilteredCategory] = useState('');
+  const [isSearchOn, setIsSearchOn] = useState(false);
   const [searchKeyWord, setSearchKeyWord] = useState('');
   const dispatch = useDispatch();
 
@@ -63,12 +63,12 @@ const AuctionsContainer = () => {
   const handleAuctionSearch = (keyword) => {
     if (!keyword) {
       setIsSearchOn(false);
-
       return;
     }
 
-    setSearchKeyWord(keyword);
+    setIsCategoryFilterOn(false);
     setIsSearchOn(true);
+    setSearchKeyWord(keyword);
   };
 
   const handleAuctionsDetailClick = (clickedAuctionId) => {
@@ -85,9 +85,13 @@ const AuctionsContainer = () => {
   };
 
   const handleCategoryClick = (category) => {
-    if (category === '전체') return setIsFilterOn(false);
+    if (category === '전체') {
+      setIsCategoryFilterOn(false);
+      return;
+    }
 
-    setIsFilterOn(true);
+    setIsSearchOn(false);
+    setIsCategoryFilterOn(true);
     setFilteredCategory(category);
   };
 
@@ -129,7 +133,7 @@ const AuctionsContainer = () => {
             itemName,
             description,
           }) => {
-            if (isFilterOn && category !== filteredCategory) return;
+            if (isCategoryFilterOn && category !== filteredCategory) return;
             if (isSearchOn) {
               const isValidated = checkIsKeywordIn(searchKeyWord, {
                 title,

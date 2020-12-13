@@ -6,16 +6,14 @@ const StyledText = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${({ color, theme }) => color || theme.colors.light_black};
-  font-size: ${({ theme }) => theme.fontSizes.small};
   width: 100%;
   height: 50px;
-  vertical-align: middle;
+  color: ${({ color, theme }) => color || theme.colors.light_black};
+  font-size: ${({ theme }) => theme.fontSizes.small};
 
   &:hover {
     font-weight: ${({ theme }) => theme.fontWeights.medium};
   }
-
 `;
 
 const NavItem = ({ to, name, onClick, color }) => {

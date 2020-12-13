@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
 import styled from 'styled-components';
+import { URL } from '../constants';
 
 const LoadingWrapper = styled.div`
   display: flex;
@@ -14,6 +15,7 @@ const LoadingWrapper = styled.div`
   img {
     width: 60%;
     min-width: 800px;
+    max-width: 1000px;
     height: 75%;
   }
 
@@ -24,7 +26,7 @@ const LoadingWrapper = styled.div`
 
 const Loading = ({ type, color }) => (
   <LoadingWrapper>
-    <img src='https://acegif.com/wp-content/gif/panda-80.gif' />
+    <img src={URL.LOADING} />
     <ReactLoading
       className='loader'
       type={type}

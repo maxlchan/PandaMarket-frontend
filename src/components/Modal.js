@@ -22,15 +22,15 @@ const ModalOverlay = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.6);
   z-index: 999;
+  background-color: rgba(0, 0, 0, 0.6);
 `;
 
 const ModalContents = styled.div`
   position: relative;
   width: 60vw;
-  z-index: 1000;
   padding: 40px 20px;
+  z-index: 1000;
   background-color: #f2f1ef;
   box-shadow: ${({ theme }) => theme.boxShadows.deep};
   border-radius: 10px;

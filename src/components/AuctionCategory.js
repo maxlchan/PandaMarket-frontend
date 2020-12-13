@@ -8,19 +8,19 @@ const StyldBox = styled.div`
   align-items: center;
   width: 100%;
   padding: 10px;
-  background-color: white;
-  box-shadow: ${({ theme }) => theme.boxShadows.default};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
-  word-break: break-all;
-  text-align: center;
   border-bottom: 2px solid transparent;
   z-index: 1;
+  box-shadow: ${({ theme }) => theme.boxShadows.default};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  background-color: white;
+  word-break: break-all;
+  text-align: center;
   cursor: pointer;
 
   &:hover {
     border-bottom: 2px solid red;
 
-    h1 {
+    .auction__categroy__title {
       color: red;
     }
   }
@@ -30,7 +30,7 @@ const StyldBox = styled.div`
     pointer-events: none;
   }
 
-  h1 {
+  .auction__categroy__title {
     font-size: ${({ theme }) => theme.fontSizes.xsmall};
     white-space: nowrap;
     pointer-events: none;

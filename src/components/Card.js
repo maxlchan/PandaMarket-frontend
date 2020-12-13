@@ -5,6 +5,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   width: 100%;
   min-height: 70vh;
   background-image: url(${({ backgroundImg }) => backgroundImg});

@@ -14,10 +14,10 @@ const StyledHeader = styled.header`
   position: fixed;
   width: 100%;
   height: 7vh;
-  background-color: white;
-  box-shadow: ${({ theme }) => theme.boxShadows.default};
-  margin-bottom: 1.5px;
   z-index: 10;
+  margin-bottom: 1.5px;
+  box-shadow: ${({ theme }) => theme.boxShadows.default};
+  background-color: white;
 
   .header__logo {
     position: absolute;

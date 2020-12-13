@@ -12,6 +12,7 @@ const ItemWrapper = styled.div`
   min-width: 200px;
   min-height: 250px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   background-color: white;
 
   &:hover {
@@ -19,8 +20,7 @@ const ItemWrapper = styled.div`
     transform: scale(1.05);
 
     .item__top {
-      background-image: url(${({ imageUrl }) =>
-        imageUrl[1] ? imageUrl[1] : imageUrl[0]});
+      background-image: url(${({ imageUrl }) => imageUrl[1] ? imageUrl[1] : imageUrl[0]});
     }
   }
 
@@ -32,7 +32,7 @@ const ItemWrapper = styled.div`
     min-height: 250px;
     max-height: 300px;
     background-image: url(${({ imageUrl }) => imageUrl[0]});
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
   }
@@ -46,12 +46,12 @@ const ItemWrapper = styled.div`
     height: 120px;
 
     .item__bottom__title {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       width: 95%;
       text-align: center;
       vertical-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .item__bottom__price {

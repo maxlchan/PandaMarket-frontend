@@ -5,14 +5,14 @@ import ImageUploader from 'react-images-upload';
 import DateTimePicker from 'react-datetime-picker';
 import styled from 'styled-components';
 import Button from '../components/Button';
-import { ROUTES, ITEM_CATEGORY, TYPE } from '../constants';
-import { createAuction } from '../redux/auction/auction.reducer';
 import Loading from '../components/Loading';
+import { createAuction } from '../redux/auction/auction.reducer';
 import {
   unitizedValue,
   makeStringToNumber,
   checkIsOverOneHour,
 } from '../utils';
+import { ROUTES, ITEM_CATEGORY, TYPE } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -29,9 +29,9 @@ const Wrapper = styled.div`
     margin: 20px 0px;
     width: 60%;
     max-width: 1000px;
-    background-color: white;
-    box-shadow: ${({ theme }) => theme.boxShadows.default};
     border-radius: 20px;
+    box-shadow: ${({ theme }) => theme.boxShadows.default};
+    background-color: white;
     overflow: hidden;
 
     .title__register {
@@ -46,8 +46,8 @@ const Wrapper = styled.div`
     }
 
     .contents__register {
-      padding: 20px 0;
       width: 80%;
+      padding: 20px 0;
     }
   }
 `;
@@ -120,7 +120,7 @@ const RegisterationContainer = () => {
   const [description, setDescription] = useState('');
   const [pictures, setPictures] = useState([]);
   const [initialPrice, setInitialPrice] = useState('');
-  const [startedDateTime, setStartedDateTime] = useState('');
+  const [startedDateTime, setStartedDateTime] = useState(new Date());
   const { isLoggedIn } = useSelector((state) => state.user);
   const isLoading = useSelector((state) => state.auctions.isLoading);
   const dispatch = useDispatch();
@@ -130,10 +130,10 @@ const RegisterationContainer = () => {
     if (!isLoggedIn) history.push(ROUTES.LOGIN);
   }, [history, isLoggedIn]);
 
-  const validateData = () => {
+  const validateRegisteredData = () => {
     const PICTURES_LENGTH = pictures.length;
     const isLowerThanThousand = makeStringToNumber(initialPrice) < 1000;
-    const isOverThanOneHour = checkIsOverOneHour(startedDateTime);
+    const isLowerThanOneHour = !checkIsOverOneHour(startedDateTime);
 
     if (PICTURES_LENGTH < 1) return alert('최소 1장의 사진을 등록해주세요');
     if (PICTURES_LENGTH > 5) return alert('사진은 최대 5개만 등록됩니다');
@@ -143,16 +143,15 @@ const RegisterationContainer = () => {
     if (!initialPrice) return alert('시작 가격을 입력해주세요');
     if (!startedDateTime) return alert('경매 일시를 입력해주세요');
     if (isLowerThanThousand) return alert('최소 1,000원 이상을 입력해주세요');
-    if (isOverThanOneHour) return alert('최소 1시간 후의 시간을 등록해주세요');
+    if (isLowerThanOneHour) return alert('최소 1시간 후의 시간을 등록해주세요');
 
     return true;
   };
 
-  const handleRegister = (e) => {
-    const isValid = validateData();
+  const handleRegister = (registeredType) => {
+    const isValid = validateRegisteredData();
     if (!isValid) return;
 
-    const registeredType = e.target.id;
     const registeredData = {
       title,
       itemName,
@@ -163,17 +162,15 @@ const RegisterationContainer = () => {
       startedDateTime,
     };
 
-    // dispatch(createAuction({ type: registeredType, payload: registeredData }));
+    dispatch(createAuction({ type: registeredType, payload: registeredData }));
   };
-
-  const handleGoBack = () => history.goBack();
 
   const handleInitialPriceChange = (value) => {
     if (value === '') return setInitialPrice(value);
 
     const unitizedNumber = unitizedValue(value);
-
     if (!unitizedNumber) return;
+
     setInitialPrice(unitizedNumber);
   };
 
@@ -207,6 +204,7 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <input
+                    spellCheck={false}
                     className='title'
                     type='text'
                     value={title}
@@ -221,6 +219,7 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <input
+                    spellCheck={false}
                     className='itemname'
                     type='text'
                     value={itemName}
@@ -253,6 +252,7 @@ const RegisterationContainer = () => {
                 </div>
                 <div className='contents__register__payload'>
                   <textarea
+                    spellCheck={false}
                     className='description'
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -291,19 +291,19 @@ const RegisterationContainer = () => {
           <ButtonWrapper>
             <Button
               className='contents__button'
-              onClick={handleRegister}
+              onClick={(e) => handleRegister(e.target.id)}
               id={TYPE.START}
               text={'경매 바로 시작'}
             />
             <Button
               className='contents__button'
-              onClick={handleRegister}
+              onClick={(e) => handleRegister(e.target.id)}
               id={TYPE.REGISTER}
               text={'경매 등록하기'}
             />
             <Button
               className='contents__button'
-              onClick={handleGoBack}
+              onClick={() => history.goBack()}
               text={'뒤로 돌아가기'}
             />
           </ButtonWrapper>

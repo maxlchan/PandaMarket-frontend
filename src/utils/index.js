@@ -10,12 +10,16 @@ export const stopBothVideoAndAudio = (stream) => {
 
 export const generateDateToText = (dateString) => {
   const dateObj = new Date(dateString);
-  const year = dateObj.getFullYear();
-  const month = dateObj.getMonth();
-  const date = dateObj.getDate();
-  const hour = dateObj.getHours();
+  const year = String(dateObj.getFullYear());
+  const month = String(dateObj.getMonth() + 1);
+  const date = String(dateObj.getDate());
+  const hour = String(dateObj.getHours());
 
-  return `${year}년 ${month}월 ${date}일 ${hour}시`;
+  const formattedMonth = month.length > 1 ? month : `0${month}`;
+  const formattedDate = date.length > 1 ? date : `0${date}`;
+  const formattedHour = hour.length > 1 ? hour : `0${hour}`;
+
+  return `${year}년 ${formattedMonth}월 ${formattedDate}일 ${formattedHour}시`;
 };
 
 export const checkIsKeywordIn = (keyword, target) => {
@@ -45,8 +49,11 @@ export const unitizedValue = (value) => {
 };
 
 export const checkIsOverOneHour = (target) => {
-  const currentHour = new Date().getTime();
-  const targetHour = target.getTime();
+  const currentTime = new Date().getTime();
+  const targetTime = target.getTime();
   const oneHour = 3600000;
-  return targetHour - currentHour > oneHour;
+
+  console.log(targetTime - currentTime > oneHour);
+
+  return targetTime - currentTime > oneHour;
 };

@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import Button from '../components/Button';
 import ChatBox from '../components/ChatBox';
 import Loading from '../components/Loading';
-import { ROUTES, TYPE } from '../constants';
+import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
+import { userInfoSelector } from '../redux/user/user.selector';
 import {
   resetBroadcast,
   setBroadcast,
 } from '../redux/broadcast/broadcast.reducer';
-import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
-import { userInfoSelector } from '../redux/user/user.selector';
 import { socket } from '../utils/socket';
+import { ROUTES, TYPE, URL } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 93vh;
-  background-image: url('https://acegif.com/wp-content/gif/confetti-29.gif');
+  background-image: url(${URL.CONFETTI});
   background-position: center;
   background-size: cover;
 
@@ -34,8 +34,8 @@ const Wrapper = styled.div`
 
     .privatechat__title {
       font-size: ${({ theme }) => theme.fontSizes.xl};
-      color: ${({ theme }) => theme.colors.ligth_black};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
+      color: ${({ theme }) => theme.colors.ligth_black};
     }
   }
 `;
