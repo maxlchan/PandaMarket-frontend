@@ -357,7 +357,7 @@ const BroadcastContainer = () => {
         <div className='box__left'>
           <video autoPlay ref={hostVideo} />
           <div className='box__left__status'>
-            <h2 className='status__intialPrice'>시작가 - {3000}원</h2>
+            <h2 className='status__intialPrice'>시작가 - ${initialPrice}원</h2>
             <h2 className='status__highestBidPrice'>
               현재 경매가 - {highestBidPrice ? highestBidPrice : initialPrice}원
             </h2>
@@ -383,7 +383,7 @@ const BroadcastContainer = () => {
           <div className='box__right__bid'>
             {isHost ? (
               <Button
-                disabled={isCountdownStart}
+                disabled={!highestBidPrice || isCountdownStart}
                 onClick={handleCountDownClick}
                 width='90%'
                 text={'카운트 다운 Start'}

@@ -7,7 +7,7 @@ const StyldBox = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   border-bottom: 2px solid transparent;
   z-index: 1;
   box-shadow: ${({ theme }) => theme.boxShadows.default};
@@ -26,7 +26,7 @@ const StyldBox = styled.div`
   }
 
   .auction__categroy__img {
-    width: 40px;
+    width: 30px;
     pointer-events: none;
   }
 

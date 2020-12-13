@@ -25,11 +25,10 @@ export const createAuction = createAsyncThunk(
     if (type === TYPE.START) payload.isStarted = true;
 
     try {
-      const { user } = getState();
-      const userId = user.info._id;
+      const { user: { info } } = getState();
+      const userId = info._id;
 
-      const { data } = await api.postAuction(payload, userId);
-      const { auctionInfo } = data;
+      const { data: { auctionInfo } } = await api.postAuction(payload, userId);
       const auctionId = auctionInfo._id;
 
       dispatch(addMyAuction(auctionId));
@@ -53,11 +52,19 @@ export const createAuction = createAsyncThunk(
 
 export const reserveAuction = createAsyncThunk(
   'auctions/reserve',
-  async (auctionId, { getState, dispatch }) => {
+  async (auctionId, { getState, dispatch, extra }) => {
+    const { history } = extra;
     const { user, auctions } = getState();
-    const { myAuctions, reservedAuctions } = user.info;
+    const { info, isLoggedIn } = user;
+    const { myAuctions, reservedAuctions } = info;
     const isUsersAuction = myAuctions.includes(auctionId);
     const isAlreadyReserved = reservedAuctions.includes(auctionId);
+
+    if (!isLoggedIn) {
+      alert('로그인 후 예약이 가능합니다');
+      history.push(ROUTES.LOGIN);
+      return;
+    }
 
     if (isUsersAuction) {
       alert('자신이 만든 경매는 예약할 수 없습니다.');

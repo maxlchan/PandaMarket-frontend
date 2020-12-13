@@ -5,11 +5,11 @@ const auctionsSelector = (state) => state.auctions.data;
 
 export const auctionsOnWaitingSelector = createSelector(
   auctionsSelector,
-  (data) => data.filter((auctionData) => !auctionData.isStarted)
+  (data) => data?.filter((auctionData) => !auctionData.isStarted)
 );
 
 export const auctionsOnAirSelector = createSelector(auctionsSelector, (data) =>
-  data.filter((auctionData) => auctionData.isStarted)
+  data?.filter((auctionData) => auctionData.isStarted)
 );
 
 export const myAuctionsSelector = createSelector(

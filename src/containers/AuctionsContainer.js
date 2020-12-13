@@ -72,9 +72,9 @@ const AuctionsContainer = () => {
   };
 
   const handleAuctionsDetailClick = (clickedAuctionId) => {
-    const clickedAuction = auctions.find(
-      (auction) => auction._id === clickedAuctionId
-    );
+    const clickedAuction = auctions.find((auction) => {
+      return auction._id === clickedAuctionId;
+    });
 
     setClickedAuction(clickedAuction);
     setIsModalClicked(true);
@@ -123,7 +123,7 @@ const AuctionsContainer = () => {
         ))}
       </AuctionCategoryBox>
       <AuctionsGrid>
-        {auctions.map(
+        {auctions?.map(
           ({
             title,
             _id,

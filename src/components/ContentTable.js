@@ -23,8 +23,10 @@ const Wrapper = styled.div`
     padding: 10px;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     text-align: center;
+    word-break: keep-all;
 
     th {
+      height: 30px;
       padding-top: 12px;
       padding-bottom: 12px;
       background-color: ${({ theme }) => theme.colors.bamboo};
@@ -52,18 +54,16 @@ const ContentTable = ({ auctionsInfo, title, onClick, children }) => {
     <Wrapper>
       <div className='mypage__content__title'>{title}</div>
       <table className='mypage__contents'>
-        <thead>
-          <tr>
-            <th>상품명</th>
-            <th>시작 가격</th>
-            <th>낙찰 가격</th>
-            <th>예약 인원</th>
-            <th>등록 일시</th>
-            <th>경매 일시</th>
-            <th>상태</th>
-            <th></th>
-          </tr>
-        </thead>
+        <tr>
+          <th>상품명</th>
+          <th>시작 가격</th>
+          <th>낙찰 가격</th>
+          <th>예약 인원</th>
+          <th>등록 일시</th>
+          <th>경매 일시</th>
+          <th>상태</th>
+          <th></th>
+        </tr>
         {auctionsInfo.map(
           ({
             _id,
@@ -77,43 +77,41 @@ const ContentTable = ({ auctionsInfo, title, onClick, children }) => {
             isStartPossible,
             isFinished,
           }) => (
-            <tbody key={_id}>
-              <tr>
-                <td>{itemName}</td>
-                <td>{initialPrice}</td>
-                <td>{finalPrice ? finalPrice : '-'}</td>
-                <td>{reservedUser.length}명</td>
-                <td>{generateDateToText(created_at)}</td>
-                <td>{generateDateToText(startedDateTime)}</td>
-                <td>
-                  {(isStartPossible && '경매시간 도달') ||
-                    (isFinished && '경매종료') ||
-                    (isStarted && '경매시작') ||
-                    '경매대기'}
-                </td>
-                <td>
-                  {children.map((button, index) => {
-                    const { type } = button.props;
+            <tr key={_id}>
+              <td>{itemName}</td>
+              <td>{initialPrice}</td>
+              <td>{finalPrice ? finalPrice : '-'}</td>
+              <td>{reservedUser.length}명</td>
+              <td>{generateDateToText(created_at)}</td>
+              <td>{generateDateToText(startedDateTime)}</td>
+              <td>
+                {(isStartPossible && '경매시간 도달') ||
+                  (isFinished && '경매종료') ||
+                  (isStarted && '경매시작') ||
+                  '경매대기'}
+              </td>
+              <td>
+                {children.map((button, index) => {
+                  const { type } = button.props;
 
-                    let disabledCondition;
+                  let disabledCondition;
 
-                    if (type === TYPE.START) {
-                      disabledCondition = !isStartPossible || isStarted;
-                    } else if (type === TYPE.MODIFY || type === TYPE.DELETE) {
-                      disabledCondition = isStartPossible || isFinished;
-                    } else if (type === TYPE.JOIN) {
-                      disabledCondition = isFinished || !isStarted;
-                    }
+                  if (type === TYPE.START) {
+                    disabledCondition = !isStartPossible || isStarted;
+                  } else if (type === TYPE.MODIFY || type === TYPE.DELETE) {
+                    disabledCondition = isStartPossible || isFinished;
+                  } else if (type === TYPE.JOIN) {
+                    disabledCondition = isFinished || !isStarted;
+                  }
 
-                    return cloneElement(button, {
-                      key: index,
-                      disabled: disabledCondition,
-                      onClick: () => onClick(_id, type),
-                    });
-                  })}
-                </td>
-              </tr>
-            </tbody>
+                  return cloneElement(button, {
+                    key: index,
+                    disabled: disabledCondition,
+                    onClick: () => onClick(_id, type),
+                  });
+                })}
+              </td>
+            </tr>
           )
         )}
       </table>

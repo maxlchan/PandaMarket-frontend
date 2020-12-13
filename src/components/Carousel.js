@@ -95,7 +95,7 @@ const Carousel = ({ contents, onClick }) => {
         <Card backgroundImg={bamboo}>
           <WelcomeContent />
         </Card>
-        {contents.map((content, index) => {
+        {contents?.map((content, index) => {
           const { _id, picturesUrl, itemName, initialPrice } = content;
           const colorIndex = index % cardColors.length;
 

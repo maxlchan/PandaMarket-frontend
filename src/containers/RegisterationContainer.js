@@ -122,7 +122,7 @@ const RegisterationContainer = () => {
   const [initialPrice, setInitialPrice] = useState('');
   const [startedDateTime, setStartedDateTime] = useState(new Date());
   const { isLoggedIn } = useSelector((state) => state.user);
-  const isLoading = useSelector((state) => state.auctions.isLoading);
+  const { isLoading } = useSelector((state) => state.auctions);
   const dispatch = useDispatch();
   const history = useHistory();
 
