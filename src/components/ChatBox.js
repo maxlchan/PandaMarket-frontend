@@ -16,7 +16,7 @@ const ChatBoxWrapper = styled.div`
   min-height: 300px;
   overflow: hidden;
   position: relative;
-  border-radius: ${({ isPrivate }) => isPrivate && '30px'};
+  border-radius: 30px;
   box-shadow: ${({ isPrivate, theme }) => {
     return isPrivate && theme.boxShadows.default;
   }};

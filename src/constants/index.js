@@ -56,7 +56,7 @@ const ITEM_CATEGORY = [
 ];
 
 const CONFIG = {
-  LIMITED_SECONDS: 5,
+  LIMITED_SECONDS: 10,
   DEBOUNCED_TIME: 500,
   ICE_SERVER: {
     iceServers: [
@@ -67,6 +67,15 @@ const CONFIG = {
         username: 'webrtc@live.com',
       },
     ],
+  },
+  TOASTIFY: {
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
   },
 };
 
@@ -84,6 +93,7 @@ const SOCKET_EVENT = {
   CHANGE_ROOM_STATUS: 'change room status',
   FINISH_BROADCAST: 'finish broadcast',
   ROOM_BROKED_BY_HOST: 'room broked by host',
+  SEND_PRIVATE_MESSAGE: 'send private message',
 };
 
 const URL = {

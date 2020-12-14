@@ -2,11 +2,13 @@ import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import AuctionDetail from '../components/AuctionDetail';
 import ChatBox from '../components/ChatBox';
 import Modal from '../components/Modal';
 import CloseButton from '../components/CloseButton';
 import Button from '../components/Button';
+import Timer from '../components/Timer';
 import {
   userRequiredInRoomSelector,
   userInfoSelector,
@@ -15,7 +17,6 @@ import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.select
 import {
   resetBroadcast,
   setBroadcast,
-  startCountdown,
   finishBroadcast,
   startBroadcast,
 } from '../redux/broadcast/broadcast.reducer';
@@ -34,21 +35,26 @@ const Wrapper = styled.div`
 const BroadcastBox = styled.div`
   display: flex;
   justify-content: center;
+  position: relative;
   width: 90%;
   height: 90%;
   padding: 20px 30px;
-  background-color: white;
-  box-shadow: ${({ theme }) => theme.boxShadows.default};
+  box-shadow: ${({ theme }) => theme.boxShadows.deep};
+  border-radius: 30px;
 
   .box__left {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     width: 60%;
     height: 100%;
     margin-right: 10px;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.15);
 
-    video {
+    .box__left__video {
+      display: flex;
+      justify-content: center;
       width: 100%;
     }
 
@@ -57,11 +63,19 @@ const BroadcastBox = styled.div`
       flex-direction: column;
       justify-content: space-evenly;
       align-items: center;
+      position: relative;
       width: 100%;
       height: 40%;
 
       h2 {
         font-size: ${({ theme }) => theme.fontSizes.base};
+      }
+
+      .status__highestBidPrice {
+        span {
+          font-size: ${({ theme }) => theme.fontSizes.lg};
+          font-weight: ${({ theme }) => theme.fontWeights.strong};
+        }
       }
     }
   }
@@ -70,6 +84,7 @@ const BroadcastBox = styled.div`
     width: 50%;
     height: 100%;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
+    background-color: white;
     overflow: hidden;
 
     .box__right__bid {
@@ -87,6 +102,18 @@ const BroadcastBox = styled.div`
   }
 `;
 
+const TimeCountWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  font-size: ${({ theme }) => theme.fontSizes.titleSize};
+  font-weight: ${({ theme }) => theme.fontWeights.strong};
+  transform: translate(-50%, -50%);
+  user-select: none;
+`;
+
 const PriceBiddingInput = styled.input`
   border: none;
   text-align: center;
@@ -95,7 +122,6 @@ const PriceBiddingInput = styled.input`
 
 const BroadcastContainer = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
-  const { isLoading } = useSelector((state) => state.broadcast);
   const auctions = useSelector((state) => state.auctions.data);
   const { myAuctions, _id: userId } = useSelector(userInfoSelector);
   const userRequiredInRoom = useSelector(userRequiredInRoomSelector);
@@ -117,20 +143,18 @@ const BroadcastContainer = () => {
   const { auctionId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
+
   const hostVideo = useRef();
   const peer = useRef({});
   let stream;
 
   const handleBidButtonClick = () => {
     if (highestBidPrice) {
-      const isLowerThanHightestPrice = !checkIsBigger(
-        bidPrice,
-        highestBidPrice
-      );
-      if (isLowerThanHightestPrice) return alert(MESSAGE.LOWER_THAN_HIGHTEST);
+      const isLowerThanHightest = !checkIsBigger(bidPrice, highestBidPrice);
+      if (isLowerThanHightest) return alert(MESSAGE.LOWER_THAN_HIGHTEST);
     } else {
-      const isLowerThanInitalPrice = !checkIsBigger(bidPrice, initialPrice);
-      if (isLowerThanInitalPrice) return alert(MESSAGE.LOWER_THAN_INITIAL);
+      const isLowerThanInitial = !checkIsBigger(bidPrice, initialPrice);
+      if (isLowerThanInitial) return alert(MESSAGE.LOWER_THAN_INITIAL);
     }
 
     socketApi.updateHighestBid(bidPrice);
@@ -149,7 +173,6 @@ const BroadcastContainer = () => {
   };
 
   const handleCountDownClick = () => {
-    dispatch(startCountdown());
     socketApi.countdown(CONFIG.LIMITED_SECONDS);
   };
 
@@ -194,7 +217,7 @@ const BroadcastContainer = () => {
 
       hostVideo.current.srcObject = stream;
     } catch (err) {
-      console.log(err.name + ': ' + err.message);
+      throw new Error(err);
     }
   };
 
@@ -204,81 +227,78 @@ const BroadcastContainer = () => {
       user: userRequiredInRoom,
     });
 
-    socket.on(SOCKET_EVENT.CHANGE_ROOM_STATUS, (payload) => {
-      dispatch(setBroadcast(payload));
-    });
-
     socket.on(
       SOCKET_EVENT.MEMBER_JOIN_ROOM,
-      (memberSocketId, member, payload) => {
+      async (memberSocketId, payload) => {
         dispatch(setBroadcast(payload));
 
         peer.current[memberSocketId] = new RTCPeerConnection(CONFIG.ICE_SERVER);
 
-        const stream = hostVideo.current.srcObject;
+        const currentPeer = peer.current[memberSocketId];
 
+        stream = hostVideo.current.srcObject;
         stream
           .getTracks()
-          .forEach((track) =>
-            peer.current[memberSocketId].addTrack(track, stream)
-          );
+          .forEach((track) => currentPeer.addTrack(track, stream));
 
-        peer.current[memberSocketId].onicecandidate = (event) => {
-          if (event.candidate) {
+        currentPeer.onicecandidate = ({ candidate }) => {
+          if (candidate) {
             socketApi.candidate(memberSocketId, {
               type: 'candidate',
-              label: event.candidate.sdpMLineIndex,
-              id: event.candidate.sdpMid,
-              candidate: event.candidate.candidate,
+              label: candidate.sdpMLineIndex,
+              id: candidate.sdpMid,
+              candidate: candidate.candidate,
             });
           }
         };
 
-        peer.current[memberSocketId]
-          .createOffer()
-          .then((sessionDescription) => {
-            peer.current[memberSocketId].setLocalDescription(
-              sessionDescription
-            );
-            socketApi.offer(memberSocketId, {
-              type: 'offer',
-              sdp: sessionDescription,
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        try {
+          const sessionDescription = await currentPeer.createOffer();
 
-        console.log(`${member.name}님이 들어오셨습니다.`);
+          currentPeer.setLocalDescription(sessionDescription);
+          socketApi.offer(memberSocketId, {
+            type: 'offer',
+            sdp: sessionDescription,
+          });
+        } catch (err) {
+          throw new Error(err);
+        }
       }
     );
 
+    socket.on(SOCKET_EVENT.UPDATE_HIGHEST_BID_PRICE, ({ name, price }) => {
+      toast(`💰${name}님께서 ${price}을 배팅하셨습니다!`, CONFIG.TOASTIFY);
+    });
+
+    socket.on(SOCKET_EVENT.CHANGE_ROOM_STATUS, (payload) => {
+      dispatch(setBroadcast(payload));
+    });
+
+    socket.on(SOCKET_EVENT.LEAVE_ROOM, (memberSocketId, payload) => {
+      delete peer.current[memberSocketId];
+      dispatch(setBroadcast(payload));
+    });
+
     socket.on(SOCKET_EVENT.ANSWER, (memberSocketId, event) => {
-      peer.current[memberSocketId].setRemoteDescription(
-        new RTCSessionDescription(event)
-      );
+      const currentPeer = peer.current[memberSocketId];
+      currentPeer.setRemoteDescription(new RTCSessionDescription(event));
     });
 
     socket.on(SOCKET_EVENT.CANDIDATE, (memberSocketId, event) => {
+      const currentPeer = peer.current[memberSocketId];
       const candidate = new RTCIceCandidate({
         sdpMLineIndex: event.label,
         candidate: event.candidate,
       });
 
-      peer.current[memberSocketId].addIceCandidate(candidate);
-    });
-
-    socket.on(SOCKET_EVENT.LEAVE_ROOM, (memberSocketId, name, payload) => {
-      delete peer.current[memberSocketId];
-      dispatch(setBroadcast(payload));
-      console.log(`${name}이 나가셨습니다.`);
+      currentPeer.addIceCandidate(candidate);
     });
   };
 
   const subscribeAsMember = () => {
     socketApi.joinRoom({ roomId: auctionId, user: userRequiredInRoom });
 
-    socket.on(SOCKET_EVENT.MEMBER_JOIN_ROOM, (_, __, payload) => {
+    socket.on(SOCKET_EVENT.MEMBER_JOIN_ROOM, (_, payload) => {
       dispatch(setBroadcast(payload));
     });
 
@@ -286,46 +306,56 @@ const BroadcastContainer = () => {
       dispatch(setBroadcast(payload));
     });
 
-    socket.on(SOCKET_EVENT.LEAVE_ROOM, (_, __, payload) => {
+    socket.on(SOCKET_EVENT.LEAVE_ROOM, (_, payload) => {
       dispatch(setBroadcast(payload));
     });
 
-    socket.on(SOCKET_EVENT.OFFER, (hostSocketId, sdp) => {
-      peer.current[hostSocketId] = new RTCPeerConnection(CONFIG.ICE_SERVER);
-      peer.current[hostSocketId].setRemoteDescription(sdp);
-      peer.current[hostSocketId].createAnswer().then((sessionDescription) => {
-        peer.current[hostSocketId].setLocalDescription(sessionDescription);
+    socket.on(SOCKET_EVENT.UPDATE_HIGHEST_BID_PRICE, ({ name, price }) => {
+      toast(`💰${name}님께서 ${price}을 배팅하셨습니다!`, CONFIG.TOASTIFY);
+    });
 
+    socket.on(SOCKET_EVENT.OFFER, async (hostSocketId, sdp) => {
+      peer.current[hostSocketId] = new RTCPeerConnection(CONFIG.ICE_SERVER);
+
+      const currentPeer = peer.current[hostSocketId];
+
+      currentPeer.setRemoteDescription(sdp);
+      currentPeer.ontrack = (event) => {
+        hostVideo.current.srcObject = event.streams[0];
+      };
+      currentPeer.onicecandidate = ({ candidate }) => {
+        if (candidate) {
+          socketApi.candidate(hostSocketId, {
+            type: 'candidate',
+            label: candidate.sdpMLineIndex,
+            id: candidate.sdpMid,
+            candidate: candidate.candidate,
+          });
+        }
+      };
+
+      try {
+        const sessionDescription = await currentPeer.createAnswer();
+
+        currentPeer.setLocalDescription(sessionDescription);
         socketApi.answer({
           type: 'answer',
           sdp: sessionDescription,
           roomId: auctionId,
         });
-      });
-
-      peer.current[hostSocketId].ontrack = (event) => {
-        hostVideo.current.srcObject = event.streams[0];
-      };
-
-      peer.current[hostSocketId].onicecandidate = (event) => {
-        if (event.candidate) {
-          socketApi.candidate(hostSocketId, {
-            type: 'candidate',
-            label: event.candidate.sdpMLineIndex,
-            id: event.candidate.sdpMid,
-            candidate: event.candidate.candidate,
-          });
-        }
-      };
+      } catch (err) {
+        throw new Error(err);
+      }
     });
 
     socket.on(SOCKET_EVENT.CANDIDATE, (hostSocketId, event) => {
+      const currentPeer = peer.current[hostSocketId];
       const candidate = new RTCIceCandidate({
         sdpMLineIndex: event.label,
         candidate: event.candidate,
       });
 
-      peer.current[hostSocketId].addIceCandidate(candidate);
+      currentPeer.addIceCandidate(candidate);
     });
 
     socket.on(SOCKET_EVENT.ROOM_BROKED_BY_HOST, () => {
@@ -339,16 +369,20 @@ const BroadcastContainer = () => {
 
   useEffect(() => {
     if (!isLoggedIn) return history.push(ROUTES.LOGIN);
-    if (isHost) {
-      (async () => {
-        dispatch(startBroadcast(auctionId));
 
-        await getUserMedia();
-        subscribeAsHost();
-      })();
-    } else {
-      subscribeAsMember();
-    }
+    (async () => {
+      try {
+        if (isHost) {
+          dispatch(startBroadcast(auctionId));
+          await getUserMedia();
+          subscribeAsHost();
+        } else {
+          subscribeAsMember();
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    })();
 
     return () => {
       socketApi.removeAllListeners();
@@ -363,9 +397,9 @@ const BroadcastContainer = () => {
 
   useEffect(() => {
     const isHost = myAuctions.includes(auctionId);
-    const currentAuction = auctions.find(
-      (auction) => auction._id === auctionId
-    );
+    const currentAuction = auctions.find((auction) => {
+      return auction._id === auctionId;
+    });
 
     setCurrentAuction(currentAuction);
     setIsHost(isHost);
@@ -381,11 +415,14 @@ const BroadcastContainer = () => {
       )}
       <BroadcastBox>
         <div className='box__left'>
-          <video autoPlay ref={hostVideo} />
+          <div className='box__left__video'>
+            <video autoPlay ref={hostVideo} />
+          </div>
           <div className='box__left__status'>
-            <h2 className='status__intialPrice'>시작가 - {initialPrice}원</h2>
+            <h2 className='status__intialPrice'>시작가 {initialPrice}원</h2>
             <h2 className='status__highestBidPrice'>
-              현재 경매가 - {highestBidPrice ? highestBidPrice : initialPrice}원
+              현재 경매가&nbsp;
+              <span>{highestBidPrice ? highestBidPrice : initialPrice}</span>원
             </h2>
             {currentWinner?.name && (
               <h3 className='status__currentWinner'>
@@ -393,7 +430,6 @@ const BroadcastContainer = () => {
               </h3>
             )}
           </div>
-          {isCountdownStart && <span>{timeCount}</span>}
           <Button
             onClick={() => setIsModalClicked(true)}
             text={'제품 상세보기'}
@@ -439,6 +475,12 @@ const BroadcastContainer = () => {
             )}
           </div>
         </div>
+        {isCountdownStart && (
+          <TimeCountWrapper>
+            <Timer duration={CONFIG.LIMITED_SECONDS} />
+            {timeCount}
+          </TimeCountWrapper>
+        )}
       </BroadcastBox>
     </Wrapper>
   );

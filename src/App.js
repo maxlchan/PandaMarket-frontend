@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider } from 'styled-components';
 import HeaderContainer from './containers/HeaderContainer';
 import HomeContainer from './containers/HomeContainer';
@@ -16,7 +18,6 @@ import themes from './styles/themes';
 import { fetchUser } from './redux/user/user.reducer';
 import { ROUTES, TYPE } from './constants/';
 import { fetchAuctions } from './redux/auction/auction.reducer';
-
 
 const App = () => {
   const isLoading = useSelector((state) => state.user.isLoading);
@@ -54,22 +55,37 @@ const App = () => {
             <Route path={ROUTES.REGISTERATION}>
               <RegisterationContainer />
             </Route>
-            <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.BROADCAST}`}>
+            <Route
+              path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.BROADCAST}`}
+            >
               <BroadcastContainer />
             </Route>
-            <Route path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.PRIVATE_CHAT}`}>
+            <Route
+              path={`${ROUTES.AUCTIONS}${ROUTES.AUCTION_DETAIL}${ROUTES.PRIVATE_CHAT}`}
+            >
               <PrivateChatContainer />
             </Route>
-            <Route path={`${ROUTES.MY_PAGE}${ROUTES.MY_AUCTIONS}`} >
+            <Route path={`${ROUTES.MY_PAGE}${ROUTES.MY_AUCTIONS}`}>
               <MypageContainer />
             </Route>
-            <Route path={`${ROUTES.MY_PAGE}${ROUTES.RESERVED_AUCTIONS}`} >
+            <Route path={`${ROUTES.MY_PAGE}${ROUTES.RESERVED_AUCTIONS}`}>
               <MypageContainer />
             </Route>
             <Route render={() => <Redirect to={ROUTES.HOME} />} />
           </Switch>
         </>
       )}
+      <ToastContainer
+        position='top-right'
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+      />
     </ThemeProvider>
   );
 };

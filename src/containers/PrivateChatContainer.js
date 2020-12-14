@@ -11,8 +11,8 @@ import {
   resetBroadcast,
   setBroadcast,
 } from '../redux/broadcast/broadcast.reducer';
-import { socket } from '../utils/socket';
-import { ROUTES, TYPE, URL } from '../constants';
+import { socket, socketApi } from '../utils/socket';
+import { ROUTES, TYPE, URL, SOCKET_EVENT} from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,27 +49,27 @@ const PrivateChatContainer = () => {
   const history = useHistory();
 
   useEffect(() => {
-    socket.on('send private message', (payload) => {
+    socket.on(SOCKET_EVENT.CHANGE_ROOM_STATUS, (payload) => {
       dispatch(setBroadcast(payload));
     });
 
-    return () => socket.off('send private message');
+    return () => socket.off(SOCKET_EVENT.CHANGE_ROOM_STATUS);
   }, []);
 
   const handleKeyPress = ({ key }) => {
     if (key === 'Enter') {
-      socket.emit('send private message', message);
+      socketApi.sendPrivateMessage(message);
       setMessage('');
     }
   };
 
   const handleChatButtonClick = () => {
-    socket.emit('send private message', message);
+    socketApi.sendPrivateMessage(message);
     setMessage('');
   };
 
   const handleEndButtonClick = () => {
-    socket.emit('leave room');
+    socketApi.leaveRoom();
     dispatch(resetBroadcast());
     history.replace(ROUTES.HOME);
   };

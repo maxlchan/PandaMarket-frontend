@@ -7,7 +7,6 @@ import { finishAuction, startAuction } from '../../utils/api';
 
 export const setBroadcast = createAction('broadcast/set');
 export const resetBroadcast = createAction('broadcast/reset');
-export const startCountdown = createAction('broadcast/startCountdown');
 
 export const startBroadcast = createAsyncThunk(
   'broadcast/start',
@@ -38,22 +37,6 @@ export const finishBroadcast = createAsyncThunk(
   }
 );
 
-export const getMedia = createAsyncThunk(
-  'broadcast/getMedia',
-  async (payload, thunkAPI) => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-
-      payload.scrObject = stream;
-    } catch (err) {
-      return err;
-    }
-  }
-);
-
 const initialState = {
   host: '',
   members: [],
@@ -69,28 +52,25 @@ const initialState = {
 };
 
 const broadcastReducer = createReducer(initialState, {
-  [getMedia.pending]: (state, action) => ({
-    ...state,
-    isLoading: true,
-    error: null,
-  }),
-  [getMedia.fulfilled]: (state, action) => ({
-    ...state,
-    isLoading: false,
-    error: null,
-  }),
-  [getMedia.rejected]: (state, action) => ({
-    ...state,
-    isLoading: false,
-    error: action.error.message,
-  }),
   [setBroadcast]: (state, action) => ({
     ...state,
     ...action.payload,
   }),
-  [startCountdown]: (state, action) => ({
+  [resetBroadcast]: (state, action) => initialState,
+  [startBroadcast.pending]: (state, action) => ({
     ...state,
-    isCountdownStart: true,
+    isLoading: true,
+    error: null,
+  }),
+  [startBroadcast.fulfilled]: (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: null,
+  }),
+  [startBroadcast.rejected]: (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.error.message,
   }),
   [finishBroadcast.pending]: (state, action) => ({
     ...state,
@@ -108,22 +88,6 @@ const broadcastReducer = createReducer(initialState, {
     isLoading: false,
     error: action.error.message,
   }),
-  [startBroadcast.pending]: (state, action) => ({
-    ...state,
-    isLoading: true,
-    error: null,
-  }),
-  [startBroadcast.fulfilled]: (state, action) => ({
-    ...state,
-    isLoading: false,
-    error: null,
-  }),
-  [startBroadcast.rejected]: (state, action) => ({
-    ...state,
-    isLoading: false,
-    error: action.error.message,
-  }),
-  [resetBroadcast]: (state, action) => initialState,
 });
 
 export default broadcastReducer;
