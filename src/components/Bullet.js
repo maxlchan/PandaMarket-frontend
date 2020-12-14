@@ -7,7 +7,6 @@ const Wrapper = styled.div`
   top: 10%;
   background-color: #ea4065;
   padding: 10px;
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
 `;
 
 const Bullet = ({ text }) => {

@@ -57,7 +57,5 @@ export const checkIsOverOneHour = (target) => {
   const targetTime = target.getTime();
   const oneHour = 60 * 60 * 1000;
 
-  console.log(targetTime - currentTime > oneHour);
-
   return targetTime - currentTime > oneHour;
 };

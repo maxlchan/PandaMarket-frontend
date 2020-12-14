@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import ReactAudioPlayer from 'react-audio-player';
 import AuctionDetail from '../components/AuctionDetail';
 import ChatBox from '../components/ChatBox';
 import Modal from '../components/Modal';
@@ -22,7 +23,13 @@ import {
 } from '../redux/broadcast/broadcast.reducer';
 import { checkIsBigger, stopBothVideoAndAudio, unitizedValue } from '../utils';
 import { socket, socketApi } from '../utils/socket';
+import { alertSuccess, alertError, alertWarn } from '../config/customizedSwal';
 import { CONFIG, MESSAGE, ROUTES, SOCKET_EVENT } from '../constants';
+import countdownSound from '../assets/sounds/countdownSound.ogg';
+import tickSound from '../assets/sounds/tickSound.ogg';
+import cashSound from '../assets/sounds/cashSound.ogg';
+import twinkleSound from '../assets/sounds/twinkleSound.ogg';
+import backgroundSound from '../assets/sounds/backgroundSound.ogg';
 
 const Wrapper = styled.div`
   display: flex;
@@ -56,6 +63,10 @@ const BroadcastBox = styled.div`
       display: flex;
       justify-content: center;
       width: 100%;
+
+      video {
+        width: 80%;
+      }
     }
 
     .box__left__status {
@@ -86,6 +97,7 @@ const BroadcastBox = styled.div`
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     background-color: white;
     overflow: hidden;
+    border-radius: 30px;
 
     .box__right__bid {
       display: flex;
@@ -138,6 +150,8 @@ const BroadcastContainer = () => {
   const [message, setMessage] = useState('');
   const [isHost, setIsHost] = useState(false);
   const [isModalClicked, setIsModalClicked] = useState(false);
+  const [isCountButtonDisabld, setIsCountButtonDisabld] = useState(false);
+  const [isUserBidding, setIsUserBidding] = useState(false);
   const initialPrice = currentAuction?.initialPrice;
 
   const { auctionId } = useParams();
@@ -148,13 +162,19 @@ const BroadcastContainer = () => {
   const peer = useRef({});
   let stream;
 
-  const handleBidButtonClick = () => {
-    if (highestBidPrice) {
-      const isLowerThanHightest = !checkIsBigger(bidPrice, highestBidPrice);
-      if (isLowerThanHightest) return alert(MESSAGE.LOWER_THAN_HIGHTEST);
-    } else {
+  const handleBidButtonClick = async () => {
+    if (!highestBidPrice) {
       const isLowerThanInitial = !checkIsBigger(bidPrice, initialPrice);
-      if (isLowerThanInitial) return alert(MESSAGE.LOWER_THAN_INITIAL);
+      if (isLowerThanInitial) {
+        await alertError(MESSAGE.LOWER_THAN_INITIAL);
+        return;
+      }
+    }
+
+    const isLowerThanHightest = !checkIsBigger(bidPrice, highestBidPrice);
+    if (isLowerThanHightest) {
+      await alertError(MESSAGE.LOWER_THAN_HIGHTEST);
+      return;
     }
 
     socketApi.updateHighestBid(bidPrice);
@@ -173,20 +193,21 @@ const BroadcastContainer = () => {
   };
 
   const handleCountDownClick = () => {
+    setIsCountButtonDisabld(true);
     socketApi.countdown(CONFIG.LIMITED_SECONDS);
   };
 
-  const handleTimeout = () => {
+  const handleTimeout = async () => {
     const isWinner = currentWinner._id === userId;
 
     if (isHost) {
-      alert(MESSAGE.BROADCAST_END_HOST);
+      await alertSuccess(MESSAGE.BROADCAST_END_HOST);
     } else if (isWinner) {
-      alert(MESSAGE.BROADCAST_END_WINNER);
+      await alertSuccess(MESSAGE.BROADCAST_END_WINNER);
     } else {
       dispatch(resetBroadcast());
       socketApi.leaveRoom();
-      alert(MESSAGE.BROADCAST_END_MEMBER);
+      await alertSuccess(MESSAGE.BROADCAST_END_MEMBER);
       history.replace(ROUTES.HOME);
 
       return;
@@ -249,6 +270,8 @@ const BroadcastContainer = () => {
               id: candidate.sdpMid,
               candidate: candidate.candidate,
             });
+          } else {
+            candidate = null;
           }
         };
 
@@ -267,7 +290,10 @@ const BroadcastContainer = () => {
     );
 
     socket.on(SOCKET_EVENT.UPDATE_HIGHEST_BID_PRICE, ({ name, price }) => {
-      toast(`💰${name}님께서 ${price}을 배팅하셨습니다!`, CONFIG.TOASTIFY);
+      setIsCountButtonDisabld(false);
+      setIsUserBidding(true);
+      setTimeout(() => setIsUserBidding(false), 2000);
+      toast.info(`💰${name}님 ₩${price}원 배팅!`, CONFIG.TOASTIFY);
     });
 
     socket.on(SOCKET_EVENT.CHANGE_ROOM_STATUS, (payload) => {
@@ -311,7 +337,9 @@ const BroadcastContainer = () => {
     });
 
     socket.on(SOCKET_EVENT.UPDATE_HIGHEST_BID_PRICE, ({ name, price }) => {
-      toast(`💰${name}님께서 ${price}을 배팅하셨습니다!`, CONFIG.TOASTIFY);
+      setIsUserBidding(true);
+      setTimeout(() => setIsUserBidding(false), 2000);
+      toast.info(`💰${name}님 ₩${price}원 배팅!💰`, CONFIG.TOASTIFY);
     });
 
     socket.on(SOCKET_EVENT.OFFER, async (hostSocketId, sdp) => {
@@ -359,7 +387,7 @@ const BroadcastContainer = () => {
     });
 
     socket.on(SOCKET_EVENT.ROOM_BROKED_BY_HOST, () => {
-      alert(MESSAGE.HOST_OUT);
+      alertWarn(MESSAGE.HOST_OUT);
 
       dispatch(resetBroadcast());
       socketApi.leaveRoom();
@@ -426,7 +454,7 @@ const BroadcastContainer = () => {
             </h2>
             {currentWinner?.name && (
               <h3 className='status__currentWinner'>
-                현재 1등 {currentWinner.name}님
+                🏆현재 1등 {currentWinner.name}님🏆
               </h3>
             )}
           </div>
@@ -448,8 +476,8 @@ const BroadcastContainer = () => {
           <div className='box__right__bid'>
             {isHost ? (
               <Button
-                disabled={!highestBidPrice || isCountdownStart}
-                onClick={handleCountDownClick}
+                disabled={isCountButtonDisabld || !highestBidPrice}
+                onClick={!isCountButtonDisabld && handleCountDownClick}
                 width='90%'
                 text={'카운트 다운 Start'}
               />
@@ -479,7 +507,21 @@ const BroadcastContainer = () => {
           <TimeCountWrapper>
             <Timer duration={CONFIG.LIMITED_SECONDS} />
             {timeCount}
+            <ReactAudioPlayer src={countdownSound} autoPlay controls={false} />
+            <ReactAudioPlayer src={tickSound} autoPlay controls={false} />
+            <ReactAudioPlayer src={backgroundSound} autoPlay controls={false} />
           </TimeCountWrapper>
+        )}
+        {isUserBidding && (
+          <>
+            <ReactAudioPlayer src={cashSound} autoPlay controls={false} />
+            <ReactAudioPlayer
+              src={twinkleSound}
+              volume={0.5}
+              autoPlay
+              controls={false}
+            />
+          </>
         )}
       </BroadcastBox>
     </Wrapper>

@@ -22,8 +22,7 @@ const ChatUnitWrapper = styled.div`
     width: 3%;
     min-width: 50px;
     max-width: 70px;
-    color: ${({ isHost }) => (isHost ? 'goldenrod' : 'black')};
-    font-weight: ${({ theme }) => theme.fontWeights.strong};
+    color: ${({ isHost }) => (isHost ? 'goldenrod' : '#253857')};
     text-align: center;
   }
 

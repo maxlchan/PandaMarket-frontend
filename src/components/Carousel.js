@@ -48,7 +48,7 @@ const ContentWrapper = styled.div`
 
     .carousel__intro__title {
       position: relative;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-size: ${({ theme }) => theme.fontSizes.titleSize};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
       text-align: center;

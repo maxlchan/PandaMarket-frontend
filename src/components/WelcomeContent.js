@@ -25,7 +25,6 @@ const Wrapper = styled.div`
     }
 
     .welcome__title__medium {
-      margin-top: 10px;
       margin-bottom: 10px;
       font-size: ${({ theme }) => theme.fontSizes.titleSize};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
@@ -33,7 +32,7 @@ const Wrapper = styled.div`
     }
 
     .welcome__title__bottom {
-      font-size: ${({ theme }) => theme.fontSizes.small};
+      font-size: ${({ theme }) => theme.fontSizes.medium};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
     }
   }

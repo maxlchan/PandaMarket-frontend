@@ -33,7 +33,7 @@ export const fetchUser = createAsyncThunk(
         return userInfo;
       }
     } catch (err) {
-      return err;
+      throw new Error(err);
     }
   }
 );

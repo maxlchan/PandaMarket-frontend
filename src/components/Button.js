@@ -26,6 +26,10 @@ const Wrapper = styled.button`
     opacity: 50%;
   }
 
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.hoverGreen};
+  }
+
   .button__title {
     min-width: 25px;
     pointer-events: none;

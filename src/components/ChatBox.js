@@ -55,6 +55,11 @@ const ChatBoxWrapper = styled.div`
       width: 30px;
       left: 15px;
       top: 15px;
+
+      span {
+        position: absolute;
+        left: 20px;
+      }
     }
   }
 `;

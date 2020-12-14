@@ -15,7 +15,7 @@ export const startBroadcast = createAsyncThunk(
       await startAuction(auctionId);
       return;
     } catch (err) {
-      return err;
+      throw new Error(err);
     }
   }
 );
@@ -32,7 +32,7 @@ export const finishBroadcast = createAsyncThunk(
       await finishAuction(payload, auctionId);
       return;
     } catch (err) {
-      return err;
+      throw new Error(err);
     }
   }
 );

@@ -12,7 +12,8 @@ import {
   convertUnitToNumber,
   checkIsOverOneHour,
 } from '../utils';
-import { ROUTES, ITEM_CATEGORY, TYPE } from '../constants';
+import { alertError } from '../config/customizedSwal';
+import { ROUTES, ITEM_CATEGORY, TYPE, MESSAGE } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -20,6 +21,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  overflow: auto;
 
   .box__register {
     display: flex;
@@ -135,22 +137,22 @@ const RegisterationContainer = () => {
     const isLowerThanThousand = convertUnitToNumber(initialPrice) < 1000;
     const isLowerThanOneHour = !checkIsOverOneHour(startedDateTime);
 
-    if (PICTURES_LENGTH < 1) return alert('최소 1장의 사진을 등록해주세요');
-    if (PICTURES_LENGTH > 5) return alert('사진은 최대 5개만 등록됩니다');
-    if (!title) return alert('경매 제목을 입력해주세요');
-    if (!itemName) return alert('상품명을 입력해주세요');
-    if (!description) return alert('상품 설명을 입력해주세요');
-    if (!initialPrice) return alert('시작 가격을 입력해주세요');
-    if (!startedDateTime) return alert('경매 일시를 입력해주세요');
-    if (isLowerThanThousand) return alert('최소 1,000원 이상을 입력해주세요');
-    if (isLowerThanOneHour) return alert('최소 1시간 후의 시간을 등록해주세요');
+    if (PICTURES_LENGTH < 1) return alertError(MESSAGE.PHOTO_UNDER_LIMIT);
+    if (PICTURES_LENGTH > 5) return alertError(MESSAGE.PHOTO_OVER_LIMIT);
+    if (!title) return alertError(MESSAGE.EMPTY_TITLE);
+    if (!itemName) return alertError(MESSAGE.EMPTY_ITEMNAME);
+    if (!description) return alertError(MESSAGE.EMPTY_DESCRIPTION);
+    if (!initialPrice) return alertError(MESSAGE.EMPTY_INITIALPRICE);
+    if (!startedDateTime) return alertError(MESSAGE.EMPTY_DATETIME);
+    if (isLowerThanThousand) return alertError(MESSAGE.PRICE_UNDER_LIMIT);
+    if (isLowerThanOneHour) return alertError(MESSAGE.DATETIME_UNDER_LIMIT);
 
     return true;
   };
 
   const handleRegister = (registeredType) => {
-    const isValid = validateRegisteredData();
-    if (!isValid) return;
+    // const isValid = validateRegisteredData();
+    // if (!isValid) return;
 
     const registeredData = {
       title,

@@ -1,7 +1,8 @@
 import { createReducer, createAsyncThunk } from '@reduxjs/toolkit';
 import * as api from '../../utils/api';
 import { addMyAuction, addReservedAuction } from '../user/user.reducer';
-import { ROUTES, TYPE } from '../../constants';
+import { alertSuccess, alertError } from '../../config/customizedSwal';
+import { MESSAGE, ROUTES, TYPE } from '../../constants';
 
 export const fetchAuctions = createAsyncThunk(
   'auctions/fetch',
@@ -12,7 +13,7 @@ export const fetchAuctions = createAsyncThunk(
 
       return auctionsInfo ? auctionsInfo : [];
     } catch (err) {
-      return err;
+      throw new Error(err);
     }
   }
 );
@@ -34,18 +35,18 @@ export const createAuction = createAsyncThunk(
       dispatch(addMyAuction(auctionId));
 
       if (type === TYPE.START) {
-        alert('등록 성공! 바로 경매방으로 입장입니다');
+        await alertSuccess(MESSAGE.REGISTER_SUCCESS_BROADCAST);
         history.push(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`);
       }
 
       if (type === TYPE.REGISTER) {
-        alert('등록 성공! 경매 시간을 반드시 준수해주세요!');
+        await alertSuccess(MESSAGE.REGISTER_SUCCESS);
         history.push(`${ROUTES.HOME}`);
       }
 
       return auctionInfo;
     } catch (err) {
-      return err;
+      throw new Error(err);
     }
   }
 );
@@ -61,18 +62,18 @@ export const reserveAuction = createAsyncThunk(
     const isAlreadyReserved = reservedAuctions.includes(auctionId);
 
     if (!isLoggedIn) {
-      alert('로그인 후 예약이 가능합니다');
+      await alertError(MESSAGE.NOT_LOGIN);
       history.push(ROUTES.LOGIN);
       return;
     }
 
     if (isUsersAuction) {
-      alert('자신이 만든 경매는 예약할 수 없습니다.');
+      await alertError(MESSAGE.INVALID_RESERVATION);
       return auctions.data;
     }
 
     if (isAlreadyReserved) {
-      alert('이미 예약하신 경매입니다.');
+      await alertError(MESSAGE.ALREADY_RESERVED);
       return auctions.data;
     }
 
@@ -81,11 +82,11 @@ export const reserveAuction = createAsyncThunk(
       const { updatedAuctionsInfo } = data;
 
       dispatch(addReservedAuction(auctionId));
-      alert('예약 완료!');
+      await alertSuccess(MESSAGE.RESERVE_SUCCESS);
 
       return updatedAuctionsInfo;
     } catch (err) {
-      return err;
+      throw new Error(err);
     }
   }
 );

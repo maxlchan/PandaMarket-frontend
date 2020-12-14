@@ -1,6 +1,17 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+* {
+	@font-face {
+    font-family: 'GmarketSansBold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+	}
+
+	font-family: 'GmarketSansBold', cursive;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -41,6 +52,7 @@ body {
 	background-color: whitesmoke;
 	overflow-y: overlay;
 	overflow-x: hidden;
+	font-family: 'GmarketSansBold', cursive;
 }
 
 ol, ul {
