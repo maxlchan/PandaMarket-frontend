@@ -74,7 +74,6 @@ const ContentTable = ({ auctionsInfo, title, onClick, children }) => {
             created_at,
             startedDateTime,
             isStarted,
-            isStartPossible,
             isFinished,
           }) => (
             <tr key={_id}>
@@ -85,8 +84,7 @@ const ContentTable = ({ auctionsInfo, title, onClick, children }) => {
               <td>{generateDateToText(created_at)}</td>
               <td>{generateDateToText(startedDateTime)}</td>
               <td>
-                {(isStartPossible && '경매시간 도달') ||
-                  (isFinished && '경매종료') ||
+                {(isFinished && '경매종료') ||
                   (isStarted && '경매시작') ||
                   '경매대기'}
               </td>
@@ -97,9 +95,7 @@ const ContentTable = ({ auctionsInfo, title, onClick, children }) => {
                   let disabledCondition;
 
                   if (type === TYPE.START) {
-                    disabledCondition = !isStartPossible || isStarted;
-                  } else if (type === TYPE.MODIFY || type === TYPE.DELETE) {
-                    disabledCondition = isStartPossible || isFinished;
+                    disabledCondition = isFinished;
                   } else if (type === TYPE.JOIN) {
                     disabledCondition = isFinished || !isStarted;
                   }

@@ -11,6 +11,7 @@ const StyldInput = styled.input`
 const ChatInput = ({ disabled, onChange, onKeyPress, value }) => {
   return (
     <StyldInput
+      spellCheck={false}
       placeholder={'메시지 입력하기'}
       onKeyPress={disabled ? null : onKeyPress}
       onChange={onChange}

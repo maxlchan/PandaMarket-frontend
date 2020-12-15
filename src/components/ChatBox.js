@@ -18,7 +18,7 @@ const ChatBoxWrapper = styled.div`
   position: relative;
   border-radius: 30px;
   box-shadow: ${({ isPrivate, theme }) => {
-    return isPrivate && theme.boxShadows.default;
+    return isPrivate && theme.boxShadows.deep;
   }};
 
   .box__allchat {
@@ -58,6 +58,7 @@ const ChatBoxWrapper = styled.div`
 
       span {
         position: absolute;
+        top: 0.1px;
         left: 20px;
       }
     }

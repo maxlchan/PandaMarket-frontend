@@ -65,10 +65,9 @@ const TYPE = {
   GOOGLEAUTH: 'googleAuth',
   TOKEN: 'token',
   START: 'start',
-  MODIFY: 'modify',
-  DELETE: 'delete',
   JOIN: 'join',
-  DETAIL: 'detail',
+  MYAUCTION_DEATAIL: 'myAuctionDetail',
+  RESERVED_DETAIL: 'reservedDetail',
   REGISTER: 'register',
   LOADING: 'spokes',
 };
@@ -131,6 +130,7 @@ const SOCKET_EVENT = {
 const URL = {
   LOADING: 'https://acegif.com/wp-content/gif/panda-80.gif',
   CONFETTI: 'https://acegif.com/wp-content/gif/confetti-29.gif',
+  BID: 'https://www.cityofcottonwoodmn.com/vertical/Sites/%7BE0FDF809-1956-4DF5-8E65-A031493D88F5%7D/uploads/Bidding.png',
 };
 
 export { ROUTES, MESSAGE, ITEM_CATEGORY, CONFIG, TYPE, URL, SOCKET_EVENT };

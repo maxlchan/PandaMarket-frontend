@@ -24,7 +24,7 @@ import {
 import { checkIsBigger, stopBothVideoAndAudio, unitizedValue } from '../utils';
 import { socket, socketApi } from '../utils/socket';
 import { alertSuccess, alertError, alertWarn } from '../config/customizedSwal';
-import { CONFIG, MESSAGE, ROUTES, SOCKET_EVENT } from '../constants';
+import { CONFIG, MESSAGE, ROUTES, SOCKET_EVENT, URL } from '../constants';
 import countdownSound from '../assets/sounds/countdownSound.ogg';
 import tickSound from '../assets/sounds/tickSound.ogg';
 import cashSound from '../assets/sounds/cashSound.ogg';
@@ -46,7 +46,8 @@ const BroadcastBox = styled.div`
   width: 90%;
   height: 90%;
   padding: 20px 30px;
-  box-shadow: ${({ theme }) => theme.boxShadows.deep};
+  box-shadow: ${({ theme }) => theme.boxShadows.default};
+  background-color: whitesmoke;
   border-radius: 30px;
 
   .box__left {
@@ -65,7 +66,21 @@ const BroadcastBox = styled.div`
       width: 100%;
 
       video {
-        width: 80%;
+        width: 90%;
+        border-radius: 10px;
+        box-shadow: ${({ theme }) => theme.boxShadows.deep};
+      }
+    }
+
+    .box__left__img {
+      width: 20%;
+      position: fixed;
+      left: 5%;
+      top: 8%;
+      z-index: 10;
+
+      img {
+        width: 40%;
       }
     }
 
@@ -163,24 +178,26 @@ const BroadcastContainer = () => {
   let stream;
 
   const handleBidButtonClick = async () => {
-    if (!highestBidPrice) {
-      const isLowerThanInitial = !checkIsBigger(bidPrice, initialPrice);
-      if (isLowerThanInitial) {
-        await alertError(MESSAGE.LOWER_THAN_INITIAL);
+    if (highestBidPrice) {
+      const isLowerThanHightest = !checkIsBigger(bidPrice, highestBidPrice);
+      if (isLowerThanHightest) {
+        alertError(MESSAGE.LOWER_THAN_HIGHTEST);
         return;
       }
-    }
-
-    const isLowerThanHightest = !checkIsBigger(bidPrice, highestBidPrice);
-    if (isLowerThanHightest) {
-      await alertError(MESSAGE.LOWER_THAN_HIGHTEST);
-      return;
+    } else {
+      const isLowerThanInitial = !checkIsBigger(bidPrice, initialPrice);
+      if (isLowerThanInitial) {
+        alertError(MESSAGE.LOWER_THAN_INITIAL);
+        return;
+      }
     }
 
     socketApi.updateHighestBid(bidPrice);
   };
 
   const handleChatButtonClick = () => {
+    if (!message) return;
+
     socketApi.sendMessage(message);
     setMessage('');
   };
@@ -227,6 +244,25 @@ const BroadcastContainer = () => {
     setBidPrice(unitizedNumber);
   };
 
+  const handleOnTrack = (event) => {
+    hostVideo.current.srcObject = event.streams[0];
+  };
+
+  const handleOnIceCandidate = (socketId) => {
+    return ({ candidate }) => {
+      if (candidate) {
+        socketApi.candidate(socketId, {
+          type: 'candidate',
+          label: candidate.sdpMLineIndex,
+          id: candidate.sdpMid,
+          candidate: candidate.candidate,
+        });
+      } else {
+        candidate == null;
+      }
+    };
+  };
+
   const closeModal = () => setIsModalClicked(false);
 
   const getUserMedia = async () => {
@@ -262,18 +298,7 @@ const BroadcastContainer = () => {
           .getTracks()
           .forEach((track) => currentPeer.addTrack(track, stream));
 
-        currentPeer.onicecandidate = ({ candidate }) => {
-          if (candidate) {
-            socketApi.candidate(memberSocketId, {
-              type: 'candidate',
-              label: candidate.sdpMLineIndex,
-              id: candidate.sdpMid,
-              candidate: candidate.candidate,
-            });
-          } else {
-            candidate = null;
-          }
-        };
+        currentPeer.onicecandidate = handleOnIceCandidate(memberSocketId);
 
         try {
           const sessionDescription = await currentPeer.createOffer();
@@ -293,7 +318,7 @@ const BroadcastContainer = () => {
       setIsCountButtonDisabld(false);
       setIsUserBidding(true);
       setTimeout(() => setIsUserBidding(false), 2000);
-      toast.info(`💰${name}님 ₩${price}원 배팅!`, CONFIG.TOASTIFY);
+      toast.info(`💰 ${name}님 ₩${price}원 배팅!`, CONFIG.TOASTIFY);
     });
 
     socket.on(SOCKET_EVENT.CHANGE_ROOM_STATUS, (payload) => {
@@ -339,7 +364,7 @@ const BroadcastContainer = () => {
     socket.on(SOCKET_EVENT.UPDATE_HIGHEST_BID_PRICE, ({ name, price }) => {
       setIsUserBidding(true);
       setTimeout(() => setIsUserBidding(false), 2000);
-      toast.info(`💰${name}님 ₩${price}원 배팅!💰`, CONFIG.TOASTIFY);
+      toast.info(`💰 ${name}님 ₩${price}원 배팅!💰`, CONFIG.TOASTIFY);
     });
 
     socket.on(SOCKET_EVENT.OFFER, async (hostSocketId, sdp) => {
@@ -348,19 +373,8 @@ const BroadcastContainer = () => {
       const currentPeer = peer.current[hostSocketId];
 
       currentPeer.setRemoteDescription(sdp);
-      currentPeer.ontrack = (event) => {
-        hostVideo.current.srcObject = event.streams[0];
-      };
-      currentPeer.onicecandidate = ({ candidate }) => {
-        if (candidate) {
-          socketApi.candidate(hostSocketId, {
-            type: 'candidate',
-            label: candidate.sdpMLineIndex,
-            id: candidate.sdpMid,
-            candidate: candidate.candidate,
-          });
-        }
-      };
+      currentPeer.ontrack = handleOnTrack;
+      currentPeer.onicecandidate = handleOnIceCandidate(hostSocketId);
 
       try {
         const sessionDescription = await currentPeer.createAnswer();
@@ -400,8 +414,8 @@ const BroadcastContainer = () => {
 
     (async () => {
       try {
+        dispatch(startBroadcast(auctionId));
         if (isHost) {
-          dispatch(startBroadcast(auctionId));
           await getUserMedia();
           subscribeAsHost();
         } else {
@@ -445,6 +459,9 @@ const BroadcastContainer = () => {
         <div className='box__left'>
           <div className='box__left__video'>
             <video autoPlay ref={hostVideo} />
+            <div className='box__left__img'>
+              <img src={URL.BID} />
+            </div>
           </div>
           <div className='box__left__status'>
             <h2 className='status__intialPrice'>시작가 {initialPrice}원</h2>
@@ -454,7 +471,7 @@ const BroadcastContainer = () => {
             </h2>
             {currentWinner?.name && (
               <h3 className='status__currentWinner'>
-                🏆현재 1등 {currentWinner.name}님🏆
+                현재 1등 {currentWinner.name}님 🏆
               </h3>
             )}
           </div>
@@ -477,7 +494,7 @@ const BroadcastContainer = () => {
             {isHost ? (
               <Button
                 disabled={isCountButtonDisabld || !highestBidPrice}
-                onClick={!isCountButtonDisabld && handleCountDownClick}
+                onClick={isCountButtonDisabld ? null : handleCountDownClick}
                 width='90%'
                 text={'카운트 다운 Start'}
               />

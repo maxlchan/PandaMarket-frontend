@@ -1,18 +1,14 @@
 import Swal from 'sweetalert2';
 
-export const alertError = async (text) => {
-  try {
-    const result = Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text,
-      scrollbarPadding: true,
-    });
+export const alertError = (text) => {
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text,
+    scrollbarPadding: true,
+  });
 
-    return result;
-  } catch (err) {
-    throw new Error(err);
-  }
+  return;
 };
 
 export const alertSuccess = async ({ title, text }) => {

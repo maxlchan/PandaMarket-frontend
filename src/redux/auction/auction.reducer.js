@@ -1,7 +1,7 @@
 import { createReducer, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from '../../utils/api';
 import { addMyAuction, addReservedAuction } from '../user/user.reducer';
 import { alertSuccess, alertError } from '../../config/customizedSwal';
+import * as api from '../../utils/api';
 import { MESSAGE, ROUTES, TYPE } from '../../constants';
 
 export const fetchAuctions = createAsyncThunk(

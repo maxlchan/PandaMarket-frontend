@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import SideNavBar from '../components/SideNavBar';
@@ -10,6 +10,7 @@ import Modal from '../components/Modal';
 import CloseButton from '../components/CloseButton';
 import AuctionDetail from '../components/AuctionDetail';
 import {
+  auctionsSelector,
   myAuctionsSelector,
   reservedAuctionsSelector,
 } from '../redux/auction/auctios.selector';
@@ -23,27 +24,30 @@ const MypageContentBox = styled.div`
 `;
 
 const MypageContainer = () => {
+  const allAuctions = useSelector(auctionsSelector);
   const myAuctions = useSelector(myAuctionsSelector);
   const reservedAuctions = useSelector(reservedAuctionsSelector);
   const [isModalClicked, setIsModalClicked] = useState(false);
   const [clickedAuction, setClickedAuction] = useState({});
-  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const history = useHistory();
 
   const handleButtonClick = (auctionId, type) => {
     if (type == TYPE.START) {
       history.push(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`);
-    } else if (type === TYPE.MODIFY) {
-      console.log(1);
-    } else if (type === TYPE.DELETE) {
-      console.log(1);
     } else if (type === TYPE.JOIN) {
       history.push(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`);
-    } else if (type === TYPE.DETAIL) {
-      const clickedAuction = reservedAuctions.find(
-        (reservedAuction) => reservedAuction._id === auctionId
-      );
+    } else if (type === TYPE.MYAUCTION_DEATAIL) {
+      const clickedAuction = allAuctions.find((auction) => {
+        return auction._id === auctionId;
+      });
+
+      setClickedAuction(clickedAuction);
+      setIsModalClicked(true);
+    } else if (type === TYPE.RESERVED_DETAIL) {
+      const clickedAuction = reservedAuctions.find((reservedAuction) => {
+        return reservedAuction._id === auctionId;
+      });
 
       setClickedAuction(clickedAuction);
       setIsModalClicked(true);
@@ -71,7 +75,6 @@ const MypageContainer = () => {
           name={'내가 예약한 경매'}
           color='white'
         />
-        <NavItem to={`${ROUTES.HOME}`} name={'회원 탈퇴'} color='white' />
       </SideNavBar>
       <MypageContentBox>
         {pathname === `${ROUTES.MY_PAGE}${ROUTES.MY_AUCTIONS}` && (
@@ -88,14 +91,8 @@ const MypageContainer = () => {
               padding='5px'
             />
             <Button
-              type={TYPE.MODIFY}
-              text={'수정하기'}
-              width='100%'
-              padding='5px'
-            />
-            <Button
-              type={TYPE.DELETE}
-              text={'삭제하기'}
+              type={TYPE.MYAUCTION_DEATAIL}
+              text={'상세보기'}
               width='100%'
               padding='5px'
             />
@@ -114,7 +111,7 @@ const MypageContainer = () => {
               padding='5px'
             />
             <Button
-              type={TYPE.DETAIL}
+              type={TYPE.RESERVED_DETAIL}
               text={'상세보기'}
               width='100%'
               padding='5px'

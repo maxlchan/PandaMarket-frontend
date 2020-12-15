@@ -23,14 +23,15 @@ const App = () => {
   const isLoading = useSelector((state) => state.user.isLoading);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const tokenLogin = () => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
     dispatch(fetchUser({ type: TYPE.TOKEN, payload: token }));
-  }, []);
+  };
 
   useEffect(() => {
+    tokenLogin();
     dispatch(fetchAuctions());
   }, []);
 
@@ -78,12 +79,7 @@ const App = () => {
       <ToastContainer
         position='top-right'
         autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
         pauseOnFocusLoss={false}
-        draggable
         pauseOnHover={false}
       />
     </ThemeProvider>

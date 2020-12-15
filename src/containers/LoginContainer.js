@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 import { fetchUser } from '../redux/user/user.reducer';
 import panda from '../assets/images/panda.png';
-import { ROUTES, TYPE } from '../constants';
+import { TYPE } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;

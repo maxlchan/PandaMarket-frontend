@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { userInfoSelector } from '../user/user.selector';
 
-const auctionsSelector = (state) => state.auctions.data;
+export const auctionsSelector = (state) => state.auctions.data;
 
 export const auctionsOnWaitingSelector = createSelector(
   auctionsSelector,

@@ -29,6 +29,10 @@ const SliderWrapper = styled.div`
   width: 100%;
   max-height: 1000px;
   min-height: 80vh;
+
+  .slick-slider {
+    box-shadow: ${({ theme }) => theme.boxShadows.default};
+  }
 `;
 
 const ContentWrapper = styled.div`

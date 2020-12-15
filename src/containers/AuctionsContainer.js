@@ -13,8 +13,8 @@ import {
   fetchAuctions,
   reserveAuction,
 } from '../redux/auction/auction.reducer';
-import { ITEM_CATEGORY, TYPE } from '../constants';
 import { checkIsKeywordIn } from '../utils';
+import { ITEM_CATEGORY, TYPE } from '../constants';
 
 const itemCategories = [...ITEM_CATEGORY, '전체'];
 

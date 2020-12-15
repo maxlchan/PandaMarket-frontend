@@ -3,8 +3,8 @@ import {
   createReducer,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
-import { TYPE } from '../../constants';
 import { getUserByGoogleAuth, getUserByToken } from '../../utils/api';
+import { TYPE } from '../../constants';
 
 export const logoutUser = createAction('users/logout');
 export const addMyAuction = createAction('users/addMyAuction');

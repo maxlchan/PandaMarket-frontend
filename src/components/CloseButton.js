@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const StyledSpan = styled.span`
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   cursor: pointer;
 `;
