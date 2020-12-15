@@ -10,7 +10,6 @@ import { createAuction } from '../redux/auction/auction.reducer';
 import {
   unitizedValue,
   convertUnitToNumber,
-  checkIsOverOneHour,
 } from '../utils';
 import { alertError } from '../config/customizedSwal';
 import { ROUTES, ITEM_CATEGORY, TYPE, MESSAGE } from '../constants';
