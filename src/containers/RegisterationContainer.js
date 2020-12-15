@@ -158,16 +158,16 @@ const RegisterationContainer = () => {
   const validateRegisteredData = () => {
     const PICTURES_LENGTH = pictures.length;
     const isLowerThanThousand = convertUnitToNumber(initialPrice) < 1000;
-    const isLowerThanOneHour = !checkIsOverOneHour(startedDateTime);
+    // const isLowerThanOneHour = !checkIsOverOneHour(startedDateTime);
 
-    // if (PICTURES_LENGTH < 1) return alertError(MESSAGE.PHOTO_UNDER_LIMIT);
+    if (PICTURES_LENGTH < 1) return alertError(MESSAGE.PHOTO_UNDER_LIMIT);
     if (PICTURES_LENGTH > 5) return alertError(MESSAGE.PHOTO_OVER_LIMIT);
     if (!title) return alertError(MESSAGE.EMPTY_TITLE);
-    // if (!itemName) return alertError(MESSAGE.EMPTY_ITEMNAME);
-    // if (!description) return alertError(MESSAGE.EMPTY_DESCRIPTION);
-    // if (!initialPrice) return alertError(MESSAGE.EMPTY_INITIALPRICE);
-    // if (!startedDateTime) return alertError(MESSAGE.EMPTY_DATETIME);
-    // if (isLowerThanThousand) return alertError(MESSAGE.PRICE_UNDER_LIMIT);
+    if (!itemName) return alertError(MESSAGE.EMPTY_ITEMNAME);
+    if (!description) return alertError(MESSAGE.EMPTY_DESCRIPTION);
+    if (!initialPrice) return alertError(MESSAGE.EMPTY_INITIALPRICE);
+    if (!startedDateTime) return alertError(MESSAGE.EMPTY_DATETIME);
+    if (isLowerThanThousand) return alertError(MESSAGE.PRICE_UNDER_LIMIT);
     // if (isLowerThanOneHour) return alertError(MESSAGE.DATETIME_UNDER_LIMIT);
 
     return true;
