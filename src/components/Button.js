@@ -6,7 +6,7 @@ const Wrapper = styled.button`
   justify-content: center;
   align-items: center;
   width: ${({ width }) => width};
-  padding: ${({ padding }) => padding || '2% 6%'};
+  padding: ${({ padding }) => padding || '2% 5%'};
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   font-size: ${({ theme }) => theme.fontSizes.small};
   margin-bottom: 5px;

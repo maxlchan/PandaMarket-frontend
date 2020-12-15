@@ -68,7 +68,7 @@ const ContentWrapper = styled.div`
       span {
         font-size: ${({ theme }) => theme.fontSizes.xxxl};
         font-weight: ${({ theme }) => theme.fontWeights.strong};
-        text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+        text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
         color: black;
       }
     }

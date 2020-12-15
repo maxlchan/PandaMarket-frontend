@@ -33,7 +33,8 @@ const Wrapper = styled.div`
     max-width: 1000px;
     border-radius: 20px;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
-    background-color: white;
+    background-color: ${({ theme }) => theme.colors.gray};
+    color: white;
     overflow: hidden;
 
     .title__register {
@@ -45,10 +46,11 @@ const Wrapper = styled.div`
       box-shadow: ${({ theme }) => theme.boxShadows.default};
       font-size: ${({ theme }) => theme.fontSizes.base};
       font-weight: ${({ theme }) => theme.fontWeights.strong};
+      background-color: ${({ theme }) => theme.colors.bamboo};
     }
 
     .contents__register {
-      width: 80%;
+      width: 90%;
       padding: 20px 0;
     }
   }
@@ -56,7 +58,7 @@ const Wrapper = styled.div`
 
 const RegisterContent = styled.div`
   display: flex;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   margin: 20px 0;
 
@@ -65,26 +67,36 @@ const RegisterContent = styled.div`
     justify-content: center;
     align-items: center;
     width: 20%;
+    background-color: ${({ theme }) => theme.colors.bamboo};
+    box-shadow: ${({ theme }) => theme.boxShadows.default};
+    color: whitesmoke;
   }
 
   .contents__register__payload {
     display: flex;
     align-items: center;
-    width: 70%;
+    width: 80%;
+    color: black;
+
+    .fileContainer {
+      margin: 0;
+    }
 
     .deleteImage {
-      width: 37px;
+      width: 35px;
       height: 30px;
-      padding-top: 5px;
+      padding-top: 2px;
     }
 
     input,
     textarea,
     select {
-      border: 1px solid gray;
+      border: 2px solid whitesmoke;
       width: 100%;
       padding-left: 10px;
       height: 30px;
+      box-shadow: ${({ theme }) => theme.boxShadows.default};
+      color: black;
     }
 
     .itemname,
@@ -101,6 +113,17 @@ const RegisterContent = styled.div`
       height: 120px;
       resize: none;
     }
+  }
+
+  .react-datetime-picker__wrapper {
+    border: 2px solid whitesmoke;
+    width: 100%;
+    padding-left: 10px;
+    height: 30px;
+    background-color: white;
+    box-shadow: ${({ theme }) => theme.boxShadows.default};
+    color: black;
+    font-size: 13px;
   }
 `;
 

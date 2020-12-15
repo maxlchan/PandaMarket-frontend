@@ -36,7 +36,10 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 90vh;
+  height: 93vh;
+  background-image: url(${URL.BROADCAST_BACKGROUND});
+  background-size: cover;
+  background-position: center;
 `;
 
 const BroadcastBox = styled.div`
@@ -46,9 +49,6 @@ const BroadcastBox = styled.div`
   width: 90%;
   height: 90%;
   padding: 20px 30px;
-  box-shadow: ${({ theme }) => theme.boxShadows.default};
-  background-color: whitesmoke;
-  border-radius: 30px;
 
   .box__left {
     display: flex;
@@ -109,7 +109,7 @@ const BroadcastBox = styled.div`
   .box__right {
     width: 50%;
     height: 100%;
-    box-shadow: ${({ theme }) => theme.boxShadows.default};
+    box-shadow: ${({ theme }) => theme.boxShadows.deep};
     background-color: white;
     overflow: hidden;
     border-radius: 30px;

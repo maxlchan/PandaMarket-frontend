@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   position: absolute;
-  left: 10%;
-  top: 10%;
+  left: 8%;
+  top: 8%;
   background-color: #ea4065;
   padding: 10px;
 `;

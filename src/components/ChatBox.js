@@ -18,7 +18,7 @@ const ChatBoxWrapper = styled.div`
   position: relative;
   border-radius: 30px;
   box-shadow: ${({ isPrivate, theme }) => {
-    return isPrivate && theme.boxShadows.deep;
+    return isPrivate && theme.boxShadows.default;
   }};
 
   .box__allchat {
@@ -95,7 +95,7 @@ const ChatBox = ({
   return (
     <ChatBoxWrapper isPrivate={isPrivate}>
       <ChatBoxHeader>
-        <h1 className='box__title'>{isPrivate ? '대화창' : '주요 채팅'}</h1>
+        <h1 className='box__title'>{isPrivate ? '대화창' : 'Q&A'}</h1>
       </ChatBoxHeader>
       <div className='box__allchat'>
         <div className='box__layer' />
