@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { URL } from '../constants';
 
@@ -36,5 +37,10 @@ const Loading = ({ type, color }) => (
     />
   </LoadingWrapper>
 );
+
+Loading.propTypes = {
+  type: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+};
 
 export default Loading;

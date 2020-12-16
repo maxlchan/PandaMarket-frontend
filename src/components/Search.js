@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import { CONFIG } from '../constants';
@@ -60,6 +61,10 @@ const Search = ({ onSearch }) => {
       />
     </Wrapper>
   );
+};
+
+Search.propTypes = {
+  onSearch: PropTypes.func.isRequired,
 };
 
 export default Search;

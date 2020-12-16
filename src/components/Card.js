@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -20,6 +21,12 @@ const Card = ({ color, backgroundImg, children }) => {
       {children}
     </Wrapper>
   );
+};
+
+Card.propTypes = {
+  color: PropTypes.string,
+  backgroundImg: PropTypes.string,
+  children: PropTypes.element,
 };
 
 export default Card;

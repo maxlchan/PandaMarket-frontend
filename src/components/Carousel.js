@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
@@ -133,4 +134,17 @@ const Carousel = ({ contents, onClick }) => {
     </SliderWrapper>
   );
 };
+
+Carousel.propTypes = {
+  contents: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      picturesUrl: PropTypes.arrayOf(PropTypes.string.isRequired),
+      itemName: PropTypes.string.isRequired,
+      initialPrice: PropTypes.string.isRequired,
+    })
+  ),
+  onClick: PropTypes.func,
+};
+
 export default Carousel;

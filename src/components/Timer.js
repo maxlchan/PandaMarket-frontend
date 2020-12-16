@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 
@@ -16,10 +17,13 @@ const Timer = ({ duration }) => {
         isPlaying
         duration={duration}
         colors={[['#004777', 0.33], ['#F7B801', 0.33], ['#A30000']]}
-      >
-      </CountdownCircleTimer>
+      ></CountdownCircleTimer>
     </TimerWrapper>
   );
+};
+
+Timer.propTypes = {
+  duration: PropTypes.number.isRequired,
 };
 
 export default Timer;

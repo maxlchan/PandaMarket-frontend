@@ -4,7 +4,7 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import { alertError } from '../../config/customizedSwal';
-import { finishAuction, startAuction } from '../../utils/api';
+import * as api from '../../utils/api';
 import { MESSAGE } from '../../constants';
 
 export const setBroadcast = createAction('broadcast/set');
@@ -14,7 +14,7 @@ export const startBroadcast = createAsyncThunk(
   'broadcast/start',
   async (auctionId, thunkAPI) => {
     try {
-      await startAuction(auctionId);
+      await api.startAuction(auctionId);
       return;
     } catch (err) {
       alertError(MESSAGE.UNKNOWN_ERROR);
@@ -32,7 +32,7 @@ export const finishBroadcast = createAsyncThunk(
       const finalPrice = broadcast.highestBidPriceList.slice(-1)[0];
       const payload = { winner: winner._id, finalPrice };
 
-      await finishAuction(payload, auctionId);
+      await api.finishAuction(payload, auctionId);
       return;
     } catch (err) {
       alertError(MESSAGE.UNKNOWN_ERROR);

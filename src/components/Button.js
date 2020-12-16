@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Wrapper = styled.button`
@@ -62,6 +63,17 @@ const Button = ({
       <h1 className='button__title'>{text}</h1>
     </Wrapper>
   );
+};
+
+Button.propTypes = {
+  id: PropTypes.string,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  color: PropTypes.string,
+  width: PropTypes.string,
+  padding: PropTypes.string,
+  text: PropTypes.string.isRequired,
 };
 
 export default Button;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const ChatUnitWrapper = styled.div`
@@ -55,6 +56,15 @@ const ChatUnit = ({ imageUrl, name, text, isHost, ownerId, userId }) => {
       <span className='chatunit__text'>{text}</span>
     </ChatUnitWrapper>
   );
+};
+
+ChatUnit.propTypes = {
+  imageUrl: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  isHost: PropTypes.bool,
+  ownerId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 export default ChatUnit;

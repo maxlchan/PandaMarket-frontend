@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import usePreventScroll from '../hooks/usePreventScroll';
 
@@ -49,6 +50,11 @@ const Modal = ({ onClick, children }) => {
       </ModalWrapper>
     </>
   );
+};
+
+Modal.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  children: PropTypes.element.isRequired,
 };
 
 export default Modal;

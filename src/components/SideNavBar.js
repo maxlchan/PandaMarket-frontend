@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -27,6 +28,10 @@ const SideNavBar = ({ children }) => {
       {children.map((child) => child)}
     </Wrapper>
   );
+};
+
+SideNavBar.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.element.isRequired),
 };
 
 export default SideNavBar;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyldBox = styled.div`
@@ -47,6 +48,12 @@ const AuctionCategory = ({ index, onClick, title }) => {
       <h1 className='auction__categroy__title'>{title}</h1>
     </StyldBox>
   );
+};
+
+AuctionCategory.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default AuctionCategory;

@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import AuctionDetailContent from './AuctionDetailContent';
 import Button from './Button';
@@ -129,6 +130,21 @@ const AuctionDetail = ({ auction, onClick }) => {
       </div>
     </Wrapper>
   );
+};
+
+AuctionDetail.PropTypes = {
+  onClick: PropTypes.func.isRequired,
+  auction: PropTypes.shape({
+    description: PropTypes.string.isRequired,
+    initialPrice: PropTypes.string.isRequired,
+    picturesUrl: PropTypes.string.isRequired,
+    reservedUser: PropTypes.arrayOf(PropTypes.string).isRequired,
+    title: PropTypes.string.isRequired,
+    itemName: PropTypes.string.isRequired,
+    startedDateTime: PropTypes.object.isRequired,
+    created_at: PropTypes.object.isRequired,
+    _id: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default AuctionDetail;

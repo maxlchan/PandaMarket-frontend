@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -24,6 +25,13 @@ const NavItem = ({ to, name, onClick, color }) => {
       </StyledText>
     </Link>
   );
+};
+
+NavItem.propTypes = {
+  to: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  color: PropTypes.string,
 };
 
 export default NavItem;

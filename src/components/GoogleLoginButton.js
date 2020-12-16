@@ -1,5 +1,6 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import googleLogo from '../assets/images/googleLogo.png';
 
@@ -40,6 +41,10 @@ const GoogleLoginButton = ({ onResponse }) => {
       onFailure={(result) => console.log(result)}
     />
   );
+};
+
+GoogleLoginButton.propTypes = {
+  onResponse: PropTypes.func.isRequired,
 };
 
 export default GoogleLoginButton;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyldInput = styled.input`
@@ -18,6 +19,13 @@ const ChatInput = ({ disabled, onChange, onKeyPress, value }) => {
       value={value}
     />
   );
+};
+
+ChatInput.propTypes = {
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+  onKeyPress: PropTypes.func.isRequired,
+  value: PropTypes.string,
 };
 
 export default ChatInput;

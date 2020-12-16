@@ -433,8 +433,8 @@ const BroadcastContainer = () => {
 
     (async () => {
       try {
-        dispatch(startBroadcast(auctionId));
         if (isHost) {
+          dispatch(startBroadcast(auctionId));
           await getUserMedia();
           subscribeAsHost();
         } else {

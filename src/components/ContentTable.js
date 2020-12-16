@@ -1,4 +1,5 @@
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { generateDateToText } from '../utils';
 import { TYPE } from '../constants';
@@ -116,6 +117,25 @@ const ContentTable = ({ auctionsInfo, title, onClick, children }) => {
   ) : (
     <NoDataText />
   );
+};
+
+ContentTable.propTypes = {
+  auctionsInfo: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      itemName: PropTypes.string.isRequired,
+      initialPrice: PropTypes.string.isRequired,
+      finalPrice: PropTypes.string,
+      reservedUser: PropTypes.arrayOf(PropTypes.string).isRequired,
+      created_at: PropTypes.string.isRequired,
+      startedDateTime: PropTypes.string.isRequired,
+      isStarted: PropTypes.bool.isRequired,
+      isFinished: PropTypes.bool.isRequired,
+    })
+  ),
+  title: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element.isRequired),
 };
 
 export default ContentTable;

@@ -3,7 +3,7 @@ import {
   createReducer,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
-import { getUserByGoogleAuth, getUserByToken } from '../../utils/api';
+import * as api from '../../utils/api';
 import { MESSAGE, TYPE } from '../../constants';
 import { alertError } from '../../config/customizedSwal';
 
@@ -18,7 +18,7 @@ export const fetchUser = createAsyncThunk(
 
     try {
       if (type === TYPE.GOOGLEAUTH) {
-        const { data } = await getUserByGoogleAuth(payload);
+        const { data } = await api.getUserByGoogleAuth(payload);
         const { userInfo, token } = data;
 
         localStorage.setItem('token', token);
@@ -28,7 +28,7 @@ export const fetchUser = createAsyncThunk(
       }
 
       if (type === TYPE.TOKEN) {
-        const { data } = await getUserByToken(payload);
+        const { data } = await api.getUserByToken(payload);
         const { userInfo } = data;
 
         return userInfo;

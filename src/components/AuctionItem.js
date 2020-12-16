@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from './Button';
 
@@ -72,6 +73,13 @@ const AuctionItem = ({ imageUrl, title, initialPrice, onClick }) => {
       </div>
     </ItemWrapper>
   );
+};
+
+AuctionItem.propTypes = {
+  imageUrl: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  initialPrice: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default AuctionItem;
