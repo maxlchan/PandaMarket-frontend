@@ -9,6 +9,7 @@ const Wrapper = styled.div`
   padding: 50px;
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   background-color: white;
+  border-radius: 20px;
 
   .mypage__content__title {
     padding-bottom: 10px;

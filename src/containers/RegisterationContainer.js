@@ -33,8 +33,8 @@ const Wrapper = styled.div`
     border-radius: 20px;
     box-shadow: ${({ theme }) => theme.boxShadows.default};
     background-color: ${({ theme }) => theme.colors.gray};
-    color: white;
     overflow: hidden;
+    color: white;
 
     .title__register {
       display: flex;
@@ -90,7 +90,7 @@ const RegisterContent = styled.div`
     input,
     textarea,
     select {
-      border: 2px solid whitesmoke;
+      border: none;
       width: 100%;
       padding-left: 10px;
       height: 30px;
@@ -318,17 +318,23 @@ const RegisterationContainer = () => {
               onClick={(e) => handleRegister(e.target.id)}
               id={TYPE.START}
               text={'경매 바로 시작'}
+              color={'#253857'}
+              padding={'10px 20px'}
             />
             <Button
               className='contents__button'
               onClick={(e) => handleRegister(e.target.id)}
               id={TYPE.REGISTER}
               text={'경매 등록하기'}
+              color={'#253857'}
+              padding={'10px 20px'}
             />
             <Button
               className='contents__button'
               onClick={() => history.goBack()}
               text={'뒤로 돌아가기'}
+              color={'#253857'}
+              padding={'10px 20px'}
             />
           </ButtonWrapper>
         </>

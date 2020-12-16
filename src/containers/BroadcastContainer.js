@@ -40,6 +40,11 @@ const Wrapper = styled.div`
   background-image: url(${URL.BROADCAST_BACKGROUND});
   background-size: cover;
   background-position: center;
+
+  @media only screen and (max-width: 1000px) {
+    flex-direction: column;
+    height: 190vh;
+  }
 `;
 
 const BroadcastBox = styled.div`
@@ -49,6 +54,10 @@ const BroadcastBox = styled.div`
   width: 90%;
   height: 90%;
   padding: 20px 30px;
+
+  @media only screen and (max-width: 1000px) {
+    flex-direction: column;
+  }
 
   .box__left {
     display: flex;
@@ -60,9 +69,16 @@ const BroadcastBox = styled.div`
     margin-right: 10px;
     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.15);
 
+    @media only screen and (max-width: 1000px) {
+      width: 100%;
+      height: 50%;
+      margin-bottom: 20px;
+    }
+
     .box__left__video {
       display: flex;
       justify-content: center;
+      position: relative;
       width: 100%;
 
       video {
@@ -73,10 +89,10 @@ const BroadcastBox = styled.div`
     }
 
     .box__left__img {
-      width: 20%;
-      position: fixed;
-      left: 5%;
-      top: 8%;
+      width: 50%;
+      position: absolute;
+      left: 1%;
+      top: -5%;
       z-index: 10;
 
       img {
@@ -89,9 +105,8 @@ const BroadcastBox = styled.div`
       flex-direction: column;
       justify-content: space-evenly;
       align-items: center;
-      position: relative;
       width: 100%;
-      height: 40%;
+      height: 30%;
 
       h2 {
         font-size: ${({ theme }) => theme.fontSizes.base};
@@ -113,6 +128,10 @@ const BroadcastBox = styled.div`
     background-color: white;
     overflow: hidden;
     border-radius: 30px;
+
+    @media only screen and (max-width: 1000px) {
+      width: 100%;
+    }
 
     .box__right__bid {
       display: flex;
@@ -274,7 +293,7 @@ const BroadcastContainer = () => {
 
       hostVideo.current.srcObject = stream;
     } catch (err) {
-      throw new Error(err);
+      alertError(MESSAGE.MEDIA_NOT_CONNETED);
     }
   };
 
@@ -474,11 +493,12 @@ const BroadcastContainer = () => {
                 현재 1등 {currentWinner.name}님 🏆
               </h3>
             )}
+            <Button
+              onClick={() => setIsModalClicked(true)}
+              padding={'10px 20px'}
+              text={'제품 상세보기'}
+            />
           </div>
-          <Button
-            onClick={() => setIsModalClicked(true)}
-            text={'제품 상세보기'}
-          />
         </div>
         <div className='box__right'>
           <ChatBox
@@ -492,12 +512,14 @@ const BroadcastContainer = () => {
           />
           <div className='box__right__bid'>
             {isHost ? (
-              <Button
-                disabled={isCountButtonDisabld || !highestBidPrice}
-                onClick={isCountButtonDisabld ? null : handleCountDownClick}
-                width='90%'
-                text={'카운트 다운 Start'}
-              />
+              <>
+                <Button
+                  disabled={isCountButtonDisabld || !highestBidPrice}
+                  onClick={isCountButtonDisabld ? null : handleCountDownClick}
+                  width='90%'
+                  text={'카운트 다운 Start'}
+                />
+              </>
             ) : (
               <>
                 <div className='box__right__bid__price'>

@@ -25,7 +25,7 @@ const boxShadows = {
 
 const colors = {
   bamboo: '#88b234',
-  green: '#0b932c',
+  green: '#3cb460',
   hoverGreen: '#1d653a',
   gray: '#f2f1ef',
   transparent_gray: 'rgba(220,220,220, 0.9)',

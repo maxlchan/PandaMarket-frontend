@@ -4,7 +4,8 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import { getUserByGoogleAuth, getUserByToken } from '../../utils/api';
-import { TYPE } from '../../constants';
+import { MESSAGE, TYPE } from '../../constants';
+import { alertError } from '../../config/customizedSwal';
 
 export const logoutUser = createAction('users/logout');
 export const addMyAuction = createAction('users/addMyAuction');
@@ -33,6 +34,7 @@ export const fetchUser = createAsyncThunk(
         return userInfo;
       }
     } catch (err) {
+      alertError(MESSAGE.UNKNOWN_ERROR);
       throw new Error(err);
     }
   }

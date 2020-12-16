@@ -13,6 +13,7 @@ export const fetchAuctions = createAsyncThunk(
 
       return auctionsInfo ? auctionsInfo : [];
     } catch (err) {
+      alertError(MESSAGE.UNKNOWN_ERROR);
       throw new Error(err);
     }
   }
@@ -46,6 +47,7 @@ export const createAuction = createAsyncThunk(
 
       return auctionInfo;
     } catch (err) {
+      alertError(MESSAGE.UNKNOWN_ERROR);
       throw new Error(err);
     }
   }
@@ -62,18 +64,18 @@ export const reserveAuction = createAsyncThunk(
     const isAlreadyReserved = reservedAuctions.includes(auctionId);
 
     if (!isLoggedIn) {
-      await alertError(MESSAGE.NOT_LOGIN);
+      alertError(MESSAGE.NOT_LOGIN);
       history.push(ROUTES.LOGIN);
       return;
     }
 
     if (isUsersAuction) {
-      await alertError(MESSAGE.INVALID_RESERVATION);
+      alertError(MESSAGE.INVALID_RESERVATION);
       return auctions.data;
     }
 
     if (isAlreadyReserved) {
-      await alertError(MESSAGE.ALREADY_RESERVED);
+      alertError(MESSAGE.ALREADY_RESERVED);
       return auctions.data;
     }
 
@@ -86,6 +88,7 @@ export const reserveAuction = createAsyncThunk(
 
       return updatedAuctionsInfo;
     } catch (err) {
+      alertError(MESSAGE.UNKNOWN_ERROR);
       throw new Error(err);
     }
   }

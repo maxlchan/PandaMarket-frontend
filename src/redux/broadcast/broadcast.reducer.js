@@ -3,7 +3,9 @@ import {
   createReducer,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
+import { alertError } from '../../config/customizedSwal';
 import { finishAuction, startAuction } from '../../utils/api';
+import { MESSAGE } from '../../constants';
 
 export const setBroadcast = createAction('broadcast/set');
 export const resetBroadcast = createAction('broadcast/reset');
@@ -15,6 +17,7 @@ export const startBroadcast = createAsyncThunk(
       await startAuction(auctionId);
       return;
     } catch (err) {
+      alertError(MESSAGE.UNKNOWN_ERROR);
       throw new Error(err);
     }
   }
@@ -32,6 +35,7 @@ export const finishBroadcast = createAsyncThunk(
       await finishAuction(payload, auctionId);
       return;
     } catch (err) {
+      alertError(MESSAGE.UNKNOWN_ERROR);
       throw new Error(err);
     }
   }

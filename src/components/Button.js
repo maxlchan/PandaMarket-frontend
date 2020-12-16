@@ -7,27 +7,30 @@ const Wrapper = styled.button`
   align-items: center;
   width: ${({ width }) => width};
   padding: ${({ padding }) => padding || '2% 5%'};
+  margin-bottom: 5px;
+  border-radius: 5px;
   box-shadow: ${({ theme }) => theme.boxShadows.default};
   font-size: ${({ theme }) => theme.fontSizes.small};
-  margin-bottom: 5px;
-
   transition: all 0.05s ease-in-out;
   cursor: pointer;
   color: white;
-  background-color: ${(props) => {
-    return props.color || props.theme.colors.green;
+  background-color: ${({ color, theme }) => {
+    return color || theme.colors.green;
   }};
 
+  &:hover {
+    transform: scale(1.05);
+    background-color: ${({ color, theme }) => {
+      return !color && theme.colors.hoverGreen;
+    }};
+  }
+
   &:active {
-    transform: scale(0.95);
+    transform: scale(1);
   }
 
   &:disabled {
     opacity: 50%;
-  }
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.hoverGreen};
   }
 
   .button__title {
