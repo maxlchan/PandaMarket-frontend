@@ -293,6 +293,7 @@ const BroadcastContainer = () => {
 
       hostVideo.current.srcObject = stream;
     } catch (err) {
+      console.warn(err);
       alertError(MESSAGE.MEDIA_NOT_CONNETED);
     }
   };
@@ -477,7 +478,7 @@ const BroadcastContainer = () => {
       <BroadcastBox>
         <div className='box__left'>
           <div className='box__left__video'>
-            <video autoPlay ref={hostVideo} />
+            <video autoPlay ref={hostVideo} muted={isHost ? true : false} />
             <div className='box__left__img'>
               <img src={URL.BID} />
             </div>
