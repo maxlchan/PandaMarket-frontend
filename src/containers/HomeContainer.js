@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Carousel from '../components/Carousel';
 import Button from '../components/Button';
-import { auctionsOnAirSelector } from '../redux/auction/auctios.selector';
+import { auctionsOnAirSelector } from '../redux/auction/auctions.selector';
 import { ROUTES } from '../constants';
 
 const Wrapper = styled.div`

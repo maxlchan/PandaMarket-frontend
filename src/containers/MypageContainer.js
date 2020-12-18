@@ -13,7 +13,7 @@ import {
   auctionsSelector,
   myAuctionsSelector,
   reservedAuctionsSelector,
-} from '../redux/auction/auctios.selector';
+} from '../redux/auction/auctions.selector';
 import { ROUTES, TYPE } from '../constants';
 
 const MypageContentBox = styled.div`

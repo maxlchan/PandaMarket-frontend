@@ -8,7 +8,7 @@ import CloseButton from '../components/CloseButton';
 import Loading from '../components/Loading';
 import Modal from '../components/Modal';
 import Search from '../components/Search';
-import { auctionsOnWaitingSelector, isAuctionsLoadingSelector } from '../redux/auction/auctios.selector';
+import { auctionsOnWaitingSelector, isAuctionsLoadingSelector } from '../redux/auction/auctions.selector';
 import { fetchAuctions, reserveAuction } from '../redux/auction/auction.reducer';
 import { checkIsKeywordIn } from '../utils';
 import { ITEM_CATEGORY, TYPE } from '../constants';
