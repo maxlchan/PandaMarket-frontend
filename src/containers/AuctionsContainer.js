@@ -8,11 +8,8 @@ import CloseButton from '../components/CloseButton';
 import Loading from '../components/Loading';
 import Modal from '../components/Modal';
 import Search from '../components/Search';
-import { auctionsOnWaitingSelector } from '../redux/auction/auctios.selector';
-import {
-  fetchAuctions,
-  reserveAuction,
-} from '../redux/auction/auction.reducer';
+import { auctionsOnWaitingSelector, isAuctionsLoadingSelector } from '../redux/auction/auctios.selector';
+import { fetchAuctions, reserveAuction } from '../redux/auction/auction.reducer';
 import { checkIsKeywordIn } from '../utils';
 import { ITEM_CATEGORY, TYPE } from '../constants';
 
@@ -47,7 +44,7 @@ const AuctionCategoryBox = styled.div`
 
 const AuctionsContainer = () => {
   const auctions = useSelector(auctionsOnWaitingSelector);
-  const { isLoading } = useSelector((state) => state.auctions);
+  const isLoading = useSelector(isAuctionsLoadingSelector);
   const [isModalClicked, setIsModalClicked] = useState(false);
   const [clickedAuction, setClickedAuction] = useState({});
   const [isCategoryFilterOn, setIsCategoryFilterOn] = useState(false);

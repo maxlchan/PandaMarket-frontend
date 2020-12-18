@@ -5,12 +5,9 @@ import styled from 'styled-components';
 import Button from '../components/Button';
 import ChatBox from '../components/ChatBox';
 import Loading from '../components/Loading';
-import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
+import { resetBroadcast, setBroadcast } from '../redux/broadcast/broadcast.reducer';
+import { broadcastSelectorForAuction, isBroadcastingLoadingSelector } from '../redux/broadcast/broadcast.selector';
 import { userInfoSelector } from '../redux/user/user.selector';
-import {
-  resetBroadcast,
-  setBroadcast,
-} from '../redux/broadcast/broadcast.reducer';
 import { socket, socketApi } from '../utils/socket';
 import { ROUTES, TYPE, URL, SOCKET_EVENT} from '../constants';
 
@@ -41,9 +38,9 @@ const Wrapper = styled.div`
 `;
 
 const PrivateChatContainer = () => {
-  const { isLoading } = useSelector((state) => state.broadcast);
   const { privateMessages, isFinished } = useSelector(broadcastSelectorForAuction);
   const { _id: userId } = useSelector(userInfoSelector);
+  const isLoading= useSelector(isBroadcastingLoadingSelector);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const history = useHistory();

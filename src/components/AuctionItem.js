@@ -20,7 +20,8 @@ const ItemWrapper = styled.div`
     transform: scale(1.05);
 
     .item__top {
-      background-image: url(${({ imageUrl }) => imageUrl[1] ? imageUrl[1] : imageUrl[0]});
+      background-image: url(${({ imageUrl }) =>
+        imageUrl[1] ? imageUrl[1] : imageUrl[0]});
     }
   }
 
@@ -76,7 +77,7 @@ const AuctionItem = ({ imageUrl, title, initialPrice, onClick }) => {
 };
 
 AuctionItem.propTypes = {
-  imageUrl: PropTypes.string.isRequired,
+  imageUrl: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   title: PropTypes.string.isRequired,
   initialPrice: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,

@@ -11,16 +11,18 @@ import CloseButton from '../components/CloseButton';
 import Button from '../components/Button';
 import Timer from '../components/Timer';
 import {
-  userRequiredInRoomSelector,
-  userInfoSelector,
-} from '../redux/user/user.selector';
-import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
-import {
   resetBroadcast,
   setBroadcast,
   finishBroadcast,
   startBroadcast,
 } from '../redux/broadcast/broadcast.reducer';
+import {
+  userRequiredInRoomSelector,
+  userInfoSelector,
+  isUserLoggedInSelector,
+} from '../redux/user/user.selector';
+import { broadcastSelectorForAuction } from '../redux/broadcast/broadcast.selector';
+import { auctionsSelector } from '../redux/auction/auctions.selector';
 import { checkIsBigger, stopBothVideoAndAudio, unitizedValue } from '../utils';
 import { socket, socketApi } from '../utils/socket';
 import { alertSuccess, alertError, alertWarn } from '../config/customizedSwal';
@@ -167,10 +169,10 @@ const PriceBiddingInput = styled.input`
 `;
 
 const BroadcastContainer = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
-  const auctions = useSelector((state) => state.auctions.data);
-  const { myAuctions, _id: userId } = useSelector(userInfoSelector);
+  const auctions = useSelector(auctionsSelector);
   const userRequiredInRoom = useSelector(userRequiredInRoomSelector);
+  const isLoggedIn = useSelector(isUserLoggedInSelector);
+  const { myAuctions, _id: userId } = useSelector(userInfoSelector);
   const {
     highestBidPrice,
     currentWinner,
@@ -187,11 +189,9 @@ const BroadcastContainer = () => {
   const [isCountButtonDisabld, setIsCountButtonDisabld] = useState(false);
   const [isUserBidding, setIsUserBidding] = useState(false);
   const initialPrice = currentAuction?.initialPrice;
-
   const { auctionId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-
   const hostVideo = useRef();
   const peer = useRef({});
   let stream;

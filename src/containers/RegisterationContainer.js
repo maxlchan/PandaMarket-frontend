@@ -7,12 +7,10 @@ import styled from 'styled-components';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
 import { createAuction } from '../redux/auction/auction.reducer';
-import {
-  unitizedValue,
-  convertUnitToNumber,
-} from '../utils';
-import { alertError } from '../config/customizedSwal';
+import { isUserLoadingSelector, isUserLoggedInSelector } from '../redux/user/user.selector';
 import { ROUTES, ITEM_CATEGORY, TYPE, MESSAGE } from '../constants';
+import { unitizedValue, convertUnitToNumber } from '../utils';
+import { alertError } from '../config/customizedSwal';
 
 const Wrapper = styled.div`
   display: flex;
@@ -145,8 +143,8 @@ const RegisterationContainer = () => {
   const [pictures, setPictures] = useState([]);
   const [initialPrice, setInitialPrice] = useState('');
   const [startedDateTime, setStartedDateTime] = useState(new Date());
-  const { isLoggedIn } = useSelector((state) => state.user);
-  const { isLoading } = useSelector((state) => state.auctions);
+  const isLoggedIn = useSelector(isUserLoggedInSelector);
+  const isLoading = useSelector(isUserLoadingSelector);
   const dispatch = useDispatch();
   const history = useHistory();
 

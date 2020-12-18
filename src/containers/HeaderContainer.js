@@ -1,11 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import NavItem from '../components/NavItem';
+import { logoutUser } from '../redux/user/user.reducer';
+import { isUserLoggedInSelector } from '../redux/user/user.selector';
 import { ROUTES } from '../constants';
 import logo from '../assets/images/logoHorizontal.png';
-import { Link } from 'react-router-dom';
-import { logoutUser } from '../redux/user/user.reducer';
 
 const StyledHeader = styled.header`
   display: flex;
@@ -45,7 +46,7 @@ const HeaderSpace = styled.div`
 `;
 
 const HeaderContainer = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const isLoggedIn = useSelector(isUserLoggedInSelector);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -68,9 +69,15 @@ const HeaderContainer = () => {
               name={'내정보'}
             />
           )}
-          {isLoggedIn
-            ? <NavItem to={ROUTES.HOME} name={'로그아웃'} onClick={handleLogout} />
-            : <NavItem to={ROUTES.LOGIN} name={'로그인'} />}
+          {isLoggedIn ? (
+            <NavItem
+              to={ROUTES.HOME}
+              name={'로그아웃'}
+              onClick={handleLogout}
+            />
+          ) : (
+            <NavItem to={ROUTES.LOGIN} name={'로그인'} />
+          )}
         </nav>
       </StyledHeader>
       <HeaderSpace />

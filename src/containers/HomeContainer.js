@@ -16,6 +16,7 @@ const Wrapper = styled.div`
 const HomeContainer = () => {
   const auctionsOnAir = useSelector(auctionsOnAirSelector);
   const history = useHistory();
+
   const handleJoinButtonClick = (auctionId) => {
     history.push(`${ROUTES.AUCTIONS}/${auctionId}${ROUTES.BROADCAST}`);
   };

@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { userInfoSelector } from '../user/user.selector';
 
+export const isAuctionsLoadingSelector = (state) => state.auctions.isLoading;
 export const auctionsSelector = (state) => state.auctions.data;
 
 export const auctionsOnWaitingSelector = createSelector(

@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+export const isUserLoggedInSelector = (state) => state.user.isLoggedIn;
+export const isUserLoadingSelector = (state) => state.user.isLoading;
 export const userInfoSelector = (state) => state.user.info;
 
 export const userRequiredInRoomSelector = createSelector(

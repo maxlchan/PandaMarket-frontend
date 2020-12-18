@@ -44,7 +44,7 @@ const ChatUnitWrapper = styled.div`
 `;
 
 const ChatUnit = ({ imageUrl, name, text, isHost, ownerId, userId }) => {
-  const isChatMine = ownerId == userId;
+  const isChatMine = ownerId === userId;
 
   return (
     <ChatUnitWrapper isChatMine={isChatMine} isHost={isHost}>

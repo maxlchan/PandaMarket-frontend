@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 import { fetchUser } from '../redux/user/user.reducer';
+import { isUserLoggedInSelector } from '../redux/user/user.selector';
 import panda from '../assets/images/panda.png';
 import { TYPE } from '../constants';
 
@@ -39,7 +40,7 @@ const Wrapper = styled.div`
 `;
 
 const LoginContainer = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const isLoggedIn = useSelector(isUserLoggedInSelector);
   const dispatch = useDispatch();
   const history = useHistory();
 

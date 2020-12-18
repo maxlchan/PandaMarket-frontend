@@ -1,9 +1,9 @@
 import React, { cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import NoDataText from './NoDataText';
 import { generateDateToText } from '../utils';
 import { TYPE } from '../constants';
-import NoDataText from './NoDataText';
 
 const Wrapper = styled.div`
   width: 100%;

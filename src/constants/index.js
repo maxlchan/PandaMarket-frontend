@@ -130,10 +130,9 @@ const SOCKET_EVENT = {
 
 const URL = {
   LOADING: 'https://acegif.com/wp-content/gif/panda-80.gif',
-  CONFETTI: 'https://acegif.com/wp-content/gif/confetti-29.gif',
+  CONFETTI: 'https://acegif.com/wp-content/gif/confetti-18.gif',
   BID: 'https://www.cityofcottonwoodmn.com/vertical/Sites/%7BE0FDF809-1956-4DF5-8E65-A031493D88F5%7D/uploads/Bidding.png',
-  BROADCAST_BACKGROUND:
-    'https://previews.123rf.com/images/marisha5/marisha51010/marisha5101000057/8009927-frame-made-of-money-isolated-on-white-background.jpg',
+  BROADCAST_BACKGROUND: 'https://previews.123rf.com/images/marisha5/marisha51010/marisha5101000057/8009927-frame-made-of-money-isolated-on-white-background.jpg',
 };
 
 export { ROUTES, MESSAGE, ITEM_CATEGORY, CONFIG, TYPE, URL, SOCKET_EVENT };

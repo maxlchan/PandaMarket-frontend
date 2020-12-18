@@ -2,6 +2,11 @@ import { createSelector } from 'reselect';
 
 const broadcastSelector = (state) => state.broadcast;
 
+export const isBroadcastingLoadingSelector = createSelector(
+  broadcastSelector,
+  (broadcast) => broadcast.isLoading
+);
+
 export const broadcastSelectorForAuction = createSelector(
   broadcastSelector,
   (broadcast) => ({
