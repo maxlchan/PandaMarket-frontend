@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const StyldBox = styled.div`
+export const StyldBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;

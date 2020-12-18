@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import usePreventScroll from '../hooks/usePreventScroll';
 
-const ModalWrapper = styled.div`
+export const ModalWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
