@@ -6,7 +6,7 @@
 
 👉 시뮬레이션 가이드 영상 : [https://www.youtube.com/watch?v=hcTGFmjfqOs](https://www.youtube.com/watch?v=hcTGFmjfqOs)
 
-![simulation](https://media.giphy.com/media/6UrrQbX32nUPv9XoDy/giphy.gif)
+![https://media.giphy.com/media/6UrrQbX32nUPv9XoDy/giphy.gif](https://media.giphy.com/media/6UrrQbX32nUPv9XoDy/giphy.gif)
 
 👉 라이브 중고 경매 시연 영상(프로젝트 발표 中) : [https://youtu.be/jMw5MIxLY3o?t=6597](https://youtu.be/jMw5MIxLY3o?t=6597)
 
@@ -20,8 +20,6 @@
 - [Deploy](#🌐-Deploy)
 - [How to use](#🕹-How-to-Use)
 - [Project Schedule](#🗓-Project-Schedule)
-- [Project Process](#project-process)
-- [Collaboration principle](#collaboration-principle)
 - [Challenge & Focus point](#🥊-Challenge-&-Focus-point)
 - [Things to do](#🚀-Things-to-do)
 
@@ -43,7 +41,7 @@
 
 # 🛠 Tech Stack
 
-## Frontend
+### Frontend
 
 - ES2015+
 - React for component-based-architecture
@@ -55,7 +53,7 @@
 - Jest for unit-test
 - Enzyme for component-test
 
-## Backend
+### Backend
 
 - Node.js
 - Express
@@ -72,29 +70,29 @@
 # 📀 Installation
 Local 환경에서 실행을 위해 환경 변수 설정이 필요합니다.
 
-## Client
+### Client
 
 Root 디렉토리에 environment.js파일에 아래와 같이 환경변수 값을 입력합니다.
 - [구글 개발자 계정](https://developers.google.com/)
 
-```javascript
+```
 // in environment.js in Root directory
 REACT_APP_GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 REACT_APP_SERVER_BASE_URL=<YOUR_SERVER_BASE_URL>
 ```
 
-```javascript
+```
 git clone https://github.com/maxlchan/PandaMarket-frontend.git
 cd PandaMarket-frontend
 npm install
 npm start
 ```
 
-## Server
+### Server
 Root 디렉토리에 .env파일에 아래와 같이 환경변수 값을 입력합니다.
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
 - [Amanzon Web Services](https://aws.amazon.com/ko/free/?trk=ps_a134p000003yHYmAAM&trkCampaign=acq_paid_search_brand&sc_channel=PS&sc_campaign=acquisition_KR&sc_publisher=Google&sc_category=Core-Main&sc_country=KR&sc_geo=APAC&sc_outcome=acq&sc_detail=aws&sc_content=Brand_Core_aws_e&sc_segment=444218215904&sc_medium=ACQ-P|PS-GO|Brand|Desktop|SU|Core-Main|Core|KR|EN|Text&s_kwcid=AL!4422!3!444218215904!e!!g!!aws&ef_id=CjwKCAiAz4b_BRBbEiwA5XlVVhkBbEbvDkN2vXClY2PXvAUvLqkLu7IllZ8wVehErHOSqlSnaqOTwBoCekwQAvD_BwE:G:s&s_kwcid=AL!4422!3!444218215904!e!!g!!aws&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc)
-```javascript
+```
 // in .env in your directory
 PORT=<YOUR_PORT_NUMBER>
 CLIENT_BASE_URL=<YOUR_CLIENT_BASE_URL>
@@ -106,16 +104,16 @@ NODE_MAILER_EMAIL=<YOUR_GMAIL_ADDRESS>
 NODE_MAILER_PASSWORD=<YOUR_GMAIL_PASSWORD>
 ```
 
-```javascript
+```
 git clone https://github.com/maxlchan/PandaMarket-backend.git
 cd Rice-coco-backend
 npm install
 npm run dev
 ```
 # 🌐 Deploy
-## Client
+### Client
 - Netlify를 이용한 Client 배포 https://www.pandamarket.live/
-## Server
+### Server
 - AWS Elastic Beanstalk (EB)
 - AWS Code Pipeline for Deployment automation
 # 🕹 How to Use
@@ -177,7 +175,7 @@ npm run dev
 
 ### 컴포넌트 세분화와 재사용
 
-이번 프로젝트는 비록 규모는 작지만 재사용 할 수 있는 컴포넌트를 많이 만들어보고 재사용도 많이 해보자! 라는 목표를 정하고 프로젝트에 임하였습니다. 이에 상태관리 로직은 최대한 컨테이너에서 이루어지도록하여 컴포넌트를 최대한 경량화시키고자 하였고, 큰 단위라고 생각되어지는 모달창 혹은 카루셀 카드에서부터 네비게이션 Tab 등 작은 단위의 요소들까지 컴포넌트로 분리하고자 노력하였습니다.  
+이번 프로젝트는 비록 규모는 작지만 재사용 할 수 있는 컴포넌트를 많이 만들어보고 재사용도 많이 해보자! 라는 목표를 정하고 프로젝트에 임하였습니다. 이에 상태관리 로직은 최대한 컨테이너에서 이루어지도록하여 컴포넌트를 최대한 경량화시키고자 하였고, 큰 단위라고 생각되어지는 모달창 혹은 카루셀 카드에서부터 네비게이션 Tab 등 작은 단위의 요소들까지 컴포넌트로 분리하고자 노력하였습니다.
 
 해당 부분에 집중하면서 느낀 장점은 **첫번째,** Redux와 소통하는 컨테이너의 로직이 길어지고 복합하게 업데이트 되더라도 Concern 분리가 명확해짐에 따라 가독성이 크게 떨어지지 않았습니다. **두번째로** 컴포넌트 함수가 순수해짐에 따라 테스트 코드를 작성하는 것이 원활했습니다.
 
@@ -187,9 +185,9 @@ npm run dev
 
 [1차 프로젝트](https://github.com/daechidongVibe/Rice-coco-frontend) 당시 한 컨테이너 내부에서 모든 비동기 처리 로직이 한꺼번에 작성되어있다보니, 코드가 너무 장황해진 느낌을 받았습니다. 해당 부분을 개선하기 위해 이번 프로젝트에서는 redux-thunk 미들웨어를 적용해보았습니다. thunk 미들웨어를 사용해본 결과, 아래 세가지 정도의 장점을 체감하였습니다.
 
-**첫번째** 컨테이너 입장에서는 비동기 처리와 관련된 액션에 대해서는 thunk에 위임하기 때문에 컨테이너 함수가 좀더 간결해지고 관심 분리도 잘되는 방향으로 코드 작성이 이루어질 수 있었습니다. 
+**첫번째** 컨테이너 입장에서는 비동기 처리와 관련된 액션에 대해서는 thunk에 위임하기 때문에 컨테이너 함수가 좀더 간결해지고 관심 분리도 잘되는 방향으로 코드 작성이 이루어질 수 있었습니다.
 
-**두번째,** 특정 비동기 작업에 대한 pending, success, failure 단계가 리덕스 상태로 명확하게 분리될 수 있었으며, 이에 따라 비동기 Loading이나 Error에 대한 부분을 관리하거나 UI 상으로 보여주는 데 용이했습니다. 
+**두번째,** 특정 비동기 작업에 대한 pending, success, failure 단계가 리덕스 상태로 명확하게 분리될 수 있었으며, 이에 따라 비동기 Loading이나 Error에 대한 부분을 관리하거나 UI 상으로 보여주는 데 용이했습니다.
 
 **마지막으로,** thunk 내부에서 1)현재 리덕스 state를 불러와 사용한다든지, 2)다른 액션들을 연달아 호출할 수 있다든지, 3)비동기 처리 후에 특정 URL로 라우팅을 한다든 지 등 자유도가 높아서 개발하기에 굉장히 편리했습니다.
 
