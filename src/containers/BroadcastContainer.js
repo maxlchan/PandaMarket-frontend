@@ -196,24 +196,6 @@ const BroadcastContainer = () => {
   const peer = useRef({});
   let stream;
 
-  const handleBidButtonClick = async () => {
-    if (highestBidPrice) {
-      const isLowerThanHightest = !checkIsBigger(bidPrice, highestBidPrice);
-      if (isLowerThanHightest) {
-        alertError(MESSAGE.LOWER_THAN_HIGHTEST);
-        return;
-      }
-    } else {
-      const isLowerThanInitial = !checkIsBigger(bidPrice, initialPrice);
-      if (isLowerThanInitial) {
-        alertError(MESSAGE.LOWER_THAN_INITIAL);
-        return;
-      }
-    }
-
-    socketApi.updateHighestBid(bidPrice);
-  };
-
   const handleChatButtonClick = () => {
     if (!message) return;
 
@@ -261,6 +243,24 @@ const BroadcastContainer = () => {
     if (!unitizedNumber) return;
 
     setBidPrice(unitizedNumber);
+  };
+
+  const handleBidButtonClick = async () => {
+    if (highestBidPrice) {
+      const isLowerThanHightest = !checkIsBigger(bidPrice, highestBidPrice);
+      if (isLowerThanHightest) {
+        alertError(MESSAGE.LOWER_THAN_HIGHTEST);
+        return;
+      }
+    } else {
+      const isLowerThanInitial = !checkIsBigger(bidPrice, initialPrice);
+      if (isLowerThanInitial) {
+        alertError(MESSAGE.LOWER_THAN_INITIAL);
+        return;
+      }
+    }
+
+    socketApi.updateHighestBid(bidPrice);
   };
 
   const handleOnTrack = (event) => {

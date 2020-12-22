@@ -9,7 +9,7 @@ import Loading from '../components/Loading';
 import { createAuction } from '../redux/auction/auction.reducer';
 import { isUserLoadingSelector, isUserLoggedInSelector } from '../redux/user/user.selector';
 import { ROUTES, ITEM_CATEGORY, TYPE, MESSAGE } from '../constants';
-import { unitizedValue, convertUnitToNumber } from '../utils';
+import { unitizedValue, convertUnitToNumber, checkIsOverOneHour } from '../utils';
 import { alertError } from '../config/customizedSwal';
 
 const Wrapper = styled.div`
@@ -155,7 +155,7 @@ const RegisterationContainer = () => {
   const validateRegisteredData = () => {
     const PICTURES_LENGTH = pictures.length;
     const isLowerThanThousand = convertUnitToNumber(initialPrice) < 1000;
-    // const isLowerThanOneHour = !checkIsOverOneHour(startedDateTime);
+    const isLowerThanOneHour = !checkIsOverOneHour(startedDateTime);
 
     if (PICTURES_LENGTH < 1) return alertError(MESSAGE.PHOTO_UNDER_LIMIT);
     if (PICTURES_LENGTH > 5) return alertError(MESSAGE.PHOTO_OVER_LIMIT);
@@ -165,7 +165,7 @@ const RegisterationContainer = () => {
     if (!initialPrice) return alertError(MESSAGE.EMPTY_INITIALPRICE);
     if (!startedDateTime) return alertError(MESSAGE.EMPTY_DATETIME);
     if (isLowerThanThousand) return alertError(MESSAGE.PRICE_UNDER_LIMIT);
-    // if (isLowerThanOneHour) return alertError(MESSAGE.DATETIME_UNDER_LIMIT);
+    if (isLowerThanOneHour) return alertError(MESSAGE.DATETIME_UNDER_LIMIT);
 
     return true;
   };
@@ -302,7 +302,7 @@ const RegisterationContainer = () => {
                 </div>
                 <DateTimePicker
                   minDate={new Date()}
-                  // maxDetail='hour'
+                  maxDetail='hour'
                   disableClock={true}
                   onChange={setStartedDateTime}
                   value={startedDateTime}
