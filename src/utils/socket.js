@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { SOCKET_EVENT } from '../constants';
 
-export const socket = io.connect(process.env.REACT_APP_SERVER_URL);
+export const socket = io.connect(process.env.REACT_APP_SERVER_BASE_URL);
 
 export const socketApi = {
   createRoom: (payload) => {
