@@ -6,7 +6,7 @@
 
 👉 시뮬레이션 가이드 영상 : [https://www.youtube.com/watch?v=hcTGFmjfqOs](https://www.youtube.com/watch?v=hcTGFmjfqOs)
 
-![alt-guide](https://media.giphy.com/media/HNmUSupvhfmNMlDQaC/giphy.gif)
+![alt-guide](https://media.giphy.com/media/6Dr0qe2ZVaSUyoMPMq/giphy.gif)
 
 👉 라이브 중고 경매 시연 영상(프로젝트 발표 中) : [https://youtu.be/jMw5MIxLY3o?t=6597](https://youtu.be/jMw5MIxLY3o?t=6597)
 
