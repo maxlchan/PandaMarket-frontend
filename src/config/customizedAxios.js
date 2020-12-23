@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { URL } from '../constants';
 
 const defaultOptions = {
-  baseURL: process.env.REACT_APP_SERVER_BASE_URL,
+  baseURL: URL.BASE,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -129,6 +129,10 @@ const SOCKET_EVENT = {
 };
 
 const URL = {
+  BASE:
+    process.env.NODE_ENV === 'production'
+      ? 'https://api.pandamarket.live'
+      : 'http://localhost:4000',
   LOADING: 'https://acegif.com/wp-content/gif/panda-80.gif',
   CONFETTI: 'https://acegif.com/wp-content/gif/confetti-18.gif',
   BID: 'https://www.cityofcottonwoodmn.com/vertical/Sites/%7BE0FDF809-1956-4DF5-8E65-A031493D88F5%7D/uploads/Bidding.png',
