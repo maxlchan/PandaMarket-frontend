@@ -106,7 +106,7 @@ NODE_MAILER_PASSWORD=<YOUR_GMAIL_PASSWORD>
 
 ```
 git clone https://github.com/maxlchan/PandaMarket-backend.git
-cd Rice-coco-backend
+cd PandaMarket-backend
 npm install
 npm run dev
 ```
