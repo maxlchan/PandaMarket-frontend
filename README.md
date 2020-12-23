@@ -80,7 +80,6 @@ Root 디렉토리에 environment.js파일에 아래와 같이 환경변수 값�
 ```
 // in environment.js in Root directory
 REACT_APP_GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
-REACT_APP_SERVER_BASE_URL=<YOUR_SERVER_BASE_URL>
 ```
 
 ```
@@ -97,7 +96,6 @@ Root 디렉토리에 .env파일에 아래와 같이 환경변수 값을 입력�
 ```
 // in .env in your directory
 PORT=<YOUR_PORT_NUMBER>
-CLIENT_BASE_URL=<YOUR_CLIENT_BASE_URL>
 DB_URL=<YOUR_MONGODB_URL>
 JWT_SECRET=<YOUR_JWT_SECRET>
 AWS_ACCESS_KEY=<YOUR_AWS_ACCESS_KEY>
