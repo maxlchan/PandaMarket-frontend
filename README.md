@@ -60,7 +60,7 @@
 - Node.js
 - Express
 - MongoDB / MongoDB Atlas for data persistence
-- Moongoose
+- Mongoose
 - JSON Web Token Authentication
 - AWS S3 for uploading data file
 - Socket.io
@@ -106,7 +106,7 @@ NODE_MAILER_PASSWORD=<YOUR_GMAIL_PASSWORD>
 
 ```
 git clone https://github.com/maxlchan/PandaMarket-backend.git
-cd PandaMarket-backend
+cd Rice-coco-backend
 npm install
 npm run dev
 ```
