@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
-import rootReducer from './root-reducer';
 import { createBrowserHistory } from 'history';
+import rootReducer from './root-reducer';
 
 export const customHistory = createBrowserHistory();
 
