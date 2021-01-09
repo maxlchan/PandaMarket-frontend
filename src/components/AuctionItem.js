@@ -18,11 +18,6 @@ const ItemWrapper = styled.div`
   &:hover {
     box-shadow: ${({ theme }) => theme.boxShadows.deep};
     transform: scale(1.05);
-
-    .item__top {
-      background-image: url(${({ imageUrl }) =>
-        imageUrl[1] ? imageUrl[1] : imageUrl[0]});
-    }
   }
 
   .item__top {
