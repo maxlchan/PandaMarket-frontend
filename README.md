@@ -1,8 +1,8 @@
 # 🐼 판다마켓
 
-**판다마켓**은 일반인들이 자신의 중고물품을 라이브 스트리밍을 통해 직접 경매할 수 있는 웹 사이트입니다.![panda logo](https://panda-market.s3.ap-northeast-2.amazonaws.com/5fd9cb748c5228f376f5fecc16086444664550)
+**판다마켓**은 일반인들이 자신의 중고물품을 라이브 스트리밍을 통해 직접 경매할 수 있는 웹 사이트입니다.
 
-👉 Deploy Address: [https://www.pandamarket.live/](https://www.pandamarket.live/)
+👉 Deploy Address: [https://www.pandamarket.live/](https://www.pandamarket.live/)(Closed now)
 
 👉 시뮬레이션 가이드 영상 : [https://www.youtube.com/watch?v=hcTGFmjfqOs](https://www.youtube.com/watch?v=hcTGFmjfqOs)
 
